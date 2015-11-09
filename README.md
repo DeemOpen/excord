@@ -1,4 +1,4 @@
-## ExCord - Extension Cord 2.0 is a Test Management web application, used to document test cases and plan and track QA projects.
+## ExCord - Extension Cord 2.0
 
 ### Requirements
 
