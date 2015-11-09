@@ -1,0 +1,126 @@
+<#import "layouts/main-layout.ftl.html" as main> 
+<@main.page>
+<script src="js/custom/testplan_form.js"></script>
+<div class="container-fluid">
+    <form method="post" action="/testplan_save" role="form" class="form-horizontal">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <div class="row">
+                    <div class="col-md-12 text-center">
+                        <h3>Test Plan</h3>
+                        <br/>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        Test Plan Name<font color="red">*</font>
+                    </label>
+                    <div class="col-md-6">
+                        <input type="hidden" name="tid" value="<#if testPlan??>${testPlan.id}</#if>"/>
+                        <input class="form-control"  name="tname" value="<#if testPlan??>${testPlan.name}</#if>"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        Creator
+                    </label>
+                    <div class="col-md-3 left">
+                        <#if testPlan??>
+                        <input type="text" class="form-control"  name="tcreator" value="${testPlan.creator}" readonly="readonly"/>
+                        <#else>
+                        <input type="text" class="form-control" name="tcreator" value="${authName}" readonly="readonly"/>
+                        </#if>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        Enabled
+                    </label>
+                    <div class="col-md-1 left">
+                        <div class="checkbox">
+                            <label>
+                                <#if testPlan?? && testPlan.enabled == true>
+                                <input type="checkbox" name="tenabled" checked/>
+                                <#else>
+                                <input type="checkbox" name="tenabled"/>
+                                </#if>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        Start Date
+                    </label>
+                    <div class="col-md-3">
+                        <input  class="form-control"  id="tstartdt" name="tstartdt" value="<#if testPlan??>${testPlan.startDate?string['MM-dd-yyyy']}</#if>" onchange="checkDate();" readonly/>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        End Date
+                    </label>
+                    <div class="col-md-3">
+                        <input  class="form-control" id="tenddt"  name="tenddt" value="<#if testPlan??>${testPlan.endDate?string['MM-dd-yyyy']}</#if>" onchange="checkDate();" readonly/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        Release
+                    </label>
+                    <div class="col-md-5">
+                        <input  class="form-control"  name="trelease" value="<#if testPlan??>${testPlan.releaseName}</#if>"/>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        Leader
+                    </label>
+                    <div class="col-md-5">
+                        <select class="form-control" name="tleader">
+                            <#list activeUsersLst as user>
+                            <#if testPlan??>
+                            <#if testPlan.leader == user.username>
+                            <option selected="selected">${user.username}</option>
+                            <#else>
+                            <option>${user.username}</option>
+                            </#if>
+                            <#else>
+                            <option>${user.username}</option>
+                            </#if>    
+                            </#list>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="col-md-2 control-label">
+                        Schedule
+                    </label>
+                    <div class="col-md-5">
+                        <input  class="form-control"  name="tschedule" value="<#if testPlan??>${testPlan.schedule}</#if>"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-2">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-10">
+                        <button type="submit" name="action" id="testplan_save" class="btn btn-info"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
+                        <button type="button" name="action" id="cancel" value="cancel" class="btn btn-info" onclick="history.back()" >Cancel</button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+</@main.page> 

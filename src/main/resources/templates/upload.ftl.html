@@ -1,0 +1,19 @@
+<#import "layouts/main-layout.ftl.html" as main> 
+<@main.page>
+<div class="container-fluid">
+    <form method="post" action="/upload" role="form" class="form-horizontal" enctype="multipart/form-data">
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">File to upload:</label>
+            <div class="col-md-10">
+                <input type="text" name="name" class="form-control" placeholder="Enter File Description">
+                <br/>
+                <input type="file" name="file" class="form-control"><br /> 
+                <br/>
+                <input type="submit" value="Upload"  class="btn btn-primary btn-lg btn-block">
+            </div>
+        </div>
+
+    </form>
+</div>
+</@main.page> 

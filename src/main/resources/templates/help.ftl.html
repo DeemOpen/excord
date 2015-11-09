@@ -1,0 +1,71 @@
+<#import "layouts/main-layout.ftl.html" as main> 
+<@main.page>
+<script src="js/custom/home.js"></script>
+<div class="container-fluid">
+    <form method="post" action="/" role="form" class="form-horizontal">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3>Documentation</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <h4>Test Plan</h4>
+                <ul>
+                    <li>Add new test plans</li>
+                    <li>Edit test plans</li>
+                    <li>Delete test plans - Also deletes the run history</li>
+                    <li>View test plans - Displays test cases associated with test plan & breakup by node</li>
+                    <li>Clone test plans - Copy of test plan with same test case association</li>
+                    <li>Run test plans - Can be run multiple times</li>
+                    <li>Show history of runs</li>
+                    <li>Assign test cases to users</li>
+                </ul> 
+                <h4>Test Cases</h4>
+                <ul>
+                    <li>Add test cases</li>
+                    <li>Edit test cases</li>
+                    <li>Delete test cases</li>
+                    <li>Clone test cases</li>
+                    <li>Add test cases to test plan</li>
+                    <li>Remove test cases from test plan</li>
+                    <li>Export test cases</li>
+                    <li>Import test cases - Import existing to same folder overwrites and acts as update</li>
+                    <li>Enable test cases - Only enabled test cases can be mapped to enabled test plans</li>
+                    <li>Disable test cases</li>
+                    <li>Bulk Edit test cases</li>
+                    <li>Cut test cases - To move test case to different folder</li>
+                    <li>Paste test cases - To move test case to different folder</li>
+                </ul>
+            </div>
+            <div class="col-md-6 text-left">
+                <h4>Folder</h4>
+                <ul>
+                    <li>Add folder</li>
+                    <li>Delete folder - Deletes all nested folder and nested test cases</li>
+                    <li>Rename folder</li>
+                </ul>
+
+                <h4>API</h4>
+                <ul>
+                    <li>Automation script can run test plan</li>
+                </ul>
+                <h4>History</h4>
+                <ul>
+                    <li>Track history of changes</li>
+                    <li>Search history of changes</li>
+                </ul>
+                <h4>Reports</h4>
+                <ul>
+                    <li>Progress Reports</li>
+                </ul>
+                <h4>Authentication</h4>
+                <ul>
+                    <li>LDAP based authentication</li>
+                    <li>DB based authentication</li>
+                </ul>
+            </div>
+        </div>
+    </form>
+</div>
+</@main.page> 

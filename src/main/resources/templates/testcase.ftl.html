@@ -1,0 +1,175 @@
+<#import "layouts/main-layout.ftl.html" as main> 
+<@main.page>
+<script src="js/custom/testcase.js"></script>
+<div class="container-fluid">
+    <form id="testcaseForm" method="post" action="/testcase" role="form" class="form-horizontal">
+
+        <input type="hidden" id="folderName" name="folderName" value=""/>
+        <input type="hidden" id="newNodeName" name="newNodeName" value=""/>
+        <input type="hidden" id="nodeId" name="nodeId" value="${currentNode.id?c}"/>
+        <#if flashMsg??>
+        <div class="row">
+            <div class="col-md-12">
+                <p class="text-success text-center">${flashMsg}</p>
+            </div>
+        </div>
+        </#if>
+        <!--Bread crumb-->
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="breadcrumb">
+                    <#assign breadCrumbPath = "/"/>
+                    <#list parentNodeLst as pNode>
+                    <li><a href="/testcase?nodeId=${pNode.id?c}" class="breadcrumb-select">${pNode.name}</a></li>
+                    <#assign breadCrumbPath = breadCrumbPath + pNode.name + "/" />
+                    </#list>
+                    <input type="hidden" id="breadCrumbPath" name="breadCrumbPath" value="${breadCrumbPath}"/>
+                </ul>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-1">
+                <label>Active Testplans</label>
+            </div>
+            <div class="col-md-8">
+                <select class="form-control" name="testPlanId">
+                    <#list testPlanLst as tp>
+                    <option value="${tp.id}">${tp.name}</option>
+                    </#list>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <div class="dropdown">
+                    <button class="btn btn-info btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                        <span class="text-right">Actions</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right btn-block">
+                        <li><a href="#" id="addFolder"><i class="fa fa-plus-square"></i>&nbsp;Add Folder</a></li>
+                        <li><a href="/testcase_add?nodeId=${currentNode.id?c}"><i class="fa fa-flask"></i>&nbsp;Add Testcase</a></li>
+                        <li><a href="#" id="linkTestcaseTestplan"><i class="fa fa-cart-plus"></i>&nbsp;Add to Testplan</a></li>
+                        <li><a href="#" id="enableTestcase"><i class="fa fa-check"></i>&nbsp;Enable Testcases</a></li>
+                        <li><a href="#" id="disableTestcase"><i class="fa fa-ban"></i>&nbsp;Disable Testcases</a></li>
+                        <li><a href="#" id="deleteTestcase"><i class="fa fa-times"></i>&nbsp;Delete Testcases</a></li>
+                        <li><a href="#" id="deleteFolder"><i class="fa fa-trash-o"></i>&nbsp;Delete Folder</a></li>
+                        <li><a href="#" id="bulkEdit"><i class="fa fa-pencil-square-o"></i>&nbsp;Bulk Edit Testcases</a></li>
+                        <#if clipboardTc??>
+                        <li><a href="#" id="pasteTestcase"><i class="fa fa-clipboard"></i>&nbsp;Paste Testcases</a></li>
+                        <#else>
+                        <li><a href="#" id="cutTestcase"><i class="fa fa-scissors"></i>&nbsp;Cut Testcases</a></li>
+                        </#if>
+                        <li><a href="#" id="renameFolder"><i class="fa fa-pencil"></i>&nbsp;Rename Folder</a></li>
+                        <li><a href="#" id="cloneTestcase"><i class="fa fa-clone"></i>&nbsp;Clone Testcases</a></li>
+                        <li><a href="#" id="exportTestcases"><i class="fa fa-table"></i>&nbsp;Export Testcases</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4 well pre-scrollable scroll-pane" >
+                <div>
+                    <span class="fa fa-folder-open"></span>
+                    <a href="/testcase?nodeId=${parentNode.id?c}"><..></a>
+                    <br/>
+                    <#list nodeLst as node>
+                    &nbsp;
+                    <#if childNodeLst?seq_contains(node.id)>
+                    <span class="fa fa-folder"></span>
+                    <#else>
+                    <span class="fa fa-folder-o"></span>
+                    </#if>
+                    <a href="/testcase?nodeId=${node.id?c}">${node.name}</a>
+                    <br/>
+                    </#list>
+                </div>
+            </div>
+            <div class="col-md-8 pre-scrollable scroll-pane">
+                <table class="table table-striped table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th><input type="checkbox" id="checkAll"/></th>
+                            <th>Testcase ID</th>
+                            <th>Associated Test Plans</th>
+                            <th>Test Name</th>
+                            <th>Enabled</th>
+                            <th>Priority</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <#list testCaseLst as tc>
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="testcaseChk" value="${tc.id?c}"/>
+                            </td>
+                            <td style="white-space: nowrap">
+                                <a href="#" class="teststepShow" id="${tc.id?c}">${tc.id?c} &nbsp;<i class="fa fa-sort-desc"></i></a>
+                            </td>
+                            <td>
+                                <#assign inc = 0/>
+                                <#list tptcmapLst as tptc>
+                                <#if tptc.testcaseId.id == tc.id>
+                                <#assign inc = inc + 1/>
+                                ${inc}. <a href="/testplan_view?testplanId=${tptc.testplanId.id}">${tptc.testplanId.name}</a>
+                                <br/>
+                                </#if>
+                                </#list>
+                            </td>
+                            <td style="word-break:break-all;"><a href="#">${tc.name}</a></td>
+                            <td>${tc.enabled?c}</td>
+                            <td>
+                                <#if tc.priority??>
+                                ${tc.priority}
+                                </#if>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="7">
+                                <table id="teststeps_${tc.id?c}" class="teststepsTable table table-bordered" width="100%" cellspacing="0">
+                                    <tr>
+                                        <td colspan="3">
+                                            <b>Description</b>: ${tc.description}
+                                        </td>
+                                    </tr>
+                                    <#if tc.ecTeststepList??>
+                                    <#list tc.ecTeststepList as step>
+                                    <tr>
+                                        <td>
+                                            ${step.stepNumber}    
+                                        </td>
+                                        <td style="width:45%">
+                                            ${step.description} 
+                                        </td>
+                                        <td style="width:50%">
+                                            ${step.expected}
+                                        </td>
+                                    </tr>
+                                    </#list>
+                                    </#if>
+                                </table>
+                            </td>
+                        </tr>
+
+                        </#list>
+
+                    </tbody>
+                </table>
+
+
+            </div>
+        </div>
+    </form>
+    <form id="testcaseUploadForm" method="post" action="/testcase_upload" role="form" class="form-horizontal" enctype="multipart/form-data">
+        <div  class="form-group">
+            <div class="col-md-9">
+                <input type="hidden" id="nodeId" name="nodeId" value="${currentNode.id?c}"/>
+                <input type="file" name="file" class="form-control">
+            </div>
+            <div class="col-md-3">
+                <button class="btn btn-info btn-block" type="submit"><i class="fa fa-upload"></i>&nbsp;Import Test Cases</button>
+            </div>
+        </div>
+    </form>
+</div>
+</@main.page> 

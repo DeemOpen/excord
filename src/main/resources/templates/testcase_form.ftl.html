@@ -1,0 +1,149 @@
+<#import "layouts/main-layout.ftl.html" as main> 
+<@main.page>
+<script src="js/3p/autosize.min.js"></script>
+<script src="js/custom/testcase_form.js"></script>
+<div class="container-fluid">
+    <form method="post" action="/testcase_save" role="form" class="form-horizontal">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3>Test Case</h3>
+                <br/>
+            </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-md-3">
+                <div>
+                    <label for="tname">Test Case Name<font color="red">*</font></label>
+                    <input type="text" class="form-control" id="tname" name="tname">
+                    <br/>
+                </div>
+                <div>
+                    <label for="tdescription">Description<font color="red">*</font></label>
+                    <textarea class="form-control" name="tdescription" id="tdescription" rows="4"></textarea>
+                    <br/>
+                </div>
+
+                <div>
+                    <label for="tpriority">Priority<font color="red">*</font></label>
+                    <select class="form-control" id="tpriority" name="tpriority">
+                        <option value="P1" selected>Critical (P1)</option>
+                        <option value="P2">Major (P2)</option>
+                        <option value="P3">Minor (P3)</option>
+                        <option value="P4">Trivial (P4)</option>
+                    </select>
+                    <br/>
+                </div>
+                <div>
+                    <label for="ttype">Type<font color="red">*</font></label>
+                    <select class="form-control" id="ttype" name="ttype">
+                        <option value="Regression" selected>Regression</option>
+                        <option value="Mixed mode">Mixed mode</option>
+                        <option value="New feature">New feature</option>
+                        <option value="Automated Regression">Automated Regression</option>
+                        <option value="Manual Only">Manual Only</option>
+                        <option value="Migration">Migration</option>
+                        <option value="Hotfix">Hotfix</option>
+                        <option value="Production Sanity Check">Production Sanity Check</option>
+                    </select>
+                </div>
+
+            </div>
+            <div class="col-md-1">
+                &nbsp;
+            </div>
+            <div class="col-md-3">
+                <div class="checkbox form-group">
+                    <label><input type="checkbox" name="tenabled" checked> Enabled</label>
+                    <label><input type="checkbox" name="tautomated"> Automated</label>
+                    <br/>
+                    <br/>
+                </div>
+                <div class="form-group">
+                    <label for="tfolder">Folder<font color="red">*</font></label>
+                    <input type="hidden" name="tfolderId" value="${currentNode.id?c}"/>
+                    <input type="text" name="tfolder" class="form-control" id="tfolder" value="${currentNode.name}" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="tlanguage">Language</label>
+                    <input type="text" name="tlanguage" class="form-control" id="tlanguage"/>
+                </div>
+                <div class="form-group">
+                    <label for="tscriptfile">Automation Test Script File:</label>
+                    <input type="text" name="tscriptfile" class="form-control" id="tscriptfile"/>
+                </div>
+                <div class="form-group">
+                    <label for="tmethod">Automation Test Method Name:</label>
+                    <input type="text" name="tmethod" class="form-control" id="tmethod"/>
+                </div>
+            </div>
+
+            <div class="col-md-1">
+                &nbsp;
+            </div>
+
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label for="tbugid">Bug Id</label>
+                    <input name="tbugid" type="text" class="form-control" id="tbugid"/>
+                </div>
+                <div class="form-group">
+                    <label for="tproduct">Product</label>
+                    <input type="text" name="tproduct" class="form-control" id="tproduct"/>
+                </div>
+                <div class="form-group">
+                    <label for="tfeature">Feature</label>
+                    <input type="text" name="tfeature" class="form-control" id="tfeature"/>
+                </div>
+                <div class="form-group">
+                    <label for="taversion">Added Version</label>
+                    <input type="text" name="taversion" class="form-control" id="taversion"/>
+                </div>
+                <div class="form-group">
+                    <label for="tdversion">Deprecated Version</label>
+                    <input type="text" name="tdversion" class="form-control" id="tdversion"/>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <table id="testStepTable" class="table table-striped table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Procedure</th>
+                            <th>Expected</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <#list 1..2 as n>
+                        <tr>
+                            <td>${n}</td>
+                            <td><textarea class="expandable-textarea" name="testStep_${n}"></textarea></td>
+                            <td><textarea class="expandable-textarea" name="testExpected_${n}"></textarea></td>
+                        </tr>
+                        </#list>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12 text-right">
+                <input type="hidden" name="tstepCount" id="tstepCount" value="2"/>
+                <a id="addTestStep"  href="#" title="Add Test Step" ><i class="fa fa-plus-square fa-2x"></i></a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <button type="submit" name="action" id="testcase_save" value="testcase_save" class="btn btn-info">Save</button>
+                <button type="button" name="action" id="cancel" value="cancel" class="btn btn-info" onclick="history.back()" >Cancel</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+</@main.page> 
