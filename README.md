@@ -1,11 +1,11 @@
-# ExCord - Extension Cord is a Test Management web application, used to document test cases and plan and track QA projects.
+## ExCord - Extension Cord 2.0 is a Test Management web application, used to document test cases and plan and track QA projects.
 
-## Requirements
+### Requirements
 
 1. Java 7 to run.
 2. Mysql DB
 
-## Setup
+### Setup
 
 1. mvn clean install
 2. Setup Mysql DB instance. Refer DB setup Section
@@ -14,7 +14,7 @@
 4. http://localhost:9090
 
 
-## Login Info
+### Login Info
 1. excord support LDAP integration.
 2. excord supports Database Integration. (user: admin, pwd: manager)
 
@@ -27,7 +27,7 @@
 5. Flyway DB migration.
 
 
-## Features
+### Features
 
 1. Lightweight application
 2. REST API's for integration with automation tools
@@ -37,17 +37,23 @@
 6. Edit test case / view test case
 7. Testcase Attachments.
 
-## DB Setup
+### DB Setup
+
+```sql
 CREATE USER 'excord' IDENTIFIED BY 'excord';
 CREATE DATABASE excord;
 grant all on excord.* to 'excord'@'localhost' identified by 'excord';
 flush privileges;
+```
 
 If you are using DB authentication insert this row.
+
+```sql
 INSERT INTO `excord`.`ec_user` (`id`, `username`, `name`, `password`, `role`, `enabled`, `created_date`) 
 VALUES ('1', 'admin', 'admin', 'manager', 'USER', '1', NOW());
+```
 
-## Screenshots
+### Screenshots
 
 <br/>
 <img src="https://raw.github.com/DeemOpen/excord/master/images/excord-db.png"/>
@@ -101,6 +107,6 @@ VALUES ('1', 'admin', 'admin', 'manager', 'USER', '1', NOW());
 
 
 
-## License & Contribution
+### License & Contribution
 
 ExCord is released under the Apache 2.0 license. Comments, bugs, pull requests, and other contributions are all welcomed!
