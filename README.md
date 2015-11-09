@@ -10,7 +10,7 @@
 1. mvn clean install
 2. Setup Mysql DB instance. Refer DB setup Section
 2. Copy the application.properties to the folder with the jar file. Modify it to point to the correct JDBC, server port, ldap etc.
-3. Run the jar. ( nohup java -jar excord-1.0-SNAPSHOT-jar-with-dependencies.jar & )
+3. Run the jar. ( nohup java -jar excord-1.0-SNAPSHOT.jar & )
 4. http://localhost:9090
 
 
