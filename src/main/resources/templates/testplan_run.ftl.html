@@ -31,13 +31,9 @@
                             <td width="15%">Environment</td>
                             <td>
                                 <select name="testEnvironment" class="form-control">
-                                    <option>QA</option>
-                                    <option>Stage</option>
-                                    <option>Sustain</option>
-                                    <option>Pre-Prod</option>
-                                    <option>Development</option>
-                                    <option>Performance</option>
-                                    <option>Production</option>
+                                    <#list testEnvLst as env>
+                                    <option>${env}</option>
+                                    </#list>
                                 </select>
                             </td>
                         </tr>
@@ -94,8 +90,8 @@
                                 ${tc.priority}
                                 </#if>
                             </td>
-                            <td><input type="text" name="tcomments_${tc.id?c}" size="55" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].note}</#if>"/></td>
-                            <td><input type="text" name="tbug_${tc.id?c}" size="10" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].bugTicket}</#if>"/></td>
+                            <td><input type="text" name="tcomments_${tc.id?c}" size="55" value="<#if trMap[tc.id?c].note??>${trMap[tc.id?c].note}</#if>"/></td>
+                            <td><input type="text" name="tbug_${tc.id?c}" size="10" value="<#if trMap[tc.id?c].bugTicket??>${trMap[tc.id?c].bugTicket}</#if>"/></td>
                             <td><#if tc.environment??>${tc.environment}</#if></td>
                             <td>
                                 <#if trMap[tc.id?c]??>${trMap[tc.id?c].timestamp}</#if>

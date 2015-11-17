@@ -35,7 +35,7 @@
                             <td>${history.environment}</td>
                             <td>${history.tester}</td>
                             <td>${history.note}</td>
-                            <td>${history.bugTicket}</td>
+                            <td><#if history.bugTicket??>${history.bugTicket}</#if></td>
                             <td>${history.latest?c}</td>
                         </tr>
                         </#list>

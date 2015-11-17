@@ -42,7 +42,7 @@ public class AuthFilter extends RequestFilter {
             nextUrl = request.getRequestURI();
         }
 
-        if (!request.getRequestURI().equals("/") && !request.getRequestURI().contains("/login") && !request.getRequestURI().startsWith("/fonts/") && !request.getRequestURI().startsWith("/css/") && !request.getRequestURI().startsWith("/js/") && !request.getRequestURI().startsWith("/images/")) {
+        if (!request.getRequestURI().startsWith("/rest/") && !request.getRequestURI().equals("/") && !request.getRequestURI().contains("/login") && !request.getRequestURI().startsWith("/fonts/") && !request.getRequestURI().startsWith("/css/") && !request.getRequestURI().startsWith("/js/") && !request.getRequestURI().startsWith("/images/")) {
             //Create session if one doesnt exist.
             HttpSession session = request.getSession(true);
             if (session.getAttribute("authName") == null) {

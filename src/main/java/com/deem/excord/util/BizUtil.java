@@ -146,4 +146,34 @@ public enum BizUtil {
         return resultLst;
     }
 
+    public Boolean checkStatus(String tstatus) {
+        switch (tstatus) {
+            case Constants.STATUS_PASSED:
+            case Constants.STATUS_BLOCKED:
+            case Constants.STATUS_FAILED:
+            case Constants.STATUS_NOT_COMPLETED:
+            case Constants.STATUS_NOT_RUN:
+                return true;
+            default:
+                return false;
+        }
+
+    }
+
+    public Boolean checkEnv(String tenv) {
+        switch (tenv) {
+            
+           
+            case Constants.STATUS_PASSED:
+            case Constants.STATUS_BLOCKED:
+            case Constants.STATUS_FAILED:
+            case Constants.STATUS_NOT_COMPLETED:
+            case Constants.STATUS_NOT_RUN:
+                return true;
+            default:
+                return false;
+        }
+
+    }
+
 }

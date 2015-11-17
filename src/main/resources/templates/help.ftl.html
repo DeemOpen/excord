@@ -66,6 +66,19 @@
                 </ul>
             </div>
         </div>
+        <div class="row">
+            <div class="col-md-6 text-left">
+                <h4>Automation Integration</h4>
+                Automation scripts can POST the test runs to the following rest endpoint.
+                <br>
+                Validations are done on STATUS & TEST_ENV.
+                <br>
+                The list of valid TEST_ENV are mentioned in the the application.properties config file.
+                <br>
+                http://HOSTNAME:HOST_PORT/rest/run/{TESTPLAN_ID}/{TESTCASE_ID}/{TEST_ENV}/{STATUS}/{COMMENTS}
+                <br>
+            </div>
+        </div>
     </form>
 </div>
 </@main.page> 

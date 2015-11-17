@@ -15,6 +15,7 @@ import com.deem.excord.util.FlashMsgUtil;
 import com.deem.excord.util.HistoryUtil;
 import com.deem.excord.vo.TestPlanMetricVo;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -24,6 +25,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -53,6 +55,9 @@ public class TestPlanController {
 
     @Autowired
     HistoryUtil historyUtil;
+
+    @Value("${test.env}")
+    String testEnvArr;
 
     @RequestMapping(value = {"/"}, method = RequestMethod.GET)
     public String home(HttpSession session, Model model) {
@@ -160,11 +165,14 @@ public class TestPlanController {
                 trMap.put(tc.getId().toString(), testresult);
             }
         }
+
+        List<String> testEnvLst = Arrays.asList(testEnvArr.split(","));
         List<EcTestplanTestcaseMapping> tptcLst = tptcDao.findByTestplanId(testPlan);
         model.addAttribute("tptcLst", tptcLst);
         model.addAttribute("testCaseLst", testCaseLst);
         model.addAttribute("trMap", trMap);
         model.addAttribute("testPlan", testPlan);
+        model.addAttribute("testEnvLst", testEnvLst);
         return "testplan_run";
     }
 
