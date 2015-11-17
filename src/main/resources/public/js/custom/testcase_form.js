@@ -13,5 +13,10 @@ $(document).ready(function () {
         t.row.add([stepCount, testStep, testResult]).draw(false);
         autosize(document.querySelectorAll('textarea'));
     });
+    
+    
+    $("#testplan_save").click(function (event) {
+
+    });
 
 }); 

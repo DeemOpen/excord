@@ -16,8 +16,7 @@ $(document).ready(function () {
         autoclose: true
     });
 
-    $("#testplan_save").click(function (event) {
 
-    });
+});
 
-}); 
+

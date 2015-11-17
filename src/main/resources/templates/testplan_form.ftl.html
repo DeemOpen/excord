@@ -17,7 +17,7 @@
                     </label>
                     <div class="col-md-6">
                         <input type="hidden" name="tid" value="<#if testPlan??>${testPlan.id}</#if>"/>
-                        <input class="form-control"  name="tname" value="<#if testPlan??>${testPlan.name}</#if>"/>
+                        <input class="form-control"  name="tname" value="<#if testPlan??>${testPlan.name}</#if>" maxlength="90"/>
                     </div>
                 </div>
 
@@ -56,7 +56,7 @@
                         Start Date
                     </label>
                     <div class="col-md-3">
-                        <input  class="form-control"  id="tstartdt" name="tstartdt" value="<#if testPlan??>${testPlan.startDate?string['MM-dd-yyyy']}</#if>" onchange="checkDate();" readonly/>
+                        <input  class="form-control"  id="tstartdt" name="tstartdt" value="<#if testPlan??>${testPlan.startDate?string['MM-dd-yyyy']}</#if>" readonly/>
                     </div>
                 </div>
 
@@ -66,7 +66,7 @@
                         End Date
                     </label>
                     <div class="col-md-3">
-                        <input  class="form-control" id="tenddt"  name="tenddt" value="<#if testPlan??>${testPlan.endDate?string['MM-dd-yyyy']}</#if>" onchange="checkDate();" readonly/>
+                        <input  class="form-control" id="tenddt"  name="tenddt" value="<#if testPlan??>${testPlan.endDate?string['MM-dd-yyyy']}</#if>" readonly/>
                     </div>
                 </div>
 
@@ -75,7 +75,7 @@
                         Release
                     </label>
                     <div class="col-md-5">
-                        <input  class="form-control"  name="trelease" value="<#if testPlan??>${testPlan.releaseName}</#if>"/>
+                        <input  class="form-control"  name="trelease" value="<#if testPlan??>${testPlan.releaseName}</#if>" maxlength="45"/>
                     </div>
                 </div>
 
@@ -105,7 +105,7 @@
                         Schedule
                     </label>
                     <div class="col-md-5">
-                        <input  class="form-control"  name="tschedule" value="<#if testPlan??>${testPlan.schedule}</#if>"/>
+                        <input  class="form-control"  name="tschedule" value="<#if testPlan??>${testPlan.schedule}</#if>" maxlength="45"/>
                     </div>
                 </div>
 
