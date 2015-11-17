@@ -15,36 +15,93 @@
             <div class="col-md-3">
                 <div>
                     <label for="tname">Test Case Name<font color="red">*</font></label>
-                    <input type="text" class="form-control" id="tname" name="tname" maxlength="90" required/>
+                    <input type="hidden" name="tid" value="<#if tc??>${tc.id?c}</#if>"/>
+                    <input type="text" class="form-control" id="tname" name="tname" maxlength="90" required value="<#if tc??>${tc.name}</#if>"/>
                     <br/>
                 </div>
                 <div>
                     <label for="tdescription">Description<font color="red">*</font></label>
-                    <textarea class="form-control" name="tdescription" id="tdescription" rows="4" required></textarea>
+                    <textarea class="form-control" name="tdescription" id="tdescription" rows="4" required><#if tc??>${tc.description}</#if></textarea>
                     <br/>
                 </div>
 
                 <div>
                     <label for="tpriority">Priority<font color="red">*</font></label>
                     <select class="form-control" id="tpriority" name="tpriority">
+                        <#if tc?? && tc.priority == "P1">
                         <option value="P1" selected>Critical (P1)</option>
+                        <#else>
+                        <option value="P1">Critical (P1)</option>
+                        </#if>
+                        <#if tc?? && tc.priority == "P2">
+                        <option value="P2" selected>Major (P2)</option>
+                        <#else>
                         <option value="P2">Major (P2)</option>
+                        </#if>
+                        <#if tc?? && tc.priority == "P3">
+                        <option value="P3" selected>Minor (P3)</option>
+                        <#else>
                         <option value="P3">Minor (P3)</option>
+                        </#if>
+                        <#if tc?? && tc.priority == "P4">
+                        <option value="P4" selected>Trivial (P4)</option>
+                        <#else>
                         <option value="P4">Trivial (P4)</option>
+                        </#if>
+
                     </select>
                     <br/>
                 </div>
                 <div>
                     <label for="ttype">Type<font color="red">*</font></label>
                     <select class="form-control" id="ttype" name="ttype">
-                        <option value="Regression" selected>Regression</option>
-                        <option value="Mixed mode">Mixed mode</option>
-                        <option value="New feature">New feature</option>
-                        <option value="Automated Regression">Automated Regression</option>
-                        <option value="Manual Only">Manual Only</option>
-                        <option value="Migration">Migration</option>
-                        <option value="Hotfix">Hotfix</option>
-                        <option value="Production Sanity Check">Production Sanity Check</option>
+                        <#if tc?? && tc.caseType == "REGRESSION">
+                        <option value="REGRESSION" selected>Regression</option>
+                        <#else>
+                        <option value="REGRESSION">Regression</option>
+                        </#if>
+
+                        <#if tc?? && tc.caseType == "MIXED_MODE">
+                        <option value="MIXED_MODE" selected>Mixed mode</option>
+                        <#else>
+                        <option value="MIXED_MODE">Mixed mode</option>
+                        </#if>
+
+                        <#if tc?? && tc.caseType == "NEW_FEATURE">
+                        <option value="NEW_FEATURE" selected>New feature</option>
+                        <#else>
+                        <option value="NEW_FEATURE">New feature</option>
+                        </#if>
+
+                        <#if tc?? && tc.caseType == "AUTOMATED_REGRESSION">
+                        <option value="AUTOMATED_REGRESSION" selected>Automated Regression</option>
+                        <#else>
+                        <option value="AUTOMATED_REGRESSION">Automated Regression</option>
+                        </#if>
+
+                        <#if tc?? && tc.caseType == "MANUAL">
+                        <option value="MANUAL" selected>Manual Only</option>
+                        <#else>
+                        <option value="MANUAL">Manual Only</option>
+                        </#if>
+
+                        <#if tc?? && tc.caseType == "MIGRATION">
+                        <option value="MIGRATION" selected>Migration</option>
+                        <#else>
+                        <option value="MIGRATION">Migration</option>
+                        </#if>
+
+                        <#if tc?? && tc.caseType == "HOTFIX">
+                        <option value="HOTFIX" selected>Hotfix</option>
+                        <#else>
+                        <option value="HOTFIX">Hotfix</option>
+                        </#if>
+
+                        <#if tc?? && tc.caseType == "SANITY_CHECK">
+                        <option value="SANITY_CHECK" selected>Production Sanity Check</option>
+                        <#else>
+                        <option value="SANITY_CHECK">Production Sanity Check</option>
+                        </#if>
                     </select>
                 </div>
 
@@ -54,8 +111,20 @@
             </div>
             <div class="col-md-3">
                 <div class="checkbox form-group">
-                    <label><input type="checkbox" name="tenabled" checked> Enabled</label>
-                    <label><input type="checkbox" name="tautomated"> Automated</label>
+                    <label>
+                        <#if tc?? && tc.enabled?c == "true">
+                        <input type="checkbox" name="tenabled" checked> 
+                        <#else>
+                        <input type="checkbox" name="tenabled"> 
+                        </#if>
+                        Enabled</label>
+                    <label>
+                        <#if tc?? && tc.automated?c == "true">
+                        <input type="checkbox" name="tautomated" checked=""> 
+                        <#else>
+                        <input type="checkbox" name="tautomated"> 
+                        </#if>
+                        Automated</label>
                     <br/>
                     <br/>
                 </div>
@@ -66,15 +135,15 @@
                 </div>
                 <div class="form-group">
                     <label for="tlanguage">Language</label>
-                    <input type="text" name="tlanguage" class="form-control" id="tlanguage" maxlength="45"/>
+                    <input type="text" name="tlanguage" class="form-control" id="tlanguage" maxlength="45" value="<#if tc??>${tc.language}</#if>"/>
                 </div>
                 <div class="form-group">
                     <label for="tscriptfile">Automation Test Script File:</label>
-                    <input type="text" name="tscriptfile" class="form-control" id="tscriptfile" maxlength="90"/>
+                    <input type="text" name="tscriptfile" class="form-control" id="tscriptfile" maxlength="90" value="<#if tc??>${tc.testScriptFile}</#if>"/>
                 </div>
                 <div class="form-group">
                     <label for="tmethod">Automation Test Method Name:</label>
-                    <input type="text" name="tmethod" class="form-control" id="tmethod" maxlength="45"/>
+                    <input type="text" name="tmethod" class="form-control" id="tmethod" maxlength="45" value="<#if tc??>${tc.methodName}</#if>"/>
                 </div>
             </div>
 
@@ -85,23 +154,23 @@
             <div class="col-md-3">
                 <div class="form-group">
                     <label for="tbugid">Bug Id</label>
-                    <input name="tbugid" type="text" class="form-control" id="tbugid" maxlength="45"/>
+                    <input name="tbugid" type="text" class="form-control" id="tbugid" maxlength="45" value="<#if tc??>${tc.bugId}</#if>"/>
                 </div>
                 <div class="form-group">
                     <label for="tproduct">Product</label>
-                    <input type="text" name="tproduct" class="form-control" id="tproduct" maxlength="45"/>
+                    <input type="text" name="tproduct" class="form-control" id="tproduct" maxlength="45" value="<#if tc??>${tc.product}</#if>"/>
                 </div>
                 <div class="form-group">
                     <label for="tfeature">Feature</label>
-                    <input type="text" name="tfeature" class="form-control" id="tfeature" maxlength="45"/>
+                    <input type="text" name="tfeature" class="form-control" id="tfeature" maxlength="45" value="<#if tc??>${tc.feature}</#if>"/>
                 </div>
                 <div class="form-group">
                     <label for="taversion">Added Version</label>
-                    <input type="text" name="taversion" class="form-control" id="taversion" maxlength="45"/>
+                    <input type="text" name="taversion" class="form-control" id="taversion" maxlength="45" value="<#if tc??>${tc.addedVersion}</#if>"/>
                 </div>
                 <div class="form-group">
                     <label for="tdversion">Deprecated Version</label>
-                    <input type="text" name="tdversion" class="form-control" id="tdversion" maxlength="45"/>
+                    <input type="text" name="tdversion" class="form-control" id="tdversion" maxlength="45" value="<#if tc??>${tc.deprecatedVersion}</#if>"/>
                 </div>
             </div>
         </div>
@@ -111,12 +180,21 @@
                 <table id="testStepTable" class="table table-striped table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
+                            <th width="2%">ID</th>
                             <th>Procedure<font color="red">*</font></th>
                             <th>Expected<font color="red">*</font></th>
                         </tr>
                     </thead>
                     <tbody>
+                        <#if tsLst??>
+                        <#list tsLst as ts>
+                        <tr>
+                            <td>${ts.stepNumber}</td>
+                            <td><textarea class="expandable-textarea" id="testStep_${ts.stepNumber}" name="testStep_${ts.stepNumber}" required>${ts.description}</textarea></td>
+                            <td><textarea class="expandable-textarea" id="testExpected_${ts.stepNumber}" name="testExpected_${ts.stepNumber}" required>${ts.expected}</textarea></td>
+                        </tr>
+                        </#list>
+                        <#else>
                         <#list 1..2 as n>
                         <tr>
                             <td>${n}</td>
@@ -124,15 +202,20 @@
                             <td><textarea class="expandable-textarea" id="testExpected_${n}" name="testExpected_${n}" required></textarea></td>
                         </tr>
                         </#list>
+                        </#if>
+
                     </tbody>
                 </table>
             </div>
         </div>
 
-
         <div class="row">
             <div class="col-md-12 text-right">
+                <#if tsLst??>
+                <input type="hidden" name="tstepCount" id="tstepCount" value="${tsLst?size}"/>
+                <#else>
                 <input type="hidden" name="tstepCount" id="tstepCount" value="2"/>
+                </#if>
                 <a id="addTestStep"  href="#" title="Add Test Step" ><i class="fa fa-plus-square fa-2x"></i></a>
             </div>
         </div>

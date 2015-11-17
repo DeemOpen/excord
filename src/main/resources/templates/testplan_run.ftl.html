@@ -75,7 +75,7 @@
                                     ${tc.folderId.name}
                                 </a>
                             </td>
-                            <td style="word-break:break-all;"><a href="#">${tc.name}</a></td>
+                            <td style="word-break:break-all;">${tc.name}</td>
                             <td>
                                 <#list tptcLst as tptc>
                                 <#if tptc.testcaseId.id?c == tc.id?c>
@@ -127,10 +127,10 @@
                                             ${step.stepNumber}    
                                         </td>
                                         <td style="width:45%">
-                                            ${step.description} 
+                                            ${step.description?replace("\n", "<br/>")} 
                                         </td>
                                         <td style="width:50%">
-                                            ${step.expected}
+                                            ${step.expected?replace("\n", "<br/>")}
                                         </td>
                                     </tr>
                                     </#list>

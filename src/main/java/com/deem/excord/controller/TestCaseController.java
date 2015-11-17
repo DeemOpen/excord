@@ -125,6 +125,7 @@ public class TestCaseController {
 
     @RequestMapping(value = "/testcase_save", method = RequestMethod.POST)
     public String testCaseSave(Model model, HttpSession session, HttpServletRequest request,
+            @RequestParam(value = "tid", required = false) Long tid,
             @RequestParam(value = "tstepCount", required = true) Long tstepCount,
             @RequestParam(value = "tname", required = true) String tname,
             @RequestParam(value = "tdescription", required = true) String tdescription,
@@ -144,7 +145,16 @@ public class TestCaseController {
     ) {
 
         EcTestfolder folder = tfDao.findOne(tfolderId);
-        EcTestcase tc = new EcTestcase();
+
+        EcTestcase tc;
+        if (tid != null) {
+            tc = tcDao.findOne(tid);
+            //Delete all existing steps of testcase.
+            tsDao.deleteTeststepByTestcaseId(tid);
+        } else {
+            tc = new EcTestcase();
+        }
+
         tc.setName(tname);
         tc.setDescription(tdescription);
         tc.setEnabled(tenabled);
@@ -161,6 +171,7 @@ public class TestCaseController {
         tc.setAddedVersion(taversion);
         tc.setDeprecatedVersion(tdversion);
         tcDao.save(tc);
+        
         for (int i = 1; i <= tstepCount; i++) {
             EcTeststep tstep = new EcTeststep();
             tstep.setStepNumber(i);
@@ -546,6 +557,16 @@ public class TestCaseController {
             session.setAttribute("flashMsg", "File is empty!");
         }
         return "redirect:/testcase?nodeId=" + nodeId;
+    }
+
+    @RequestMapping(value = "/testcase_edit", method = RequestMethod.GET)
+    public String testcaseEdit(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "testcaseId", required = true) Long testcaseId) {
+        EcTestcase tc = tcDao.findOne(testcaseId);
+        List<EcTeststep> tsLst = tsDao.findByTestcaseId(tc);
+        model.addAttribute("currentNode", tc.getFolderId());
+        model.addAttribute("tc", tc);
+        model.addAttribute("tsLst", tsLst);
+        return "testcase_form";
     }
 
 }

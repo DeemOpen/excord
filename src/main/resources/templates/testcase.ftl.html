@@ -116,7 +116,7 @@
                                 </#if>
                                 </#list>
                             </td>
-                            <td style="word-break:break-all;"><a href="#">${tc.name}</a></td>
+                            <td style="word-break:break-all;"><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
                             <td>${tc.enabled?c}</td>
                             <td>
                                 <#if tc.priority??>
@@ -138,11 +138,11 @@
                                         <td>
                                             ${step.stepNumber}    
                                         </td>
-                                        <td style="width:45%">
-                                            ${step.description} 
+                                        <td style="width:45%;">
+                                            ${step.description?replace("\n", "<br/>")} 
                                         </td>
-                                        <td style="width:50%">
-                                            ${step.expected}
+                                        <td style="width:50%;">
+                                            ${step.expected?replace("\n", "<br/>")}
                                         </td>
                                     </tr>
                                     </#list>

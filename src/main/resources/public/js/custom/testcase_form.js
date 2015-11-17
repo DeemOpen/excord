@@ -14,4 +14,17 @@ $(document).ready(function () {
         autosize(document.querySelectorAll('textarea'));
     });
 
+
+
+//    $("#testcase_save").click(function (event) {
+//        var stepCount = Number($("#tstepCount").val().trim());
+//        for (i = 1; i <= stepCount; i++) {
+//            if (jQuery.isEmptyObject($("#testStep_" + i).val()) || jQuery.isEmptyObject($("#testExpected_" + i).val())) {
+//                event.preventDefault();
+//                bootbox.alert("Test steps cant be empty!");
+//                break;
+//            }
+//        }
+//    });
+
 }); 
