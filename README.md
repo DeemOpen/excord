@@ -31,11 +31,10 @@
 
 1. Lightweight application
 2. REST API's for integration with automation tools
-3. Track test cases project over project, release over release
-4. Rest API
+3. Document testcases.
+4. Associate testcases with testplan and run the test plans.
 5. Metric Reports
-6. Edit test case / view test case
-7. Testcase Attachments.
+
 
 ### DB Setup
 
