@@ -27,9 +27,14 @@ $(document).ready(function () {
     $("#delTestStep").click(function (event) {
         event.preventDefault();
         var stepCount = Number($("#tstepCount").val().trim());
-        stepCount = stepCount - 1;
-        $("#tstepCount").val(stepCount);
-        $('#testStepTable tr:last').remove();
+        if (stepCount < 2) {
+            bootbox.alert("Cant delete all steps!");
+        } else {
+            stepCount = stepCount - 1;
+            $("#tstepCount").val(stepCount);
+            $('#testStepTable tr:last').remove();
+        }
+
     });
 
 }); 
