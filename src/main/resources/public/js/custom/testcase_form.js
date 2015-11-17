@@ -8,15 +8,10 @@ $(document).ready(function () {
         var stepCount = Number($("#tstepCount").val().trim());
         stepCount = stepCount + 1;
         $("#tstepCount").val(stepCount);
-        var testStep = "<textarea id=\"testStep_" + stepCount + "\" name=\"testStep_" + stepCount + "\"></textarea>";
-        var testResult = "<textarea id=\"testExpected_" + stepCount + "\" name=\"testExpected_" + stepCount + "\"></textarea>";
+        var testStep = "<textarea id=\"testStep_" + stepCount + "\" name=\"testStep_" + stepCount + "\" required></textarea>";
+        var testResult = "<textarea id=\"testExpected_" + stepCount + "\" name=\"testExpected_" + stepCount + "\" required></textarea>";
         t.row.add([stepCount, testStep, testResult]).draw(false);
         autosize(document.querySelectorAll('textarea'));
-    });
-    
-    
-    $("#testplan_save").click(function (event) {
-
     });
 
 }); 

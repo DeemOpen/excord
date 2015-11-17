@@ -16,6 +16,12 @@ $(document).ready(function () {
         autoclose: true
     });
 
+    $("#testplan_save").click(function (event) {
+        if (jQuery.isEmptyObject($("#tstartdt").val()) || jQuery.isEmptyObject($("#tenddt").val())) {
+            event.preventDefault();
+            bootbox.alert("Please fill mandatory fields!");
+        }
+    });
 
 });
 

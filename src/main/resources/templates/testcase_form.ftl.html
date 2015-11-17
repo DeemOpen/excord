@@ -15,12 +15,12 @@
             <div class="col-md-3">
                 <div>
                     <label for="tname">Test Case Name<font color="red">*</font></label>
-                    <input type="text" class="form-control" id="tname" name="tname" maxlength="90">
+                    <input type="text" class="form-control" id="tname" name="tname" maxlength="90" required/>
                     <br/>
                 </div>
                 <div>
                     <label for="tdescription">Description<font color="red">*</font></label>
-                    <textarea class="form-control" name="tdescription" id="tdescription" rows="4"></textarea>
+                    <textarea class="form-control" name="tdescription" id="tdescription" rows="4" required></textarea>
                     <br/>
                 </div>
 
@@ -120,8 +120,8 @@
                         <#list 1..2 as n>
                         <tr>
                             <td>${n}</td>
-                            <td><textarea class="expandable-textarea" name="testStep_${n}"></textarea></td>
-                            <td><textarea class="expandable-textarea" name="testExpected_${n}"></textarea></td>
+                            <td><textarea class="expandable-textarea" id="testStep_${n}" name="testStep_${n}" required></textarea></td>
+                            <td><textarea class="expandable-textarea" id="testExpected_${n}" name="testExpected_${n}" required></textarea></td>
                         </tr>
                         </#list>
                     </tbody>
@@ -139,7 +139,7 @@
 
         <div class="row">
             <div class="col-md-12 text-center">
-                <button type="submit" name="action" id="testcase_save" value="testcase_save" class="btn btn-info">Save</button>
+                <button type="submit" name="action" id="testcase_save" value="testcase_save" class="btn btn-info"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
                 <button type="button" name="action" id="cancel" value="cancel" class="btn btn-info" onclick="history.back()" >Cancel</button>
             </div>
         </div>
