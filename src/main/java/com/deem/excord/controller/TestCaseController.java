@@ -171,7 +171,7 @@ public class TestCaseController {
         tc.setAddedVersion(taversion);
         tc.setDeprecatedVersion(tdversion);
         tcDao.save(tc);
-        
+
         for (int i = 1; i <= tstepCount; i++) {
             EcTeststep tstep = new EcTeststep();
             tstep.setStepNumber(i);
@@ -208,7 +208,8 @@ public class TestCaseController {
 
     @RequestMapping(value = "/testcase_testplan_link", method = RequestMethod.POST)
     public String testCaseTestPlanLink(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "testPlanId", required = true) Long testPlanId, @RequestParam(value = "nodeId", required = true) Long nodeId, @RequestParam(value = "testcaseChk") List<Long> testcaseChkLst) {
-
+        Boolean disabledTcPresent = false;
+        Boolean enabledTcPresent = false;
         for (Long testCaseId : testcaseChkLst) {
             EcTestplanTestcaseMapping tptcMap = new EcTestplanTestcaseMapping();
             EcTestcase tc = tcDao.findOne(testCaseId);
@@ -219,16 +220,28 @@ public class TestCaseController {
                 tptcMap.setTestplanId(tp);
                 if (tc.getEnabled()) {
                     //Dont map disabled test cases.
+                    enabledTcPresent = true;
                     historyUtil.addHistory("Linked TestPlan : [" + tp.getName() + "] with TestCase: [" + tc.getName() + "] ", session, request.getRemoteAddr());
                     tptcDao.save(tptcMap);
                 } else {
+                    disabledTcPresent = true;
                     logger.info("Cant link disabled test case: [{}:{}] to test plan: [{}:{}]", tc.getId(), tc.getName(), tp.getId(), tp.getName());
                 }
             } else {
                 logger.info("Link already exists for test case: [{}:{}] to test plan: [{}:{}]", tc.getId(), tc.getName(), tp.getId(), tp.getName());
             }
         }
-        session.setAttribute("flashMsg", "Successfully Linked!");
+
+        if (disabledTcPresent == true && enabledTcPresent == true) {
+            session.setAttribute("flashMsg", "Successfully Linked Testcases, Disabled testcases cant be linked!");
+        } else if (disabledTcPresent == true && enabledTcPresent == false) {
+            session.setAttribute("flashMsg", "Disabled testcases cant be linked!");
+        } else if (disabledTcPresent == false && enabledTcPresent == true) {
+            session.setAttribute("flashMsg", "Successfully Linked Testcases!");
+        } else {
+            session.setAttribute("flashMsg", "Testcases already linked!");
+        }
+
         return "redirect:/testcase?nodeId=" + nodeId;
     }
 
