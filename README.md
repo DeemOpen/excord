@@ -109,3 +109,4 @@ VALUES ('1', 'admin', 'admin', 'manager', 'USER', '1', NOW());
 ### License & Contribution
 
 ExCord is released under the Apache 2.0 license. Comments, bugs, pull requests, and other contributions are all welcomed!
+Icon designed by Freepik
