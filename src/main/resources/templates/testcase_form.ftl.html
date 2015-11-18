@@ -186,7 +186,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <#if tsLst??>
+                        <#if tsLst?? && tsLst?has_content>
                         <#list tsLst as ts>
                         <tr>
                             <td>${ts.stepNumber}</td>
