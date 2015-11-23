@@ -490,7 +490,7 @@ public class TestCaseController {
         }
 
         try {
-            response.setContentType("application/vnd.ms-excel");
+            response.setContentType("application/octet-stream");
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
             String dateStr = sdf.format(cal.getTime());
