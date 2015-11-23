@@ -589,7 +589,7 @@ public class TestCaseController {
 
                     //Just keep adding test steps.
                 }
-                historyUtil.addHistory("Uploaded testcase file: " + fileName + " to folder :[" + currentNode.getId() + ":" + currentNode.getName() + "]", session, request.getRemoteAddr());
+                historyUtil.addHistory("Uploaded testcase file: " + fileName + " to folder [" + currentNode.getId() + ":" + currentNode.getName() + "]", session, request.getRemoteAddr());
                 session.setAttribute("flashMsg", "Successfully Imported :" + fileName);
             } catch (Exception ex) {
                 session.setAttribute("flashMsg", "File upload failed! " + ex.getMessage());
