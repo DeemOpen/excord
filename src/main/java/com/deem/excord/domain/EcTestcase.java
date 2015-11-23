@@ -2,6 +2,7 @@ package com.deem.excord.domain;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.SortedSet;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -13,6 +14,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -82,7 +84,8 @@ public class EcTestcase implements Serializable {
     @OneToMany(mappedBy = "testcaseId")
     private List<EcTestupload> ecTestuploadList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "testcaseId")
-    private List<EcTeststep> ecTeststepList;
+    @OrderBy("stepNumber ASC")
+    private SortedSet<EcTeststep> ecTeststepList;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "testcaseId")
     private List<EcTestplanTestcaseMapping> ecTestplanTestcaseMappingList;
 
@@ -237,11 +240,11 @@ public class EcTestcase implements Serializable {
         this.ecTestuploadList = ecTestuploadList;
     }
 
-    public List<EcTeststep> getEcTeststepList() {
+    public SortedSet<EcTeststep> getEcTeststepList() {
         return ecTeststepList;
     }
 
-    public void setEcTeststepList(List<EcTeststep> ecTeststepList) {
+    public void setEcTeststepList(SortedSet<EcTeststep> ecTeststepList) {
         this.ecTeststepList = ecTeststepList;
     }
 

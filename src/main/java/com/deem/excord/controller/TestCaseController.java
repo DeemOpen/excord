@@ -94,7 +94,7 @@ public class TestCaseController {
         Collections.reverse(parentNodeLst);
 
         //find all testcases in node.
-        List<EcTestcase> testCaseLst = tcDao.findAllByFolderId(currenNode);
+        List<EcTestcase> testCaseLst = tcDao.findAllByFolderIdOrderByIdAsc(currenNode);
         if (testCaseLst == null) {
             testCaseLst = new ArrayList<EcTestcase>();
         }
@@ -440,7 +440,7 @@ public class TestCaseController {
     public void testCaseExport(HttpServletResponse response, @RequestParam(value = "nodeId", required = true) Long nodeId, @RequestParam(value = "testcaseChk") List<Long> testcaseChkLst) {
 
         ServletOutputStream outputStream = null;
-        List<EcTestcase> testCaseLst = tcDao.findAllByFolderId(tfDao.findOne(nodeId));
+        List<EcTestcase> testCaseLst = tcDao.findAllByFolderIdOrderByIdAsc(tfDao.findOne(nodeId));
         if (testCaseLst == null) {
             testCaseLst = new ArrayList<EcTestcase>();
         }
@@ -448,27 +448,33 @@ public class TestCaseController {
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("TestCases");
 
-        Map<String, Object[]> data = new TreeMap<String, Object[]>();
-        data.put("1", new Object[]{"ID", "NAME", "DESCRIPTION", "STEP", "PROCEDURE", "EXPECTED"});
-        Integer idx = 2;
+        Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
+        Integer idx = 0;
+        data.put(idx, new Object[]{"ID", "NAME", "DESCRIPTION", "STEP", "PROCEDURE", "EXPECTED"});
+        idx++;
         for (EcTestcase tc : testCaseLst) {
             if (testcaseChkLst.contains(tc.getId())) {
                 String testcaseName = tc.getName();
                 String testcaseDesc = tc.getDescription();
-
-                for (EcTeststep step : tc.getEcTeststepList()) {
-                    data.put(idx.toString(), new Object[]{tc.getId().toString(), testcaseName, testcaseDesc, step.getStepNumber(), step.getDescription(), step.getExpected()});
-                    testcaseDesc = "";
+                if (tc.getEcTeststepList().isEmpty()) {
+                    data.put(idx, new Object[]{tc.getId().toString(), testcaseName, testcaseDesc, 1, "", ""});
                     idx++;
+                } else {
+                    for (EcTeststep step : tc.getEcTeststepList()) {
+                        data.put(idx, new Object[]{tc.getId().toString(), testcaseName, testcaseDesc, step.getStepNumber(), step.getDescription(), step.getExpected()});
+                        testcaseDesc = "";
+                        testcaseName = "";
+                        idx++;
+                    }
                 }
+
             }
         }
 
-        Set<String> keyset = data.keySet();
-        int rownum = 0;
-        for (String key : keyset) {
-            Row row = sheet.createRow(rownum++);
-            Object[] objArr = data.get(key);
+        for (Map.Entry<Integer, Object[]> entry : data.entrySet()) {
+            Integer key = entry.getKey();
+            Object[] objArr = entry.getValue();
+            Row row = sheet.createRow(key);
             int cellnum = 0;
             for (Object obj : objArr) {
                 Cell cell = row.createCell(cellnum++);
@@ -479,7 +485,9 @@ public class TestCaseController {
                     cell.setCellValue(obj.toString());
                 }
             }
+
         }
+
         try {
             response.setContentType("application/vnd.ms-excel");
             Calendar cal = Calendar.getInstance();
@@ -516,49 +524,58 @@ public class TestCaseController {
                 EcTestcase tc = null;
                 Integer stepNumber = 1;
                 Boolean skipHeader = true;
+                Long previousTestId = -1L;
+                Long newTestId = -1L;
                 while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
                     if (skipHeader) {
                         skipHeader = false;
                         continue;
                     }
-                    Long testId = -1L;
+                    String testName = validateInput(row.getCell(1).getStringCellValue(),90);
+                    String testDescription = validateInput(row.getCell(2).getStringCellValue(),-1);
+                    String testProcedure = validateInput(row.getCell(4).getStringCellValue(),-1);
+                    String testExpected = validateInput(row.getCell(5).getStringCellValue(),-1);
+                    logger.info("test name:{}, test description: {}",testName,testDescription);
                     if (row.getCell(0) != null) {
-                        testId = Long.parseLong(row.getCell(0).getStringCellValue());
-                    }
-                    String testName = row.getCell(1).getStringCellValue();
-                    String testDescription = row.getCell(2).getStringCellValue();
-                    String testProcedure = row.getCell(4).getStringCellValue();
-                    String testExpected = row.getCell(5).getStringCellValue();
-                    if (tc == null || !tc.getName().equals(testName)) {
-                        stepNumber = 1;
-                        //The testid should also match the folder id.
-                        tc = tcDao.findByIdAndFolderId(testId, currentNode);
-                        if (tc == null) {
-                            tc = new EcTestcase();
-                            historyUtil.addHistory("Testcase [" + testName + "] added by import", session, request.getRemoteAddr());
+                        newTestId = Long.parseLong(row.getCell(0).getStringCellValue());
+                        if (newTestId.equals(previousTestId)) {
+                            //Just keep adding steps.
+                            EcTeststep tp = new EcTeststep();
+                            tp.setStepNumber(stepNumber);
+                            tp.setDescription(testProcedure);
+                            tp.setExpected(testExpected);
+                            tp.setTestcaseId(tc);
+                            stepNumber++;
+                            tsDao.save(tp);
                         } else {
-                            historyUtil.addHistory("Testcase [" + tc.getId() + ":" + tc.getName() + "] updated by import", session, request.getRemoteAddr()
-                            );
-                            //Delete all existing teststeps.
-                            tsDao.deleteTeststepByTestcaseId(tc.getId());
+                            previousTestId = newTestId;
+                            stepNumber = 1;
+                            tc = tcDao.findByIdAndFolderId(previousTestId, currentNode);
+                            if (tc == null) {
+                                tc = new EcTestcase();
+                                historyUtil.addHistory("Testcase [" + testName + "] added by import", session, request.getRemoteAddr());
+                            } else {
+                                historyUtil.addHistory("Testcase [" + tc.getId() + ":" + tc.getName() + "] updated by import", session, request.getRemoteAddr());
+                                //Delete all existing teststeps.
+                                tsDao.deleteTeststepByTestcaseId(tc.getId());
+                            }
+                            tc.setName(testName);
+                            tc.setDescription(testDescription);
+                            tc.setEnabled(true);
+                            tc.setFolderId(currentNode);
+                            tcDao.save(tc);
+                            EcTeststep tp = new EcTeststep();
+                            tp.setStepNumber(stepNumber);
+                            tp.setDescription(testProcedure);
+                            tp.setExpected(testExpected);
+                            tp.setTestcaseId(tc);
+                            stepNumber++;
+                            tsDao.save(tp);
                         }
-                        tc.setName(testName);
-                        tc.setDescription(testDescription);
-                        tc.setEnabled(true);
-                        tc.setFolderId(currentNode);
-                        tcDao.save(tc);
                     }
 
                     //Just keep adding test steps.
-                    EcTeststep tp = new EcTeststep();
-                    tp.setStepNumber(stepNumber);
-                    tp.setDescription(testProcedure);
-                    tp.setExpected(testExpected);
-                    tp.setTestcaseId(tc);
-                    stepNumber++;
-                    tsDao.save(tp);
-
                 }
                 historyUtil.addHistory("Uploaded testcase file: " + fileName, session, request.getRemoteAddr());
                 session.setAttribute("flashMsg", "Successfully Imported :" + fileName);
@@ -582,4 +599,13 @@ public class TestCaseController {
         return "testcase_form";
     }
 
+    public String validateInput(String value, Integer length) {
+        if (value == null || value.isEmpty()) {
+            return " ";
+        }
+        if (length > 0 && value.length() > length) {
+            value = value.substring(0, length);
+        }
+        return value;
+    }
 }

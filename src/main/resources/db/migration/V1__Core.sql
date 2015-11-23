@@ -177,7 +177,7 @@ CREATE  TABLE IF NOT EXISTS `excord`.`ec_history` (
   `id` BIGINT NOT NULL AUTO_INCREMENT ,
   `change_user` VARCHAR(45) NULL ,
   `change_date` DATETIME NULL ,
-  `change_summary` VARCHAR(90) NULL ,
+  `change_summary` TEXT NULL ,
   `change_ip` VARCHAR(90) NULL ,
   PRIMARY KEY (`id`) ,
   INDEX `history_idx1` (`change_user` ASC) )

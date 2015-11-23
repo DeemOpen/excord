@@ -9,7 +9,7 @@ import org.springframework.data.repository.query.Param;
 
 public interface TestCaseRepository extends CrudRepository<EcTestcase, Long> {
 
-    public List<EcTestcase> findAllByFolderId(EcTestfolder folderId);
+    public List<EcTestcase> findAllByFolderIdOrderByIdAsc(EcTestfolder folderId);
 
     @Query(value = "select a.* from ec_testcase a, ec_testplan_testcase_mapping b where a.id = b.testcase_id and b.testplan_id = :testPlanId", nativeQuery = true)
     public List<EcTestcase> findAllTestCasesByTestPlanId(@Param("testPlanId") Long testPlanId);

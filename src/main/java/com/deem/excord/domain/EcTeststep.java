@@ -16,7 +16,7 @@ import javax.validation.constraints.Size;
 
 @Entity
 @Table(name = "ec_teststep")
-public class EcTeststep implements Serializable {
+public class EcTeststep implements Serializable, Comparable<EcTeststep> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -27,7 +27,7 @@ public class EcTeststep implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "step_number")
-    private int stepNumber;
+    private Integer stepNumber;
     @Basic(optional = false)
     @NotNull
     @Lob
@@ -51,7 +51,7 @@ public class EcTeststep implements Serializable {
         this.id = id;
     }
 
-    public EcTeststep(Long id, int stepNumber, String description, String expected) {
+    public EcTeststep(Long id, Integer stepNumber, String description, String expected) {
         this.id = id;
         this.stepNumber = stepNumber;
         this.description = description;
@@ -70,7 +70,7 @@ public class EcTeststep implements Serializable {
         return stepNumber;
     }
 
-    public void setStepNumber(int stepNumber) {
+    public void setStepNumber(Integer stepNumber) {
         this.stepNumber = stepNumber;
     }
 
@@ -121,6 +121,11 @@ public class EcTeststep implements Serializable {
     @Override
     public String toString() {
         return "com.deem.excord.domain.EcTeststep[ id=" + id + " ]";
+    }
+
+    @Override
+    public int compareTo(EcTeststep obj) {
+        return this.stepNumber.compareTo(obj.stepNumber);
     }
 
 }
