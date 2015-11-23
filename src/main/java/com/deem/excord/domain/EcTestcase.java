@@ -66,7 +66,8 @@ public class EcTestcase implements Serializable {
     @Size(max = 45)
     @Column(name = "method_name")
     private String methodName;
-    @Size(max = 10)
+    @Basic(optional = false)
+    @Size(min = 1, max = 10)
     @Column(name = "priority")
     private String priority;
     @Size(max = 45)
@@ -75,7 +76,8 @@ public class EcTestcase implements Serializable {
     @Size(max = 45)
     @Column(name = "feature")
     private String feature;
-    @Size(max = 45)
+    @Basic(optional = false)
+    @Size(min = 1, max = 45)
     @Column(name = "case_type")
     private String caseType;
     @JoinColumn(name = "folder_id", referencedColumnName = "id")
