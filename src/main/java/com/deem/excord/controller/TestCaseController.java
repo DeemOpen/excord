@@ -28,6 +28,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -526,20 +527,19 @@ public class TestCaseController {
                 Boolean skipHeader = true;
                 Long previousTestId = -1L;
                 Long newTestId = -1L;
+                final DataFormatter df = new DataFormatter();
                 while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
                     if (skipHeader) {
                         skipHeader = false;
                         continue;
                     }
-                    String testName = validateInput(row.getCell(1).getStringCellValue(),90);
-                    String testDescription = validateInput(row.getCell(2).getStringCellValue(),-1);
-                    String testProcedure = validateInput(row.getCell(4).getStringCellValue(),-1);
-                    String testExpected = validateInput(row.getCell(5).getStringCellValue(),-1);
-                    logger.info("test name:{}, test description: {}",testName,testDescription);
                     if (row.getCell(0) != null) {
-                        newTestId = Long.parseLong(row.getCell(0).getStringCellValue());
-                        if (newTestId.equals(previousTestId)) {
+                        newTestId = Long.parseLong(df.formatCellValue(row.getCell(0)));
+                        String testProcedure = validateInput(df.formatCellValue(row.getCell(4)), -1);
+                        String testExpected = validateInput(df.formatCellValue(row.getCell(5)), -1);
+
+                        if (newTestId.equals(previousTestId) && tc != null) {
                             //Just keep adding steps.
                             EcTeststep tp = new EcTeststep();
                             tp.setStepNumber(stepNumber);
@@ -549,6 +549,8 @@ public class TestCaseController {
                             stepNumber++;
                             tsDao.save(tp);
                         } else {
+                            String testName = validateInput(df.formatCellValue(row.getCell(1)), 90);
+                            String testDescription = validateInput(df.formatCellValue(row.getCell(2)), -1);
                             previousTestId = newTestId;
                             stepNumber = 1;
                             tc = tcDao.findByIdAndFolderId(previousTestId, currentNode);
@@ -580,7 +582,7 @@ public class TestCaseController {
                 historyUtil.addHistory("Uploaded testcase file: " + fileName, session, request.getRemoteAddr());
                 session.setAttribute("flashMsg", "Successfully Imported :" + fileName);
             } catch (Exception ex) {
-                session.setAttribute("flashMsg", "File upload failed!");
+                session.setAttribute("flashMsg", "File upload failed! " + ex.getMessage());
                 ex.printStackTrace();
             }
         } else {
