@@ -116,7 +116,7 @@ public class TestPlanController {
             tptcDao.save(tptcObj);
 
         }
-        historyUtil.addHistory("Clone testplan: " + tp.getName(), session, request.getRemoteAddr());
+        historyUtil.addHistory("Cloned testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request.getRemoteAddr());
         session.setAttribute("flashMsg", "Successfully Cloned TestPlan " + tp.getName());
 
         return "redirect:/";
@@ -143,9 +143,9 @@ public class TestPlanController {
     @RequestMapping(value = "/testplan_delete", method = RequestMethod.GET)
     public String deleteTestplan(HttpSession session, HttpServletRequest request, Model model, @RequestParam(value = "testplanId", required = true) Long testplanId) {
 
-        EcTestplan testPlan = tpDao.findOne(testplanId);
-        tpDao.delete(testPlan);
-        historyUtil.addHistory("Deleted testplan: " + testPlan.getName(), session, request.getRemoteAddr());
+        EcTestplan tp = tpDao.findOne(testplanId);
+        tpDao.delete(tp);
+        historyUtil.addHistory("Deleted testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request.getRemoteAddr());
         return "redirect:/";
     }
 
@@ -237,10 +237,10 @@ public class TestPlanController {
             tp.setSchedule(tschedule);
             tpDao.save(tp);
             if (!tid.equals("")) {
-                historyUtil.addHistory("Updated testplan: " + tname, session, request.getRemoteAddr());
+                historyUtil.addHistory("Updated testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request.getRemoteAddr());
                 session.setAttribute("flashMsg", "Successfully Updated TestPlan " + tp.getName());
             } else {
-                historyUtil.addHistory("Added testplan: " + tname, session, request.getRemoteAddr());
+                historyUtil.addHistory("Added testplan: [" + tname + "]", session, request.getRemoteAddr());
                 session.setAttribute("flashMsg", "Successfully Added TestPlan " + tp.getName());
             }
             return "redirect:/";
@@ -283,7 +283,7 @@ public class TestPlanController {
             EcTestcase tc = tcDao.findOne(testCaseId);
             EcTestplan tp = tpDao.findOne(testPlanId);
             EcTestplanTestcaseMapping tptcMap = tptcDao.findByTestplanIdAndTestcaseId(tp, tc);
-            historyUtil.addHistory("UnLinked TestPlan : [" + tp.getName() + "] with TestCase: [" + tc.getName() + "] ", session, request.getRemoteAddr());
+            historyUtil.addHistory("UnLinked TestPlan : [" + tp.getId() + ":" + tp.getName() + "] with TestCase: [" + tc.getId() + ":" + tc.getName() + "] ", session, request.getRemoteAddr());
             tptcDao.delete(tptcMap);
         }
         session.setAttribute("flashMsg", "Successfully Unlinked!");
