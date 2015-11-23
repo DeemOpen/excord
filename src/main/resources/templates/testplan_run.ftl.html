@@ -118,7 +118,7 @@
                                     <tr>
                                         <td colspan="3">
 
-                                            <b>Description</b>: ${tc.description}
+                                            <b>Description</b>: ${tc.description?replace("\n", "<br/>")}
                                             <br/>
                                             <b>Automated</b>: ${tc.automated?c}
                                             <br/>
