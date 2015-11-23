@@ -92,7 +92,7 @@
                             </td>
                             <td><input type="text" name="tcomments_${tc.id?c}" size="55" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].note}</#if>"/></td>
                             <td><input type="text" name="tbug_${tc.id?c}" size="10" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].bugTicket}</#if>"/></td>
-                            <td><#if tc.environment??>${tc.environment}</#if></td>
+                            <td><#if trMap[tc.id?c]??>${trMap[tc.id?c].environment}</#if></td>
                             <td>
                                 <#if trMap[tc.id?c]??>${trMap[tc.id?c].timestamp}</#if>
                             </td>
