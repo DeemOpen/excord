@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,6 +26,9 @@ public class LoginController {
 
     @Autowired
     UserRepository uDao;
+
+    @Value("${email.domain}")
+    String emailDomain;
 
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public String login(Model model) {
@@ -44,13 +48,20 @@ public class LoginController {
         session.setMaxInactiveInterval(6000);
         if (authUtil.authenticateUser(username, password)) {
             logger.info("Successfull login: {}", username);
-            if (uDao.findByUsername(username) == null) {
+            EcUser user = uDao.findByUsername(username);
+            if (user == null) {
                 logger.info("First time login: {}", username);
-                EcUser user = new EcUser();
+                user = new EcUser();
                 user.setEnabled(true);
                 user.setCreatedDate(new Date());
                 user.setRole(Constants.ROLE_USER);
                 user.setUsername(username);
+                user.setEmail(username + "@" + emailDomain);
+                user.setLastLogin(new Date());
+                uDao.save(user);
+            } else {
+                user.setEnabled(true);
+                user.setLastLogin(new Date());
                 uDao.save(user);
             }
             session.setAttribute("authName", username);

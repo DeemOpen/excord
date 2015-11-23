@@ -48,8 +48,8 @@ flush privileges;
 If you are using DB authentication insert this row.
 
 ```sql
-INSERT INTO `excord`.`ec_user` (`id`, `username`, `name`, `password`, `role`, `enabled`, `created_date`) 
-VALUES ('1', 'admin', 'admin', 'manager', 'USER', '1', NOW());
+INSERT INTO `excord`.`ec_user` (`id`, `username`, `name`, `password`, `role`, `enabled`, `created_date`,`email`) 
+VALUES ('1', 'admin', 'admin', 'manager', 'USER', '1', NOW(),'test@blackhole.com');
 ```
 
 ### Screenshots

@@ -204,9 +204,11 @@ CREATE TABLE IF NOT EXISTS `excord`.`ec_user` (
   `username` VARCHAR(45) NOT NULL COMMENT '',
   `name` VARCHAR(90) NULL COMMENT '',
   `password` VARCHAR(45) NULL COMMENT '',
+  `email` VARCHAR(90) NULL COMMENT '',
   `role` VARCHAR(10) NULL COMMENT '',
   `enabled` TINYINT(1) NOT NULL COMMENT '',
   `created_date` DATE NULL COMMENT '',
+  `last_login` DATETIME NULL COMMENT '',
   PRIMARY KEY (`id`)  COMMENT '')
 ENGINE = InnoDB;
 

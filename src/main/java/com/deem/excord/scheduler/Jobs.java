@@ -1,23 +1,27 @@
 package com.deem.excord.scheduler;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import com.deem.excord.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-//@EnableScheduling
-//@Component
+@EnableScheduling
+@Component
 public class Jobs {
 
     private static final Logger logger = LoggerFactory.getLogger(Jobs.class);
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
-    //Every 90 mins
-    //@Scheduled(cron = "*/90 * * * * *")
-    public void periodicJobs() {
-        logger.info("The time is now " + dateFormat.format(new Date()));
+    @Autowired
+    UserRepository uDao;
+
+    //Everyday at 6:00 AM
+    @Scheduled(cron = "0 0 6 * * ?")
+    public void dailyJob() {
+        logger.info("Running daily job!");
+        uDao.disableOldUsers();
+
     }
 }
