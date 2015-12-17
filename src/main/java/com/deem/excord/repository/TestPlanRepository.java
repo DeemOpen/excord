@@ -23,4 +23,7 @@ public interface TestPlanRepository extends CrudRepository<EcTestplan, Long> {
     @Query(value = "select status,DATE_FORMAT(`timestamp`,'%m-%Y') as dt,count(*) as cnt from ec_testplan_testcase_mapping b, ec_testresult c where c.testplan_testcase_link_id = b.id and b.testplan_id = :testplanId group by status, dt order by dt asc", nativeQuery = true)
     public List<Object[]> findRunMetricByTestPlanId(@Param("testplanId") Long testplanId);
 
+    @Query(value = "SELECT b.priority,a.assigned_to,c.status,count(*) FROM  ec_testcase b, ec_testplan_testcase_mapping a LEFT JOIN ec_testresult c ON a.id = c.testplan_testcase_link_id where a.testplan_id = :testplanId and a.testcase_id = b.id group by a.assigned_to,b.priority,c.status order by b.priority,a.assigned_to,c.status desc", nativeQuery = true)
+    public List<Object[]> findByPriorityByTester(@Param("testplanId") Long testplanId);
+
 }

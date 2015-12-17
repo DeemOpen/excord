@@ -116,7 +116,7 @@ public class TestPlanController {
             tptcDao.save(tptcObj);
 
         }
-        historyUtil.addHistory("Cloned testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request.getRemoteAddr());
+        historyUtil.addHistory("Cloned testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request);
         session.setAttribute("flashMsg", "Successfully Cloned TestPlan " + tp.getName());
 
         return "redirect:/";
@@ -145,7 +145,7 @@ public class TestPlanController {
 
         EcTestplan tp = tpDao.findOne(testplanId);
         tpDao.delete(tp);
-        historyUtil.addHistory("Deleted testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request.getRemoteAddr());
+        historyUtil.addHistory("Deleted testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request);
         return "redirect:/";
     }
 
@@ -237,10 +237,10 @@ public class TestPlanController {
             tp.setSchedule(tschedule);
             tpDao.save(tp);
             if (!tid.equals("")) {
-                historyUtil.addHistory("Updated testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request.getRemoteAddr());
+                historyUtil.addHistory("Updated testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request);
                 session.setAttribute("flashMsg", "Successfully Updated TestPlan " + tp.getName());
             } else {
-                historyUtil.addHistory("Added testplan: [" + tname + "]", session, request.getRemoteAddr());
+                historyUtil.addHistory("Added testplan: [" + tname + "]", session, request);
                 session.setAttribute("flashMsg", "Successfully Added TestPlan " + tp.getName());
             }
             return "redirect:/";
@@ -283,7 +283,7 @@ public class TestPlanController {
             EcTestcase tc = tcDao.findOne(testCaseId);
             EcTestplan tp = tpDao.findOne(testPlanId);
             EcTestplanTestcaseMapping tptcMap = tptcDao.findByTestplanIdAndTestcaseId(tp, tc);
-            historyUtil.addHistory("UnLinked TestPlan : [" + tp.getId() + ":" + tp.getName() + "] with TestCase: [" + tc.getId() + ":" + tc.getName() + "] ", session, request.getRemoteAddr());
+            historyUtil.addHistory("UnLinked TestPlan : [" + tp.getId() + ":" + tp.getName() + "] with TestCase: [" + tc.getId() + ":" + tc.getName() + "] ", session, request);
             tptcDao.delete(tptcMap);
         }
         session.setAttribute("flashMsg", "Successfully Unlinked!");

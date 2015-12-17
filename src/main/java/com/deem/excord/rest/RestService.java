@@ -100,42 +100,78 @@ public class RestService {
         return new ResponseEntity<String>("OK!", HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/rest/pie-data", method = RequestMethod.GET)
-    public List getPieData() {
-        List pieData = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            List dataElement = new ArrayList();
-            dataElement.add("Region_" + i);
-            dataElement.add(Math.random() * 10);
-            pieData.add(dataElement);
+    @RequestMapping(value = "/rest/automated-data/{testplanId}", method = RequestMethod.GET)
+    public List getAutomatedData(@PathVariable Long testplanId) {
+
+        List<EcTestcase> tcLst = tcDao.findAllTestCasesByTestPlanId(testplanId);
+        Integer autoCnt = 0;
+        Integer manualCnt = 0;
+        for (EcTestcase tc : tcLst) {
+            if (tc.getAutomated()) {
+                autoCnt++;
+            } else {
+                manualCnt++;
+            }
         }
+
+        List pieData = new ArrayList<>();
+        List ele1 = new ArrayList();
+        ele1.add("Automated Testcases");
+        ele1.add(autoCnt);
+        pieData.add(ele1);
+        List ele2 = new ArrayList();
+        ele2.add("Manual Testcases");
+        ele2.add(manualCnt);
+        pieData.add(ele2);
+
         return pieData;
     }
 
-    @RequestMapping(value = "/rest/column-data", method = RequestMethod.GET)
-    public List<Map<String, Object>> getColumnData() {
-        List<Map<String, Object>> columnData = new ArrayList<>();
-        Map<String, Object> headerElement = new HashMap<>();
-        headerElement.put("name", "Month");
-        headerElement.put("data", new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"});
-        columnData.add(headerElement);
+    @RequestMapping(value = "/rest/testtype-data/{testplanId}", method = RequestMethod.GET)
+    public List getTesttypeData(@PathVariable Long testplanId) {
 
-        Map<String, Object> dataElement1 = new HashMap<>();
-        dataElement1.put("name", Constants.STATUS_PASSED);
-        dataElement1.put("data", new Integer[]{4, 5, 6, 2, 5, 7, 2, 1, 6, 7, 3, 4});
-        columnData.add(dataElement1);
+        List<EcTestcase> tcLst = tcDao.findAllTestCasesByTestPlanId(testplanId);
+        Map<String, Integer> stats = new HashMap<String, Integer>();
 
-        Map<String, Object> dataElement2 = new HashMap<>();
-        dataElement2.put("name", Constants.STATUS_FAILED);
-        dataElement2.put("data", new Integer[]{7, 8, 9, 6, 7, 10, 9, 7, 6, 9, 8, 4});
-        columnData.add(dataElement2);
+        for (EcTestcase tc : tcLst) {
+            if (stats.get(tc.getCaseType()) == null) {
+                stats.put(tc.getCaseType(), 1);
+            } else {
+                stats.put(tc.getCaseType(), stats.get(tc.getCaseType()) + 1);
+            }
+        }
+        List pieData = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : stats.entrySet()) {
+            List ele = new ArrayList();
+            ele.add(entry.getKey());
+            ele.add(entry.getValue());
+            pieData.add(ele);
+        }
 
-        Map<String, Object> dataElement3 = new HashMap<>();
-        dataElement3.put("name", Constants.STATUS_OTHER);
-        dataElement3.put("data", new Integer[]{5, 2, 3, 6, 7, 1, 2, 6, 6, 4, 6, 3});
-        columnData.add(dataElement3);
+        return pieData;
+    }
 
-        return columnData;
+    @RequestMapping(value = "/rest/priority-data/{testplanId}", method = RequestMethod.GET)
+    public List getPriorityData(@PathVariable Long testplanId) {
+
+        List<EcTestcase> tcLst = tcDao.findAllTestCasesByTestPlanId(testplanId);
+        Map<String, Integer> stats = new HashMap<String, Integer>();
+        for (EcTestcase tc : tcLst) {
+            if (stats.get(tc.getPriority()) == null) {
+                stats.put(tc.getPriority(), 1);
+            } else {
+                stats.put(tc.getPriority(), stats.get(tc.getPriority()) + 1);
+            }
+        }
+        List pieData = new ArrayList<>();
+        for (Map.Entry<String, Integer> entry : stats.entrySet()) {
+            List ele = new ArrayList();
+            ele.add(entry.getKey());
+            ele.add(entry.getValue());
+            pieData.add(ele);
+        }
+
+        return pieData;
     }
 
     @RequestMapping(value = "/rest/testplan-data", method = RequestMethod.GET)

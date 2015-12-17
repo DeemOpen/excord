@@ -182,7 +182,7 @@ public class TestCaseController {
             tsDao.save(tstep);
 
         }
-        historyUtil.addHistory("Added testcase: [" + tname + "] under [" + folder.getId() + ":" + folder.getName() + "]", session, request.getRemoteAddr());
+        historyUtil.addHistory("Added testcase: [" + tname + "] under [" + folder.getId() + ":" + folder.getName() + "]", session, request);
         session.setAttribute("flashMsg", "Successfully Added TestCase " + tc.getName());
 
         return "redirect:/testcase?nodeId=" + tfolderId;
@@ -195,7 +195,7 @@ public class TestCaseController {
         EcTestfolder childFolder = new EcTestfolder();
         childFolder.setName(folderName);
         childFolder.setParentId(parentFolder);
-        historyUtil.addHistory("Added folder: [" + folderName + "] under [" + parentFolder.getId() + ":" + parentFolder.getName() + "]", session, request.getRemoteAddr());
+        historyUtil.addHistory("Added folder: [" + folderName + "] under [" + parentFolder.getId() + ":" + parentFolder.getName() + "]", session, request);
         tfDao.save(childFolder);
         return "redirect:/testcase?nodeId=" + parentFolder.getId();
     }
@@ -222,7 +222,7 @@ public class TestCaseController {
                 if (tc.getEnabled()) {
                     //Dont map disabled test cases.
                     enabledTcPresent = true;
-                    historyUtil.addHistory("Linked TestPlan : [" + tp.getId() + ":" + tp.getName() + "] with TestCase: [" + tc.getId() + ":" + tc.getName() + "] ", session, request.getRemoteAddr());
+                    historyUtil.addHistory("Linked TestPlan : [" + tp.getId() + ":" + tp.getName() + "] with TestCase: [" + tc.getId() + ":" + tc.getName() + "] ", session, request);
                     tptcDao.save(tptcMap);
                 } else {
                     disabledTcPresent = true;
@@ -252,7 +252,7 @@ public class TestCaseController {
         for (Long testCaseId : testcaseChkLst) {
             EcTestcase tc = tcDao.findOne(testCaseId);
             tc.setEnabled(true);
-            historyUtil.addHistory("Enabled testcase : [" + tc.getId() + ":" + tc.getName() + "]", session, request.getRemoteAddr());
+            historyUtil.addHistory("Enabled testcase : [" + tc.getId() + ":" + tc.getName() + "]", session, request);
             tcDao.save(tc);
         }
         session.setAttribute("flashMsg", "Successfully enabled testcase!");
@@ -265,7 +265,7 @@ public class TestCaseController {
         for (Long testCaseId : testcaseChkLst) {
             EcTestcase tc = tcDao.findOne(testCaseId);
             tc.setEnabled(false);
-            historyUtil.addHistory("Disabled testcase : [" + tc.getId() + ":" + tc.getName() + "]", session, request.getRemoteAddr());
+            historyUtil.addHistory("Disabled testcase : [" + tc.getId() + ":" + tc.getName() + "]", session, request);
             tcDao.save(tc);
         }
         session.setAttribute("flashMsg", "Successfully disabled testcase!");
@@ -277,7 +277,7 @@ public class TestCaseController {
 
         for (Long testCaseId : testcaseChkLst) {
             EcTestcase tc = tcDao.findOne(testCaseId);
-            historyUtil.addHistory("Deleted testcase : [" + tc.getId() + ":" + tc.getName() + "]", session, request.getRemoteAddr());
+            historyUtil.addHistory("Deleted testcase : [" + tc.getId() + ":" + tc.getName() + "]", session, request);
             tcDao.delete(tc);
         }
         session.setAttribute("flashMsg", "Successfully deleted testcase!");
@@ -290,7 +290,7 @@ public class TestCaseController {
 
         if (currenNode.getParentId() != null) {
             Long parentId = currenNode.getParentId().getId();
-            historyUtil.addHistory("Folder Deleted : [" + currenNode.getId() + ":" + currenNode.getName() + "]", session, request.getRemoteAddr());
+            historyUtil.addHistory("Folder Deleted : [" + currenNode.getId() + ":" + currenNode.getName() + "]", session, request);
             tfDao.delete(currenNode);
             session.setAttribute("flashMsg", "Successfully deleted folder!");
             return "redirect:/testcase?nodeId=" + parentId;
@@ -351,7 +351,7 @@ public class TestCaseController {
             if (tproduct != null) {
                 tcObj.setProduct(tproduct);
             }
-            historyUtil.addHistory("Testcase Bulk Updated : [" + tcObj.getId() + ":" + tcObj.getName() + "]", session, request.getRemoteAddr());
+            historyUtil.addHistory("Testcase Bulk Updated : [" + tcObj.getId() + ":" + tcObj.getName() + "]", session, request);
             tcDao.save(tcObj);
         }
         return "redirect:/testcase?nodeId=" + nodeId;
@@ -374,7 +374,7 @@ public class TestCaseController {
             for (String tc : clipboardTcLst) {
                 EcTestcase tcObj = tcDao.findOne(Long.parseLong(tc));
                 EcTestfolder newNode = tfDao.findOne(nodeId);
-                historyUtil.addHistory("Moved testcase : [" + tcObj.getId() + ":" + tcObj.getName() + "] from [" + tcObj.getFolderId().getId() + ":" + tcObj.getFolderId().getName() + " ] to [" + newNode.getId() + ":" + newNode.getName() + " ]", session, request.getRemoteAddr());
+                historyUtil.addHistory("Moved testcase : [" + tcObj.getId() + ":" + tcObj.getName() + "] from [" + tcObj.getFolderId().getId() + ":" + tcObj.getFolderId().getName() + " ] to [" + newNode.getId() + ":" + newNode.getName() + " ]", session, request);
                 tcObj.setFolderId(newNode);
                 tcDao.save(tcObj);
             }
@@ -391,7 +391,7 @@ public class TestCaseController {
         EcTestfolder currenNode = tfDao.findOne(nodeId);
         if (currenNode.getParentId() != null) {
             currenNode.setName(newNodeName);
-            historyUtil.addHistory("Folder Renamed from : [" + currenNode.getId() + ":" + currenNode.getName() + "] to [" + newNodeName + "]", session, request.getRemoteAddr());
+            historyUtil.addHistory("Folder Renamed from : [" + currenNode.getId() + ":" + currenNode.getName() + "] to [" + newNodeName + "]", session, request);
             tfDao.save(currenNode);
             session.setAttribute("flashMsg", "Successfully renamed folder!");
         } else {
@@ -422,7 +422,7 @@ public class TestCaseController {
             newTc.setProduct(tc.getProduct());
             newTc.setTestScriptFile(tc.getTestScriptFile());
             tcDao.save(newTc);
-            historyUtil.addHistory("Cloned testcase : [" + tc.getId() + ":" + tc.getName() + "]", session, request.getRemoteAddr());
+            historyUtil.addHistory("Cloned testcase : [" + tc.getId() + ":" + tc.getName() + "]", session, request);
             for (EcTeststep step : tc.getEcTeststepList()) {
                 EcTeststep newstep = new EcTeststep();
                 newstep.setDescription(step.getDescription());
@@ -566,9 +566,9 @@ public class TestCaseController {
                                 tc.setFeature("");
                                 tc.setAddedVersion("");
                                 tc.setDeprecatedVersion("");
-                                historyUtil.addHistory("Testcase [" + testName + "] added by import, file: " + fileName, session, request.getRemoteAddr());
+                                historyUtil.addHistory("Testcase [" + testName + "] added by import, file: " + fileName, session, request);
                             } else {
-                                historyUtil.addHistory("Testcase [" + tc.getId() + ":" + tc.getName() + "] updated by import, file: " + fileName, session, request.getRemoteAddr());
+                                historyUtil.addHistory("Testcase [" + tc.getId() + ":" + tc.getName() + "] updated by import, file: " + fileName, session, request);
                                 //Delete all existing teststeps.
                                 tsDao.deleteTeststepByTestcaseId(tc.getId());
                             }
@@ -589,7 +589,7 @@ public class TestCaseController {
 
                     //Just keep adding test steps.
                 }
-                historyUtil.addHistory("Uploaded testcase file: " + fileName + " to folder [" + currentNode.getId() + ":" + currentNode.getName() + "]", session, request.getRemoteAddr());
+                historyUtil.addHistory("Uploaded testcase file: " + fileName + " to folder [" + currentNode.getId() + ":" + currentNode.getName() + "]", session, request);
                 session.setAttribute("flashMsg", "Successfully Imported :" + fileName);
             } catch (Exception ex) {
                 session.setAttribute("flashMsg", "File upload failed! " + ex.getMessage());
