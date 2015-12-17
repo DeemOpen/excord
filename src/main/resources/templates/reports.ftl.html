@@ -5,11 +5,121 @@
 <script src="js/custom/reports.js"></script>
 <div class="container-fluid">
     <form method="post" action="/metrics" role="form" class="form-horizontal">
+
         <div class="row">
             <div class="col-md-12 text-center">
-                <img src="images/work-in-progress.png" width="250" height="200"/>
+                <h3>Test Execution by Month</h3>
+                <br/>
             </div>
         </div>
+        <div class="row">            
+            <div class="col-md-12 text-center">
+                <div id="linechartContainer" style="min-width: 100%; height: 400px; max-width: 100%; margin: 0 auto"></div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3>Top Testers by Current Month</h3>
+                <br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="toptester-month-ele" class="table table-striped table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Tester</th>
+                            <th>Environment</th>
+                            <th>Execution Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <#list topTesterMonthLst as topTester>
+                        <tr>
+                            <#list topTester as m>
+                            <td>
+                                ${m}
+                            </td>
+                            </#list>
+                        </tr>
+                        </#list>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3>Top Testers by Current Year</h3>
+                <br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="toptester-year-ele" class="table table-striped table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Tester</th>
+                            <th>Environment</th>
+                            <th>Execution Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <#list topTesterYearLst as topTester>
+                        <tr>
+                            <#list topTester as m>
+                            <td>
+                                ${m}
+                            </td>
+                            </#list>
+                        </tr>
+                        </#list>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3>Most Executed Manual Testcases by Current Year</h3>
+                <br/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <table id="topexe-year-ele" class="table table-striped table-bordered" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Node ID</th>
+                            <th>Testcase Name</th>
+                            <th>Execution Count</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <#list mostExeTestsLst as topTest>
+                        <#assign checkFlag=true>
+                        <tr>
+                            <#list topTest as m>
+                            <td>
+                                <#if checkFlag == true>
+                                <a href="/testcase?nodeId=${m?c}">${m?c}</a>
+                                <#assign checkFlag=false>
+                                <#else>
+                                ${m}
+                                </#if>
+                            </td>
+                            </#list>
+                        </tr>
+                        </#list>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </form>
 </div>
 </@main.page> 

@@ -1,6 +1,7 @@
 package com.deem.excord.controller;
 
 import com.deem.excord.repository.TestPlanRepository;
+import com.deem.excord.repository.TestResultRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -15,8 +16,18 @@ public class ReportsController {
     @Autowired
     TestPlanRepository tpDao;
 
+    @Autowired
+    TestResultRepository trDao;
+
     @RequestMapping(value = "/reports", method = RequestMethod.GET)
     public String reportsHome(Model model) {
+        List<Object[]> topTesterMonthLst = trDao.findByTopTesterByEnvByMonth();
+        List<Object[]> topTesterYearLst = trDao.findByTopTesterByEnvByYear();
+        List<Object[]> mostExeTestsLst = trDao.mostexecutedManualTests();
+
+        model.addAttribute("topTesterMonthLst", topTesterMonthLst);
+        model.addAttribute("topTesterYearLst", topTesterYearLst);
+        model.addAttribute("mostExeTestsLst", mostExeTestsLst);
         return "reports";
     }
 

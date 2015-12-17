@@ -243,4 +243,33 @@ public class RestService {
 
         return columnData;
     }
+
+    @RequestMapping(value = "/rest/monthlyexe-data", method = RequestMethod.GET)
+    public List<Map<String, Object>> getMonthlyExectionData() {
+        List<Map<String, Object>> columnData = new ArrayList<>();
+        Map<String, Object> headerElement = new HashMap<>();
+        headerElement.put("name", "Month");
+        headerElement.put("data", new String[]{"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"});
+        columnData.add(headerElement);
+
+        List<Object[]> executionByMonth = trDao.executionByMonth();
+        List<Integer> dtLst = new ArrayList<Integer>();
+        Map<String, Object> dataElement1 = new HashMap<>();
+        dataElement1.put("name", "Test Runs");
+        for (Object[] result : executionByMonth) {
+            Integer count = ((BigInteger) result[1]).intValue();
+            dtLst.add(count);
+        }
+        Integer size = dtLst.size();
+        if (size < 11) {
+            for (int i = size; i < 11; i++) {
+                dtLst.add(0);
+            }
+        }
+
+        dataElement1.put("data", dtLst);
+        columnData.add(dataElement1);
+
+        return columnData;
+    }
 }
