@@ -286,16 +286,32 @@ public class TestCaseController {
 
     @RequestMapping(value = "/testcase_deletefolder", method = RequestMethod.POST)
     public String testcaseDeleteFolder(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "nodeId", required = true) Long nodeId) {
-        EcTestfolder currenNode = tfDao.findOne(nodeId);
+        EcTestfolder currentNode = tfDao.findOne(nodeId);
 
-        if (currenNode.getParentId() != null) {
-            Long parentId = currenNode.getParentId().getId();
-            historyUtil.addHistory("Folder Deleted : [" + currenNode.getId() + ":" + currenNode.getName() + "]", session, request);
-            tfDao.delete(currenNode);
+        //check if folder has nested
+        //check if folder has tc.
+        if (currentNode.getParentId() == null) {
+            session.setAttribute("flashMsg", "Cant delete root node!");
+            return "redirect:/testcase?nodeId=" + nodeId;
+        }
+
+        if (currentNode.getEcTestcaseList().size() != 0) {
+            session.setAttribute("flashMsg", "Cant delete node with testcases. Delete the testcases or move them prior to delete!");
+            return "redirect:/testcase?nodeId=" + nodeId;
+        }
+        if (currentNode.getEcTestfolderList().size() != 0) {
+            session.setAttribute("flashMsg", "Cant delete node with nested nodes. Delete the nested nodes prior to delete!");
+            return "redirect:/testcase?nodeId=" + nodeId;
+        }
+
+        if (currentNode.getParentId() != null) {
+            Long parentId = currentNode.getParentId().getId();
+            historyUtil.addHistory("Folder Deleted : [" + currentNode.getId() + ":" + currentNode.getName() + "]", session, request);
+            tfDao.delete(currentNode);
             session.setAttribute("flashMsg", "Successfully deleted folder!");
             return "redirect:/testcase?nodeId=" + parentId;
-        } else {
-            session.setAttribute("flashMsg", "Cant delete root node!");
+        }
+        else{
             return "redirect:/testcase?nodeId=" + nodeId;
         }
     }

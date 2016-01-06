@@ -72,7 +72,7 @@ $(document).ready(function () {
 
     $("#deleteFolder").click(function (event) {
         event.preventDefault();
-        bootbox.confirm("Are you sure about physically deleting test folder along with all testcases inside it?", function (result) {
+        bootbox.confirm("Are you sure about physically deleting test folder?", function (result) {
             if (result) {
                 $("#testcaseForm").attr("action", "/testcase_deletefolder");
                 $("#testcaseForm").submit();

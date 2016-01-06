@@ -261,8 +261,8 @@ public class RestService {
             dtLst.add(count);
         }
         Integer size = dtLst.size();
-        if (size < 11) {
-            for (int i = size; i < 11; i++) {
+        if (size < 12) {
+            for (int i = size; i < 12; i++) {
                 dtLst.add(0);
             }
         }
