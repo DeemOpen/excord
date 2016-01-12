@@ -74,24 +74,35 @@ public class RestService {
             EcTestcase tc = tcDao.findOne(testcaseId);
             EcTestplan tp = tpDao.findOne(testplanId);
 
-            if (tc.getAutomated()) {
-                //For automation to work the test case needs to have this flag enabled!
-                EcTestplanTestcaseMapping tptcLinkId = tptcDao.findByTestplanIdAndTestcaseId(tp, tc);
-                //Remove latest flag from all old runs.
-                trDao.updateAllTestRunsLatestFlag(tptcLinkId.getId());
-                EcTestresult tr = new EcTestresult();
-                tr.setLatest(true);
-                tr.setNote(tcomments);
-                tr.setStatus(tstatus);
-                tr.setTimestamp(new Date());
-                tr.setTester(Constants.AUTOMATION_USER);
-                tr.setEnvironment(tenv);
-                tr.setTestplanTestcaseLinkId(tptcLinkId);
-                tr.setBugTicket("");
-                trDao.save(tr);
-            } else {
+            if (tp == null) {
+                return new ResponseEntity<String>("Test Plan: " + tp.getId() + " not found!", HttpStatus.NOT_FOUND);
+            }
+            if (tc == null) {
+                return new ResponseEntity<String>("Test Case: " + tc.getId() + " not found!", HttpStatus.NOT_FOUND);
+            }
+
+            if (!tp.getEnabled()) {
+                return new ResponseEntity<String>("Test Plan: " + tp.getId() + " is not enabled!", HttpStatus.NOT_FOUND);
+            }
+
+            if (!tc.getAutomated()) {
                 return new ResponseEntity<String>("Test Case: " + tc.getId() + " is not marked as automated!", HttpStatus.NOT_FOUND);
             }
+
+            //For automation to work the test case needs to have this flag enabled!
+            EcTestplanTestcaseMapping tptcLinkId = tptcDao.findByTestplanIdAndTestcaseId(tp, tc);
+            //Remove latest flag from all old runs.
+            trDao.updateAllTestRunsLatestFlag(tptcLinkId.getId());
+            EcTestresult tr = new EcTestresult();
+            tr.setLatest(true);
+            tr.setNote(tcomments);
+            tr.setStatus(tstatus);
+            tr.setTimestamp(new Date());
+            tr.setTester(Constants.AUTOMATION_USER);
+            tr.setEnvironment(tenv);
+            tr.setTestplanTestcaseLinkId(tptcLinkId);
+            tr.setBugTicket("");
+            trDao.save(tr);
 
         } catch (Exception ex) {
             logger.error(ex.getMessage());
