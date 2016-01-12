@@ -75,22 +75,27 @@ public class RestService {
             EcTestplan tp = tpDao.findOne(testplanId);
 
             if (tp == null) {
-                return new ResponseEntity<String>("Test Plan: " + tp.getId() + " not found!", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<String>("Test Plan: " + testplanId + " not found!", HttpStatus.NOT_FOUND);
             }
             if (tc == null) {
-                return new ResponseEntity<String>("Test Case: " + tc.getId() + " not found!", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<String>("Test Case: " + testcaseId + " not found!", HttpStatus.NOT_FOUND);
             }
 
             if (!tp.getEnabled()) {
-                return new ResponseEntity<String>("Test Plan: " + tp.getId() + " is not enabled!", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<String>("Test Plan: " + testplanId + " is not enabled!", HttpStatus.NOT_FOUND);
             }
 
             if (!tc.getAutomated()) {
-                return new ResponseEntity<String>("Test Case: " + tc.getId() + " is not marked as automated!", HttpStatus.NOT_FOUND);
+                return new ResponseEntity<String>("Test Case: " + testcaseId + " is not marked as automated!", HttpStatus.NOT_FOUND);
             }
 
             //For automation to work the test case needs to have this flag enabled!
             EcTestplanTestcaseMapping tptcLinkId = tptcDao.findByTestplanIdAndTestcaseId(tp, tc);
+
+            if (tptcLinkId == null) {
+                return new ResponseEntity<String>("Test Plan: " + testplanId + " and Test Case: " + testcaseId + " not linked!", HttpStatus.NOT_FOUND);
+            }
+
             //Remove latest flag from all old runs.
             trDao.updateAllTestRunsLatestFlag(tptcLinkId.getId());
             EcTestresult tr = new EcTestresult();
