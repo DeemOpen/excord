@@ -87,6 +87,7 @@ public class RestService {
                 tr.setTester(Constants.AUTOMATION_USER);
                 tr.setEnvironment(tenv);
                 tr.setTestplanTestcaseLinkId(tptcLinkId);
+                tr.setBugTicket("");
                 trDao.save(tr);
             } else {
                 return new ResponseEntity<String>("Test Case: " + tc.getId() + " is not marked as automated!", HttpStatus.NOT_FOUND);
