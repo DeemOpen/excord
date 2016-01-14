@@ -1,0 +1,33 @@
+<#import "layouts/main-layout.ftl.html" as main> 
+<@main.page>
+
+<div class="container-fluid">
+    <form method="post" action="/requirement_save" role="form" class="form-horizontal">
+        <div class="row">
+            <div class="col-md-12 text-center">
+                <h3>Requirement</h3>
+                <br/>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">
+                Requirement Name<font color="red">*</font>
+            </label>
+            <div class="col-md-6">
+                <input type="hidden" name="tid" value="<#if testPlan??>${testPlan.id}</#if>"/>
+                <input class="form-control"  name="tname" value="<#if testPlan??>${testPlan.name}</#if>" maxlength="90" required/>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+                &nbsp;
+            </div>
+            <div class="col-md-10">
+                <button type="submit" name="action" id="req_save" class="btn btn-info"><i class="fa fa-floppy-o"></i>&nbsp;Save Requirement</button>
+                <button type="button" name="action" id="cancel" value="cancel" class="btn btn-info" onclick="history.back()" >Cancel</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+</@main.page> 

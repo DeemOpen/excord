@@ -23,6 +23,9 @@ import javax.validation.constraints.Size;
 @Table(name = "ec_testcase")
 public class EcTestcase implements Serializable {
 
+    @OneToMany(mappedBy = "testcaseId")
+    private List<EcTestcaseRequirementMapping> ecTestcaseRequirementMappingCollection;
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -281,6 +284,14 @@ public class EcTestcase implements Serializable {
     @Override
     public String toString() {
         return "com.deem.excord.domain.EcTestcase[ id=" + id + " ]";
+    }
+
+    public List<EcTestcaseRequirementMapping> getEcTestcaseRequirementMappingCollection() {
+        return ecTestcaseRequirementMappingCollection;
+    }
+
+    public void setEcTestcaseRequirementMappingCollection(List<EcTestcaseRequirementMapping> ecTestcaseRequirementMappingCollection) {
+        this.ecTestcaseRequirementMappingCollection = ecTestcaseRequirementMappingCollection;
     }
 
 }

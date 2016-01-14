@@ -7,6 +7,13 @@
         <div id="wrap">
             <#include "../common/menubar.ftl.html"/>
             <!-- Content starts -->
+            <#if flashMsg??>
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="text-success text-center">${flashMsg}</p>
+                </div>
+            </div>
+            </#if>
             <#nested>
             <!-- Content ends -->
         </div>        

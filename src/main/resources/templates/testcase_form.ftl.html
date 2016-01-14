@@ -112,19 +112,21 @@
             <div class="col-md-3">
                 <div class="checkbox form-group">
                     <label>
-                        <#if tc?? && tc.enabled?c == "true">
-                        <input type="checkbox" name="tenabled" checked> 
-                        <#else>
-                        <input type="checkbox" name="tenabled"> 
-                        </#if>
-                        Enabled</label>
+                        Enabled
+                    </label>
+                    <#if tc?? && tc.enabled?c == "true">
+                    <input type="checkbox" name="tenabled" data-toggle="toggle" data-on="Yes" data-off="No"  data-onstyle="success"  checked> 
+                    <#else>
+                    <input type="checkbox" name="tenabled" data-toggle="toggle" data-on="Yes" data-off="No"  data-onstyle="success" >  
+                    </#if>
                     <label>
-                        <#if tc?? && tc.automated?c == "true">
-                        <input type="checkbox" name="tautomated" checked=""> 
-                        <#else>
-                        <input type="checkbox" name="tautomated"> 
-                        </#if>
                         Automated</label>
+                    <#if tc?? && tc.automated?c == "true">
+                    <input type="checkbox" name="tautomated"  data-toggle="toggle" data-on="Yes" data-off="No"  data-onstyle="success" checked> 
+                    <#else>
+                    <input type="checkbox" name="tautomated"  data-toggle="toggle" data-on="Yes" data-off="No"  data-onstyle="success" > 
+                    </#if>
+
                     <br/>
                     <br/>
                 </div>

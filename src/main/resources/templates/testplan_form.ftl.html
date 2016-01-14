@@ -39,15 +39,11 @@
                         Enabled
                     </label>
                     <div class="col-md-1 left">
-                        <div class="checkbox">
-                            <label>
-                                <#if testPlan?? && testPlan.enabled == true>
-                                <input type="checkbox" name="tenabled" checked/>
-                                <#else>
-                                <input type="checkbox" name="tenabled"/>
-                                </#if>
-                            </label>
-                        </div>
+                        <#if testPlan?? && testPlan.enabled == true>
+                        <input type="checkbox" name="tenabled" data-toggle="toggle" data-on="Yes" data-off="No"  data-onstyle="success" checked/>
+                        <#else>
+                        <input type="checkbox" name="tenabled" data-toggle="toggle" data-on="Yes" data-off="No"  data-onstyle="success"/>
+                        </#if>
                     </div>
                 </div>
 

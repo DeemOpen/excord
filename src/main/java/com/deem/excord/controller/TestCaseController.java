@@ -1,6 +1,7 @@
 package com.deem.excord.controller;
 
 import com.deem.excord.domain.EcTestcase;
+import com.deem.excord.domain.EcTestcaseRequirementMapping;
 import com.deem.excord.domain.EcTestfolder;
 import com.deem.excord.domain.EcTestplan;
 import com.deem.excord.domain.EcTestplanTestcaseMapping;
@@ -10,6 +11,7 @@ import com.deem.excord.repository.TestFolderRepository;
 import com.deem.excord.repository.TestPlanRepository;
 import com.deem.excord.repository.TestPlanTestCaseRepository;
 import com.deem.excord.repository.TestStepRepository;
+import com.deem.excord.repository.TestcaseRequirementRepository;
 import com.deem.excord.util.Constants;
 import com.deem.excord.util.FlashMsgUtil;
 import com.deem.excord.util.HistoryUtil;
@@ -64,11 +66,13 @@ public class TestCaseController {
     TestStepRepository tsDao;
 
     @Autowired
+    TestcaseRequirementRepository tcrDao;
+
+    @Autowired
     HistoryUtil historyUtil;
 
     @RequestMapping(value = "/testcase", method = RequestMethod.GET)
-    public String testCases(Model model, HttpSession session,
-            @RequestParam(value = "nodeId", required = false, defaultValue = "2") Long nodeId) {
+    public String testCases(Model model, HttpSession session, @RequestParam(value = "nodeId", required = false, defaultValue = "2") Long nodeId) {
 
         FlashMsgUtil.INSTANCE.checkFlashMsg(session, model);
         EcTestfolder currenNode = tfDao.findOne(nodeId);
@@ -106,6 +110,12 @@ public class TestCaseController {
             tptcmapLst = new ArrayList<EcTestplanTestcaseMapping>();
         }
 
+        //find all requirements associated with testcases in this node.
+        List<EcTestcaseRequirementMapping> tcreqmapLst = tcrDao.findAllByTestFolderId(currenNode.getId());
+        if (tcreqmapLst == null) {
+            tcreqmapLst = new ArrayList<EcTestcaseRequirementMapping>();
+        }
+
         //find all testplans which are active
         List<EcTestplan> testPlanLst = tpDao.findByEnabledOrderByIdDesc(Boolean.TRUE);
         if (testPlanLst == null) {
@@ -120,6 +130,7 @@ public class TestCaseController {
         model.addAttribute("parentNodeLst", parentNodeLst);
         model.addAttribute("tptcmapLst", tptcmapLst);
         model.addAttribute("testPlanLst", testPlanLst);
+        model.addAttribute("tcreqmapLst", tcreqmapLst);
 
         return "testcase";
     }
@@ -310,8 +321,7 @@ public class TestCaseController {
             tfDao.delete(currentNode);
             session.setAttribute("flashMsg", "Successfully deleted folder!");
             return "redirect:/testcase?nodeId=" + parentId;
-        }
-        else{
+        } else {
             return "redirect:/testcase?nodeId=" + nodeId;
         }
     }
@@ -635,5 +645,13 @@ public class TestCaseController {
             value = value.substring(0, length);
         }
         return value;
+    }
+
+    @RequestMapping(value = "/testcase_req_link", method = RequestMethod.POST)
+    public String testCaseRequirementLink(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "nodeId", required = true) Long nodeId, @RequestParam(value = "testcaseChk") List<Long> testcaseChkLst) {
+        String clipboardLinkTc = StringUtils.arrayToCommaDelimitedString(testcaseChkLst.toArray());
+        session.setAttribute("clipboardLinkTc", clipboardLinkTc);
+        session.setAttribute("clipboardNodeId", nodeId);
+        return "redirect:/requirement";
     }
 }

@@ -35,6 +35,16 @@ $(document).ready(function () {
             bootbox.alert("Please check a testcase!");
         }
     });
+    
+    $("#linkTestcaseRequirement").click(function (event) {
+        event.preventDefault();
+        if ($('input[name="testcaseChk"]:checked').length > 0) {
+            $("#testcaseForm").attr("action", "/testcase_req_link");
+            $("#testcaseForm").submit();
+        } else {
+            bootbox.alert("Please check a testcase!");
+        }
+    });
 
     $("#enableTestcase").click(function (event) {
         event.preventDefault();

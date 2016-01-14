@@ -7,13 +7,6 @@
         <input type="hidden" id="folderName" name="folderName" value=""/>
         <input type="hidden" id="newNodeName" name="newNodeName" value=""/>
         <input type="hidden" id="nodeId" name="nodeId" value="${currentNode.id?c}"/>
-        <#if flashMsg??>
-        <div class="row">
-            <div class="col-md-12">
-                <p class="text-success text-center">${flashMsg}</p>
-            </div>
-        </div>
-        </#if>
         <!--Bread crumb-->
         <div class="row">
             <div class="col-md-12">
@@ -62,6 +55,7 @@
                         <li><a href="#" id="renameFolder"><i class="fa fa-pencil"></i>&nbsp;Rename Folder</a></li>
                         <li><a href="#" id="cloneTestcase"><i class="fa fa-clone"></i>&nbsp;Clone Testcases</a></li>
                         <li><a href="#" id="exportTestcases"><i class="fa fa-table"></i>&nbsp;Export Testcases</a></li>
+                        <li><a href="#" id="linkTestcaseRequirement"><i class="fa fa-link"></i>&nbsp;Link to Requirement</a></li>
                     </ul>
                 </div>
             </div>
@@ -92,9 +86,9 @@
                             <th><input type="checkbox" id="checkAll"/></th>
                             <th>Testcase ID</th>
                             <th>Associated Test Plans</th>
+                            <th>Associated Requirement</th>
                             <th>Test Name</th>
-                            <th>Enabled</th>
-                            <th>Priority</th>
+                            <th>Fields</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -116,10 +110,23 @@
                                 </#if>
                                 </#list>
                             </td>
-                            <td style="word-break:break-all;"><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
-                            <td>${tc.enabled?c}</td>
                             <td>
-                                ${tc.priority}
+                                <#assign inc = 0/>
+                                <#list tcreqmapLst as tcr>
+                                <#if tcr.testcaseId.id == tc.id>
+                                <#assign inc = inc + 1/>
+                                ${inc}. <a href="/requirement?reqId=${tcr.requirementId.id}">${tcr.requirementId.name}</a>
+                                <br/>
+                                </#if>
+                                </#list>
+                            </td>
+                            <td style="word-break:break-all;"><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
+                            <td>
+                                <b>Enabled:</b> ${tc.enabled?c}
+                                <br/>
+                                <b>Priority:</b> ${tc.priority}
+                                <br/>
+                                <b>Automated:</b> ${tc.automated?c}
                             </td>
                         </tr>
                         <tr>
@@ -128,8 +135,6 @@
                                     <tr>
                                         <td colspan="3">
                                             <b>Description</b>: ${tc.description?replace("\n", "<br/>")}
-                                            <br/>
-                                            <b>Automated</b>: ${tc.automated?c}
                                             <br/>
                                             <b>Type</b>: ${tc.caseType}
                                             <br/>
