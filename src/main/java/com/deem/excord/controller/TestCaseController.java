@@ -163,6 +163,7 @@ public class TestCaseController {
             tc = tcDao.findOne(tid);
             //Delete all existing steps of testcase.
             tsDao.deleteTeststepByTestcaseId(tid);
+            tcrDao.updateAllLinkedTestcaseAsReviewed(tid);
         } else {
             tc = new EcTestcase();
         }

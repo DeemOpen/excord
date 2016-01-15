@@ -8,11 +8,22 @@ import com.deem.excord.repository.TestCaseRepository;
 import com.deem.excord.repository.TestcaseRequirementRepository;
 import com.deem.excord.util.FlashMsgUtil;
 import com.deem.excord.util.HistoryUtil;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,26 +90,13 @@ public class RequirementController {
         return "requirement";
     }
 
-    @RequestMapping(value = "/requirement", method = RequestMethod.POST)
-    public String requirementTestCaseLink(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "reqId", required = true) Long reqId, @RequestParam(value = "action", required = true) String action) {
-
-        if (action.equals("testcase_requirement_link")) {
-            return linkTestcaseRequirement(model, request, session, reqId, action);
-        } else if (action.equals("testcase_requirement_link_cancel")) {
-            return unLinkTestcaseRequirement(model, request, session, reqId, action);
-        } else if (action.equals("req_create")) {
-            return createRequirement(model, request, session, reqId, action);
-        } else if (action.equals("req_edit")) {
-            return editRequirement(model, request, session, reqId, action);
-        } else if (action.equals("req_delete")) {
-            return deleteRequirement(model, request, session, reqId, action);
-        } else {
-            return "redirect:/requirement";
-        }
-
+    @RequestMapping(value = "/requirement_upload", method = RequestMethod.POST)
+    public String requirementUpload(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "reqId", required = true) Long reqId, @RequestParam(value = "action", required = true) String action) {
+        return "redirect:/requirement";
     }
 
-    public String linkTestcaseRequirement(Model model, HttpServletRequest request, HttpSession session, Long reqId, String action) {
+    @RequestMapping(value = "/testcase_requirement_link", method = RequestMethod.GET)
+    public String testcaseRequirementLink(Model model, HttpSession session, HttpServletRequest request, @RequestParam(value = "reqId", required = false, defaultValue = "1") Long reqId) {
         Long nodeId = (Long) session.getAttribute("clipboardNodeId");
         String clipboardLinkTc = (String) session.getAttribute("clipboardLinkTc");
         if (clipboardLinkTc != null) {
@@ -124,7 +122,21 @@ public class RequirementController {
         return "redirect:/testcase?nodeId=" + nodeId;
     }
 
-    public String unLinkTestcaseRequirement(Model model, HttpServletRequest request, HttpSession session, Long reqId, String action) {
+    @RequestMapping(value = "/testcase_requirement_unlink", method = RequestMethod.GET)
+    public String testcaseRequirementUnLink(Model model, HttpSession session, HttpServletRequest request, @RequestParam(value = "reqId", required = true) Long reqId, @RequestParam(value = "tcId", required = true) Long tcId) {
+
+        EcTestcase tcObj = tcDao.findOne(tcId);
+        EcRequirement reqObj = reqDao.findOne(reqId);
+        if (tcObj != null && reqObj != null) {
+            tcrDao.deleteByTestcaseIdAndRequirementId(tcObj, reqObj);
+            session.setAttribute("flashMsg", "Successfully Unlinked testcases from requirement!");
+            historyUtil.addHistory("Unlinked testcase: [" + tcObj.getId() + ":" + tcObj.getName() + "] from requirement: [" + reqObj.getId() + ":" + reqObj.getName() + "]", session, request);
+        }
+        return "redirect:/requirement?reqId=" + reqId;
+    }
+
+    @RequestMapping(value = "/testcase_requirement_link_cancel", method = RequestMethod.GET)
+    public String testcaseRequirementLinkCancel(Model model, HttpSession session, @RequestParam(value = "reqId", required = false, defaultValue = "1") Long reqId) {
         Long nodeId = (Long) session.getAttribute("clipboardNodeId");
         session.setAttribute("clipboardLinkTc", null);
         session.setAttribute("clipboardNodeId", null);
@@ -132,20 +144,24 @@ public class RequirementController {
         return "redirect:/testcase?nodeId=" + nodeId;
     }
 
-    public String createRequirement(Model model, HttpServletRequest request, HttpSession session, Long reqId, String action) {
+    @RequestMapping(value = "/req_create", method = RequestMethod.GET)
+    public String requirementCreate(Model model, HttpSession session, @RequestParam(value = "reqId", required = false, defaultValue = "1") Long reqId) {
         EcRequirement parentReq = reqDao.findOne(reqId);
         model.addAttribute("parentReq", parentReq);
         return "requirement_form";
     }
 
-    public String editRequirement(Model model, HttpServletRequest request, HttpSession session, Long reqId, String action) {
+    @RequestMapping(value = "/req_edit", method = RequestMethod.GET)
+    public String requirementEdit(Model model, HttpSession session, @RequestParam(value = "reqId", required = false, defaultValue = "1") Long reqId) {
         EcRequirement req = reqDao.findOne(reqId);
         model.addAttribute("req", req);
         model.addAttribute("parentReq", req.getParentId());
         return "requirement_form";
     }
 
-    public String deleteRequirement(Model model, HttpServletRequest request, HttpSession session, Long reqId, String action) {
+    @RequestMapping(value = "/req_delete", method = RequestMethod.POST)
+    public String requirementDelete(Model model, HttpSession session, HttpServletRequest request, @RequestParam(value = "reqId", required = false, defaultValue = "1") Long reqId) {
+
         EcRequirement req = reqDao.findOne(reqId);
         if (req.getParentId() == null) {
             session.setAttribute("flashMsg", "Cant delete root requirement!");
@@ -156,7 +172,9 @@ public class RequirementController {
             return "redirect:/requirement?reqId=" + reqId;
         } else {
             Long parentId = req.getParentId().getId();
+            String reqName = req.getName();
             reqDao.delete(req);
+            historyUtil.addHistory("Deleted requirement: [" + reqName + "]", session, request);
             session.setAttribute("flashMsg", "Successfully deleted requirement!");
             return "redirect:/requirement?reqId=" + parentId;
         }
@@ -175,7 +193,10 @@ public class RequirementController {
             @RequestParam(value = "rstory", required = true) String rstory
     ) {
 
-        EcRequirement parentReq = reqDao.findOne(rParentId);
+        EcRequirement parentReq = null;
+        if (!rParentId.equals(-1L)) {
+            parentReq = reqDao.findOne(rParentId);
+        }
         EcRequirement req = null;
         if (reqId != null) {
             req = reqDao.findOne(reqId);
@@ -191,11 +212,76 @@ public class RequirementController {
         req.setProduct(rproduct);
         req.setStory(rstory);
         reqDao.save(req);
+        if (!rParentId.equals(-1L)) {
+            historyUtil.addHistory("Saved requirement: [" + rname + "] under [" + parentReq.getId() + ":" + parentReq.getName() + "]", session, request);
+        } else {
+            historyUtil.addHistory("Saved requirement: [" + rname + "] under [ - ]", session, request);
+        }
 
-        historyUtil.addHistory("Saved requirement: [" + rname + "] under [" + parentReq.getId() + ":" + parentReq.getName() + "]", session, request);
         session.setAttribute("flashMsg", "Successfully saved requirement: " + rname);
+        tcrDao.updateAllLinkedTestcaseForReview(reqId);
 
         return "redirect:/requirement?reqId=" + req.getId();
+    }
+
+    @RequestMapping(value = "/req_export", method = RequestMethod.GET)
+    public void requirementExport(HttpServletResponse response, @RequestParam(value = "reqId", required = true, defaultValue = "1") Long reqId) {
+
+        ServletOutputStream outputStream = null;
+
+        EcRequirement currenReq = reqDao.findOne(reqId);
+        List<EcRequirement> requirementLst = reqDao.findAllByParentIdOrderByNameAsc(currenReq);
+        if (requirementLst == null) {
+            requirementLst = new ArrayList<EcRequirement>();
+        }
+
+        XSSFWorkbook workbook = new XSSFWorkbook();
+        XSSFSheet sheet = workbook.createSheet("Requirements");
+
+        Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
+        Integer idx = 0;
+        data.put(idx, new Object[]{"ID", "NAME", "PRIORITY", "STATUS", "RELEASE_NAME", "PRODUCT", "COVERAGE", "STORY"});
+        idx++;
+        for (EcRequirement req : requirementLst) {
+            data.put(idx, new Object[]{req.getId().toString(), req.getName(), req.getPriority(), req.getStatus(), req.getReleaseName(), req.getProduct(), req.getCoverage(), req.getStory()});
+            idx++;
+        }
+
+        for (Map.Entry<Integer, Object[]> entry : data.entrySet()) {
+            Integer key = entry.getKey();
+            Object[] objArr = entry.getValue();
+            Row row = sheet.createRow(key);
+            int cellnum = 0;
+            for (Object obj : objArr) {
+                Cell cell = row.createCell(cellnum++);
+                //All values will be Strings.
+                if (obj instanceof String) {
+                    cell.setCellValue((String) obj);
+                } else {
+                    cell.setCellValue(obj.toString());
+                }
+            }
+
+        }
+
+        try {
+            response.setContentType("application/octet-stream");
+            Calendar cal = Calendar.getInstance();
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+            String dateStr = sdf.format(cal.getTime());
+            response.setHeader("Content-Disposition", "attachment; fileName=Requirements_" + currenReq.getId() + "_" + dateStr + ".xlsx");
+            outputStream = response.getOutputStream();
+            workbook.write(outputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                outputStream.flush();
+                outputStream.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
 }

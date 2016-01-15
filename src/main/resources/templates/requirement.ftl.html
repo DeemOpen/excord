@@ -29,6 +29,32 @@
                 </ul>
             </div>
         </div>
+
+        <div class="form-group">
+            <div class="col-md-9">
+                <div class="well well-sm">&nbsp;</div>
+            </div>
+            <div class="col-md-3">
+                <div class="dropdown">
+                    <button class="btn btn-info btn-block dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
+                        <span class="text-right">Actions</span>
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right btn-block">
+                        <#if Session.clipboardLinkTc??>
+                        <li><a href="/testcase_requirement_link?reqId=${currReq.id?c}"><i class="fa fa-link"></i>&nbsp;Link</a></li>
+                        <li><a href="/testcase_requirement_link_cancel?reqId=${currReq.id?c}"><i class="fa fa-undo"></i>&nbsp;Cancel Linking</a></li>
+                        <#else>
+                        <li><a href="/req_create?reqId=${currReq.id?c}"><i class="fa fa-plus-square"></i>&nbsp;Create Child Requirement</a></li>
+                        <li><a href="/req_edit?reqId=${currReq.id?c}"><i class="fa fa-pencil"></i>&nbsp;Edit Requirement</a></li>
+                        <li><a href="#" id="req_delete"><i class="fa fa-trash-o"></i>&nbsp;Delete Requirement</a></li>
+                        <li><a href="/req_export?reqId=${currReq.id?c}"><i class="fa fa-table"></i>&nbsp;Export Requirements</a></li>
+                        </#if>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col-md-4 well pre-scrollable scroll-pane" >
                 <div>
@@ -90,8 +116,10 @@
                                 <#assign inc = 0/>
                                 <#list tcrLst as tcr>
                                 <#assign inc = inc + 1/>
-                                ${inc}. <a href="/testcase_edit?testcaseId=${tcr.testcaseId.id}">${tcr.testcaseId.name}</a> &nbsp;&nbsp; <a href="#"><i class="fa fa-chain-broken"></i></a>
-                                <br/>
+                                ${inc}. <a href="/testcase_edit?testcaseId=${tcr.testcaseId.id?c}">${tcr.testcaseId.name}</a> &nbsp;&nbsp; 
+                                <a href="/testcase_requirement_unlink?tcId=${tcr.testcaseId.id?c}&reqId=${tcr.requirementId.id?c}" title="Unlink Testcase!"><i class="fa fa-chain-broken"></i>&nbsp;</a>&nbsp;&nbsp;
+                                <#if tcr.review?c == 'true'><span class="label label-danger">Review Testcase!</span> &nbsp;&nbsp;</#if> 
+                                <br/><br/>
                                 </#list>
                             </td>
                         </tr>
@@ -107,20 +135,18 @@
             </div>
         </div>
         <div class="row">
-            <#if Session.clipboardLinkTc??>
-            <div class="col-md-12 text-center">
-                <button type="submit" name="action" value="testcase_requirement_link" class="btn btn-info"><i class="fa fa-link"></i>&nbsp;Link</button>
-                <button type="submit" name="action" value="testcase_requirement_link_cancel" class="btn btn-info"><i class="fa fa-undo "></i>&nbsp;Cancel Linking</button>
+
+        </div>
+    </form>
+    <form id="testcaseUploadForm" method="post" action="/requirement_upload" role="form" class="form-horizontal" enctype="multipart/form-data">
+        <div  class="form-group">
+            <div class="col-md-9">
+                <input type="hidden" id="nodeId" name="reqId" value="${currReq.id?c}"/>
+                <input type="file" name="file" class="form-control">
             </div>
-            <#else>
-            <div class="col-md-12 text-center">
-                <button type="submit" name="action" value="req_create" class="btn btn-info"><i class="fa fa-plus-square"></i>&nbsp;Create Child Requirement</button>
-                <button type="submit" name="action" value="req_edit" class="btn btn-info"><i class="fa fa-pencil"></i>&nbsp;Edit Requirement</button>
-                <button type="submit" name="action" value="req_delete" class="btn btn-info"><i class="fa fa-trash-o"></i>&nbsp;Delete Requirement</button>
-                <button type="submit" name="action" value="req_export" class="btn btn-info"><i class="fa fa-table"></i>&nbsp;Export Requirements</button>
-                <button type="button" name="action" id="cancel" value="back" class="btn btn-default" onclick="history.back()" >Back</button>
+            <div class="col-md-3">
+                <button class="btn btn-info btn-block" type="submit"><i class="fa fa-upload"></i>&nbsp;Import Requirements</button>
             </div>
-            </#if>
         </div>
     </form>
 

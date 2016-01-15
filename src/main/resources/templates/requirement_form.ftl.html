@@ -21,7 +21,7 @@
                 Priority<font color="red">*</font>
             </label>
             <div class="col-md-4">
-                <select class="form-control" id="tpriority" name="rpriority">
+                <select class="form-control" name="rpriority">
                     <#if req?? && req.priority == "P1">
                     <option value="P1" selected>Critical (P1)</option>
                     <#else>
@@ -50,9 +50,13 @@
                 Parent Requirement<font color="red">*</font>
             </label>
             <div class="col-md-4">
+                <#if parentReq??>
                 <input type="hidden" name="rParentId" value="${parentReq.id}"/>
                 <input type="text"  class="form-control" value="${parentReq.id} :  ${parentReq.name}" readonly/>
-
+                <#else>
+                <input type="hidden" name="rParentId" value="-1"/>
+                <input type="text"  class="form-control" value="-" readonly/>
+                </#if>
             </div>
             <label class="col-md-1 control-label">
                 Coverage Required
@@ -78,9 +82,9 @@
                     <option value="ACTIVE">ACTIVE</option>
                     </#if>
                     <#if req?? && req.status == "DEPRECATED">
-                    <option value="P2" selected>DEPRECATED</option>
+                    <option value="DEPRECATED" selected>DEPRECATED</option>
                     <#else>
-                    <option value="P2">DEPRECATED</option>
+                    <option value="DEPRECATED">DEPRECATED</option>
                     </#if>
                     <#if req?? && req.status == "PROPOSED">
                     <option value="PROPOSED" selected>PROPOSED</option>
@@ -111,10 +115,10 @@
 
         <div class="form-group">
             <label class="col-md-2 control-label">
-                Story<font color="red">*</font>
+                Story
             </label>
             <div class="col-md-9">
-                <textarea id="story" name="rstory" rows="12" cols="90" required><#if req??>${req.story}</#if></textarea>           
+                <textarea id="story" name="rstory" rows="12" cols="90"><#if req??>${req.story}</#if></textarea>           
             </div>
         </div>
         <div class="row">

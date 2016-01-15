@@ -112,9 +112,13 @@
                             </td>
                             <td>
                                 <#assign inc = 0/>
+                                <#assign review = 'false'/>
                                 <#list tcreqmapLst as tcr>
                                 <#if tcr.testcaseId.id == tc.id>
                                 <#assign inc = inc + 1/>
+                                <#if tcr.review?c == 'true'>
+                                <#assign review = 'true'/>
+                                </#if>
                                 ${inc}. <a href="/requirement?reqId=${tcr.requirementId.id}">${tcr.requirementId.name}</a>
                                 <br/>
                                 </#if>
@@ -122,11 +126,16 @@
                             </td>
                             <td style="word-break:break-all;"><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
                             <td>
+                                <#if review == 'true'>
+                                <span class="label label-danger">Requirement Updated!</span>
+                                <br/><br/>
+                                </#if>
                                 <b>Enabled:</b> ${tc.enabled?c}
                                 <br/>
                                 <b>Priority:</b> ${tc.priority}
                                 <br/>
                                 <b>Automated:</b> ${tc.automated?c}
+
                             </td>
                         </tr>
                         <tr>
