@@ -13,9 +13,108 @@
             <label class="col-md-2 control-label">
                 Requirement Name<font color="red">*</font>
             </label>
-            <div class="col-md-6">
-                <input type="hidden" name="tid" value="<#if testPlan??>${testPlan.id}</#if>"/>
-                <input class="form-control"  name="tname" value="<#if testPlan??>${testPlan.name}</#if>" maxlength="90" required/>
+            <div class="col-md-4">
+                <input class="form-control"  name="rname" value="<#if req??>${req.name}</#if>" maxlength="90" required/>
+                <input type="hidden" name="reqId" value="<#if req??>${req.id}</#if>"/>
+            </div>
+            <label for="rpriority" class="col-md-1 control-label">
+                Priority<font color="red">*</font>
+            </label>
+            <div class="col-md-4">
+                <select class="form-control" id="tpriority" name="rpriority">
+                    <#if req?? && req.priority == "P1">
+                    <option value="P1" selected>Critical (P1)</option>
+                    <#else>
+                    <option value="P1">Critical (P1)</option>
+                    </#if>
+                    <#if req?? && req.priority == "P2">
+                    <option value="P2" selected>Major (P2)</option>
+                    <#else>
+                    <option value="P2">Major (P2)</option>
+                    </#if>
+                    <#if req?? && req.priority == "P3">
+                    <option value="P3" selected>Minor (P3)</option>
+                    <#else>
+                    <option value="P3">Minor (P3)</option>
+                    </#if>
+                    <#if req?? && req.priority == "P4">
+                    <option value="P4" selected>Trivial (P4)</option>
+                    <#else>
+                    <option value="P4">Trivial (P4)</option>
+                    </#if>
+                </select>    
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-md-2 control-label">
+                Parent Requirement<font color="red">*</font>
+            </label>
+            <div class="col-md-4">
+                <input type="hidden" name="rParentId" value="${parentReq.id}"/>
+                <input type="text"  class="form-control" value="${parentReq.id} :  ${parentReq.name}" readonly/>
+
+            </div>
+            <label class="col-md-1 control-label">
+                Coverage Required
+            </label>
+            <div class="col-md-4">
+                <#if req?? && req.coverage?c == "true">
+                <input type="checkbox" name="rcoverage" data-toggle="toggle" data-on="Yes" data-off="No"  data-onstyle="success" checked> 
+                <#else>
+                <input type="checkbox" name="rcoverage" data-toggle="toggle" data-on="Yes" data-off="No"  data-onstyle="success" >  
+                </#if>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label for="rstate" class="col-md-2 control-label">
+                Status<font color="red">*</font>
+            </label>
+            <div class="col-md-4">
+                <select class="form-control" id="rstatus" name="rstatus">
+                    <#if req?? && req.status == "ACTIVE">
+                    <option value="ACTIVE" selected>ACTIVE</option>
+                    <#else>
+                    <option value="ACTIVE">ACTIVE</option>
+                    </#if>
+                    <#if req?? && req.status == "DEPRECATED">
+                    <option value="P2" selected>DEPRECATED</option>
+                    <#else>
+                    <option value="P2">DEPRECATED</option>
+                    </#if>
+                    <#if req?? && req.status == "PROPOSED">
+                    <option value="PROPOSED" selected>PROPOSED</option>
+                    <#else>
+                    <option value="PROPOSED">PROPOSED</option>
+                    </#if>
+                </select>    
+            </div>
+            <label class="col-md-1 control-label">
+                Release
+            </label>
+            <div class="col-md-4">
+                <input class="form-control"  name="rrelease" value="<#if req??>${req.releaseName}</#if>" maxlength="45"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-5">
+                &nbsp;
+            </div>
+            <label class="col-md-2 control-label">
+                Product
+            </label>
+            <div class="col-md-4">
+                <input class="form-control"  name="rproduct" value="<#if req??>${req.product}</#if>" maxlength="45"/>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="col-md-2 control-label">
+                Story<font color="red">*</font>
+            </label>
+            <div class="col-md-9">
+                <textarea id="story" name="rstory" rows="12" cols="90" required><#if req??>${req.story}</#if></textarea>           
             </div>
         </div>
         <div class="row">

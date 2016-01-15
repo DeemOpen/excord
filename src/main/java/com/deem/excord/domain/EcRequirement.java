@@ -36,23 +36,23 @@ public class EcRequirement implements Serializable {
     @Column(name = "priority")
     private String priority;
     @Size(max = 45)
-    @Column(name = "state")
-    private String state;
+    @Column(name = "status")
+    private String status;
     @Column(name = "coverage")
     private Boolean coverage;
     @Size(max = 90)
-    @Column(name = "release")
-    private String release;
+    @Column(name = "release_name")
+    private String releaseName;
     @Size(max = 90)
     @Column(name = "product")
     private String product;
     @OneToMany(mappedBy = "parentId")
-    private List<EcRequirement> ecRequirementCollection;
+    private List<EcRequirement> ecRequirementList;
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
     @ManyToOne
     private EcRequirement parentId;
     @OneToMany(mappedBy = "requirementId")
-    private List<EcTestcaseRequirementMapping> ecTestcaseRequirementMappingCollection;
+    private List<EcTestcaseRequirementMapping> ecTestcaseRequirementMappingList;
 
     public EcRequirement() {
     }
@@ -93,14 +93,6 @@ public class EcRequirement implements Serializable {
         this.priority = priority;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
     public Boolean getCoverage() {
         return coverage;
     }
@@ -109,12 +101,20 @@ public class EcRequirement implements Serializable {
         this.coverage = coverage;
     }
 
-    public String getRelease() {
-        return release;
+    public String getStatus() {
+        return status;
     }
 
-    public void setRelease(String release) {
-        this.release = release;
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getReleaseName() {
+        return releaseName;
+    }
+
+    public void setReleaseName(String releaseName) {
+        this.releaseName = releaseName;
     }
 
     public String getProduct() {
@@ -125,14 +125,6 @@ public class EcRequirement implements Serializable {
         this.product = product;
     }
 
-    public List<EcRequirement> getEcRequirementCollection() {
-        return ecRequirementCollection;
-    }
-
-    public void setEcRequirementCollection(List<EcRequirement> ecRequirementCollection) {
-        this.ecRequirementCollection = ecRequirementCollection;
-    }
-
     public EcRequirement getParentId() {
         return parentId;
     }
@@ -141,12 +133,20 @@ public class EcRequirement implements Serializable {
         this.parentId = parentId;
     }
 
-    public List<EcTestcaseRequirementMapping> getEcTestcaseRequirementMappingCollection() {
-        return ecTestcaseRequirementMappingCollection;
+    public List<EcRequirement> getEcRequirementList() {
+        return ecRequirementList;
     }
 
-    public void setEcTestcaseRequirementMappingCollection(List<EcTestcaseRequirementMapping> ecTestcaseRequirementMappingCollection) {
-        this.ecTestcaseRequirementMappingCollection = ecTestcaseRequirementMappingCollection;
+    public void setEcRequirementList(List<EcRequirement> ecRequirementList) {
+        this.ecRequirementList = ecRequirementList;
+    }
+
+    public List<EcTestcaseRequirementMapping> getEcTestcaseRequirementMappingList() {
+        return ecTestcaseRequirementMappingList;
+    }
+
+    public void setEcTestcaseRequirementMappingList(List<EcTestcaseRequirementMapping> ecTestcaseRequirementMappingList) {
+        this.ecTestcaseRequirementMappingList = ecTestcaseRequirementMappingList;
     }
 
     @Override

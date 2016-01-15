@@ -52,7 +52,7 @@
                 </div>
             </div>
             <div class="col-md-8 pre-scrollable scroll-pane">
-                <table class="table table-bordered">
+                <table class="table table-bordered table-hover">
                     <tbody>
                         <tr>
                             <th width="15%">Requirement Id</th>
@@ -67,15 +67,19 @@
                             <td>${currReq.priority}</td>
                         </tr>
                         <tr>
+                            <th>Status</th>
+                            <td>${currReq.status}</td>
+                        </tr>
+                        <tr>
                             <th>Release</th>
-                            <td>${currReq.release}</td>
+                            <td>${currReq.releaseName}</td>
                         </tr>
                         <tr>
                             <th>Product</th>
                             <td>${currReq.product}</td>
                         </tr>
                         <tr>
-                            <th>Needs Coverage</th>
+                            <th>Coverage Required</th>
                             <td>${currReq.coverage?c}</td>
                         </tr>
                         <tr>
@@ -95,7 +99,7 @@
                 </table>
                 <div class="row">
                     <div class="col-md-12">
-                        <textarea id="story" rows="15" cols="90" readonly="readonly">${currReq.story}</textarea>
+                        <textarea id="story" rows="12" cols="90" readonly="readonly">${currReq.story}</textarea>
                         <br/><br/>
                     </div>
                 </div>
@@ -112,17 +116,8 @@
             <div class="col-md-12 text-center">
                 <button type="submit" name="action" value="req_create" class="btn btn-info"><i class="fa fa-plus-square"></i>&nbsp;Create Child Requirement</button>
                 <button type="submit" name="action" value="req_edit" class="btn btn-info"><i class="fa fa-pencil"></i>&nbsp;Edit Requirement</button>
-                
-                <button type="submit" name="action" value="req_save" class="btn btn-info"><i class="fa fa-trash-o"></i>&nbsp;Delete Requirement</button>
+                <button type="submit" name="action" value="req_delete" class="btn btn-info"><i class="fa fa-trash-o"></i>&nbsp;Delete Requirement</button>
                 <button type="submit" name="action" value="req_export" class="btn btn-info"><i class="fa fa-table"></i>&nbsp;Export Requirements</button>
-
-
-                <#if clipboardTc??>
-                <button type="submit" name="action" value="req_paste" class="btn btn-info"><i class="fa fa-clipboard"></i>&nbsp;Paste Requirements</button>
-                <#else>
-                <button type="submit" name="action" value="req_cut" class="btn btn-info"><i class="fa fa-scissors"></i>&nbsp;Cut Requirements</button>
-                </#if>
-
                 <button type="button" name="action" id="cancel" value="back" class="btn btn-default" onclick="history.back()" >Back</button>
             </div>
             </#if>

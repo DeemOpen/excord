@@ -193,8 +193,8 @@ public class TestCaseController {
             tsDao.save(tstep);
 
         }
-        historyUtil.addHistory("Added testcase: [" + tname + "] under [" + folder.getId() + ":" + folder.getName() + "]", session, request);
-        session.setAttribute("flashMsg", "Successfully Added TestCase " + tc.getName());
+        historyUtil.addHistory("Saved testcase: [" + tname + "] under [" + folder.getId() + ":" + folder.getName() + "]", session, request);
+        session.setAttribute("flashMsg", "Successfully saved testcase: " + tc.getName());
 
         return "redirect:/testcase?nodeId=" + tfolderId;
     }
@@ -306,11 +306,11 @@ public class TestCaseController {
             return "redirect:/testcase?nodeId=" + nodeId;
         }
 
-        if (currentNode.getEcTestcaseList().size() != 0) {
+        if (!currentNode.getEcTestcaseList().isEmpty()) {
             session.setAttribute("flashMsg", "Cant delete node with testcases. Delete the testcases or move them prior to delete!");
             return "redirect:/testcase?nodeId=" + nodeId;
         }
-        if (currentNode.getEcTestfolderList().size() != 0) {
+        if (!currentNode.getEcTestfolderList().isEmpty()) {
             session.setAttribute("flashMsg", "Cant delete node with nested nodes. Delete the nested nodes prior to delete!");
             return "redirect:/testcase?nodeId=" + nodeId;
         }

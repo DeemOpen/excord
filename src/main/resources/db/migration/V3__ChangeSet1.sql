@@ -7,8 +7,8 @@ CREATE TABLE IF NOT EXISTS `excord`.`ec_requirement` (
   `name` VARCHAR(90) NULL,
   `parent_id` BIGINT(20) NULL,
   `priority` VARCHAR(45) NULL,
-  `state` VARCHAR(45) NULL,
-  `release` VARCHAR(90) NULL,
+  `status` VARCHAR(45) NULL,
+  `release_name` VARCHAR(90) NULL,
   `product` VARCHAR(90) NULL,
   `coverage` TINYINT(1) NOT NULL,
   `story` TEXT NULL,
@@ -46,7 +46,7 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8
 COLLATE = utf8_general_ci;
 
-INSERT INTO `excord`.`ec_requirement` (`name`, `story`, `priority`, `state`, `release`, `product`,`coverage`) VALUES ('ROOT', '', 'P1', 'ACTIVE', '', '','0');
+INSERT INTO `excord`.`ec_requirement` (`name`, `story`, `priority`, `status`, `release_name`, `product`,`coverage`) VALUES ('ROOT', '', 'P1', 'ACTIVE', '', '','0');
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
