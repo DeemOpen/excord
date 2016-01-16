@@ -160,10 +160,33 @@ public enum BizUtil {
 
     }
 
+    public Boolean checkReqPriority(String rPriority) {
+        switch (rPriority) {
+            case Constants.PRIORITY_P1:
+            case Constants.PRIORITY_P2:
+            case Constants.PRIORITY_P3:
+            case Constants.PRIORITY_P4:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    public Boolean checkReqStatus(String rStatus) {
+        switch (rStatus) {
+            case Constants.REQ_STATUS_ACTIVE:
+            case Constants.REQ_STATUS_DEPRECATED:
+            case Constants.REQ_STATUS_PROPOSED:
+                return true;
+            default:
+                return false;
+        }
+
+    }
+
     public Boolean checkEnv(String tenv) {
         switch (tenv) {
-            
-           
+
             case Constants.STATUS_PASSED:
             case Constants.STATUS_BLOCKED:
             case Constants.STATUS_FAILED:

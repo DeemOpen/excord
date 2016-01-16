@@ -543,7 +543,7 @@ public class TestCaseController {
             try {
                 byte[] bytes = file.getBytes();
                 String fileName = file.getOriginalFilename();
-                logger.info("Uploading file: {}", fileName);
+                logger.info("Uploading testcase file: {}", fileName);
                 ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                 XSSFWorkbook workbook = new XSSFWorkbook(bis);
                 XSSFSheet sheet = workbook.getSheetAt(0);

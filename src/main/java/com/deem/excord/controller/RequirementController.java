@@ -3,16 +3,22 @@ package com.deem.excord.controller;
 import com.deem.excord.domain.EcRequirement;
 import com.deem.excord.domain.EcTestcase;
 import com.deem.excord.domain.EcTestcaseRequirementMapping;
+import com.deem.excord.domain.EcTestfolder;
+import com.deem.excord.domain.EcTeststep;
 import com.deem.excord.repository.RequirementRepository;
 import com.deem.excord.repository.TestCaseRepository;
 import com.deem.excord.repository.TestcaseRequirementRepository;
+import com.deem.excord.util.BizUtil;
+import com.deem.excord.util.Constants;
 import com.deem.excord.util.FlashMsgUtil;
 import com.deem.excord.util.HistoryUtil;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -21,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -33,6 +40,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 public class RequirementController {
@@ -88,11 +96,6 @@ public class RequirementController {
         model.addAttribute("tcrLst", tcrLst);
 
         return "requirement";
-    }
-
-    @RequestMapping(value = "/requirement_upload", method = RequestMethod.POST)
-    public String requirementUpload(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "reqId", required = true) Long reqId, @RequestParam(value = "action", required = true) String action) {
-        return "redirect:/requirement";
     }
 
     @RequestMapping(value = "/testcase_requirement_link", method = RequestMethod.GET)
@@ -210,6 +213,13 @@ public class RequirementController {
         req.setPriority(rpriority);
         req.setReleaseName(rrelease);
         req.setProduct(rproduct);
+
+        if (req.getStory() != null) {
+            if (!req.getStory().equals(rstory)) {
+                //Story changed then mark all testcases for review.
+                tcrDao.updateAllLinkedTestcaseForReview(reqId);
+            }
+        }
         req.setStory(rstory);
         reqDao.save(req);
         if (!rParentId.equals(-1L)) {
@@ -217,9 +227,7 @@ public class RequirementController {
         } else {
             historyUtil.addHistory("Saved requirement: [" + rname + "] under [ - ]", session, request);
         }
-
         session.setAttribute("flashMsg", "Successfully saved requirement: " + rname);
-        tcrDao.updateAllLinkedTestcaseForReview(reqId);
 
         return "redirect:/requirement?reqId=" + req.getId();
     }
@@ -284,4 +292,98 @@ public class RequirementController {
         }
     }
 
+    @RequestMapping(value = "/req_upload", method = RequestMethod.POST)
+    public String requirementUpload(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "reqId", required = true) Long reqId, @RequestParam(value = "file") MultipartFile file) {
+        Boolean statusError = false;
+        Boolean priorityError = false;
+        if (!file.isEmpty()) {
+            try {
+                byte[] bytes = file.getBytes();
+                String fileName = file.getOriginalFilename();
+                logger.info("Uploading requirements file: {}", fileName);
+                ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
+                XSSFWorkbook workbook = new XSSFWorkbook(bis);
+                XSSFSheet sheet = workbook.getSheetAt(0);
+                Iterator<Row> rowIterator = sheet.iterator();
+                EcRequirement reqObj = reqDao.findOne(reqId);
+                Boolean skipHeader = true;
+                final DataFormatter df = new DataFormatter();
+                Long childReqId = -1L;
+                while (rowIterator.hasNext()) {
+                    Row row = rowIterator.next();
+                    if (skipHeader) {
+                        skipHeader = false;
+                        continue;
+                    }
+                    EcRequirement childReq = null;
+                    if (row.getCell(0) != null) {
+                        childReqId = Long.parseLong(df.formatCellValue(row.getCell(0)));
+                        childReq = reqDao.findOne(childReqId);
+                    } else {
+                        childReq = new EcRequirement();
+                        childReq.setParentId(reqObj);
+                    }
+                    String rName = validateInput(df.formatCellValue(row.getCell(1)), 90);
+                    String rPriority = validateInput(df.formatCellValue(row.getCell(2)), 45);
+                    if (!BizUtil.INSTANCE.checkReqPriority(rPriority)) {
+                        priorityError = true;
+                        continue;
+                    }
+                    String rStatus = validateInput(df.formatCellValue(row.getCell(3)), 45);
+                    if (!BizUtil.INSTANCE.checkReqStatus(rStatus)) {
+                        statusError = true;
+                        continue;
+                    }
+
+                    String rRelease = validateInput(df.formatCellValue(row.getCell(4)), 45);
+                    String rProduct = validateInput(df.formatCellValue(row.getCell(5)), 45);
+                    String rCoverage = validateInput(df.formatCellValue(row.getCell(6)), 5);
+                    String rStory = validateInput(df.formatCellValue(row.getCell(4)), -1);
+
+                    childReq.setName(rName);
+                    childReq.setPriority(rPriority);
+                    childReq.setStatus(rStatus);
+                    childReq.setReleaseName(rRelease);
+                    childReq.setProduct(rProduct);
+                    childReq.setCoverage(Boolean.valueOf(rCoverage));
+                    if (childReq.getStory() != null) {
+                        if (!childReq.getStory().equals(rStory)) {
+                            //Story changed then mark all testcases for review.
+                            tcrDao.updateAllLinkedTestcaseForReview(reqId);
+                        }
+                    }
+                    childReq.setStory(rStory);
+
+                    reqDao.save(childReq);
+                    historyUtil.addHistory("Requirement [" + childReq.getId() + ":" + childReq.getName() + "] added/updated by import, file: " + fileName, session, request);
+                }
+                historyUtil.addHistory("Uploaded requirements file: " + fileName + " to requirement [" + reqObj.getId() + ":" + reqObj.getName() + "]", session, request);
+
+                if (statusError) {
+                    session.setAttribute("flashMsg", "Invalid Status codes found in :" + fileName);
+                } else if (priorityError) {
+                    session.setAttribute("flashMsg", "Invalid Priority codes found in :" + fileName);
+                } else {
+                    session.setAttribute("flashMsg", "Successfully Imported :" + fileName);
+                }
+
+            } catch (Exception ex) {
+                session.setAttribute("flashMsg", "File upload failed! " + ex.getMessage());
+                ex.printStackTrace();
+            }
+        } else {
+            session.setAttribute("flashMsg", "File is empty!");
+        }
+        return "redirect:/requirement?reqId=" + reqId;
+    }
+
+    public String validateInput(String value, Integer length) {
+        if (value == null || value.isEmpty()) {
+            return " ";
+        }
+        if (length > 0 && value.length() > length) {
+            value = value.substring(0, length);
+        }
+        return value;
+    }
 }
