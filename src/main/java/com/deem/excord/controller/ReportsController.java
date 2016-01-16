@@ -38,9 +38,4 @@ public class ReportsController {
         return "testplan_metric";
     }
 
-    @RequestMapping(value = "/help", method = RequestMethod.GET)
-    public String help(Model model) {
-        return "help";
-    }
-
 }

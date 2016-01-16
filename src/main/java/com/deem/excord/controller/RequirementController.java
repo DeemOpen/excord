@@ -170,17 +170,18 @@ public class RequirementController {
             session.setAttribute("flashMsg", "Cant delete root requirement!");
             return "redirect:/requirement?reqId=" + reqId;
         }
-        if (!req.getEcRequirementList().isEmpty()) {
-            session.setAttribute("flashMsg", "Cant delete requirements with child requirements. Delete the child requirements prior to delete!");
-            return "redirect:/requirement?reqId=" + reqId;
-        } else {
-            Long parentId = req.getParentId().getId();
-            String reqName = req.getName();
-            reqDao.delete(req);
-            historyUtil.addHistory("Deleted requirement: [" + reqName + "]", session, request);
-            session.setAttribute("flashMsg", "Successfully deleted requirement!");
-            return "redirect:/requirement?reqId=" + parentId;
-        }
+        //if (!req.getEcRequirementList().isEmpty()) {
+        //    session.setAttribute("flashMsg", "Cant delete requirements with child requirements. Delete the child requirements prior to delete!");
+        //    return "redirect:/requirement?reqId=" + reqId;
+        //}
+
+        Long parentId = req.getParentId().getId();
+        String reqName = req.getName();
+        reqDao.delete(req);
+        historyUtil.addHistory("Deleted requirement: [" + reqId + ":" + reqName + "]", session, request);
+        session.setAttribute("flashMsg", "Successfully deleted requirement!");
+        return "redirect:/requirement?reqId=" + parentId;
+
     }
 
     @RequestMapping(value = "/requirement_save", method = RequestMethod.POST)

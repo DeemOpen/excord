@@ -29,11 +29,14 @@
 
 ### Features
 
-1. Lightweight application
-2. REST API's for integration with automation tools
-3. Document testcases.
-4. Associate testcases with testplan and run the test plans.
-5. Metric Reports
+1. Lightweight application, Easy to Setup & Run.
+2. Create Requirements.
+3. Create Testcases.
+4. Create Testplans.
+5. Associate Testcases with Requirements.
+5. Associate Testcases with Testplan for execution.
+6. Reports
+7. REST API's for integration with automation tools
 
 
 ### DB Setup
