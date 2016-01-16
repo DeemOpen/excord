@@ -1,6 +1,8 @@
 package com.deem.excord.controller;
 
+import com.deem.excord.domain.EcRequirement;
 import com.deem.excord.domain.EcTestcaseRequirementMapping;
+import com.deem.excord.repository.RequirementRepository;
 import com.deem.excord.repository.TestPlanRepository;
 import com.deem.excord.repository.TestResultRepository;
 import com.deem.excord.repository.TestcaseRequirementRepository;
@@ -28,6 +30,9 @@ public class ReportsController {
     @Autowired
     TestcaseRequirementRepository tcrDao;
 
+    @Autowired
+    RequirementRepository rDao;
+
     @RequestMapping(value = "/report_execution", method = RequestMethod.GET)
     public String reportExecution(Model model) {
         List<Object[]> topTesterMonthLst = trDao.findByTopTesterByEnvByMonth();
@@ -52,6 +57,13 @@ public class ReportsController {
         List<EcTestcaseRequirementMapping> reviewLst = tcrDao.findAllByReviewTrue();
         model.addAttribute("reviewLst", reviewLst);
         return "report_review";
+    }
+
+    @RequestMapping(value = "/report_coverage", method = RequestMethod.GET)
+    public String reportCoverage(Model model) {
+        List<EcRequirement> reqLst = rDao.findAllMissingCoverage();
+        model.addAttribute("reqLst", reqLst);
+        return "report_coverage";
     }
 
 }

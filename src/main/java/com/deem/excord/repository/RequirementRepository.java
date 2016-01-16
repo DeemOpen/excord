@@ -12,5 +12,8 @@ public interface RequirementRepository extends CrudRepository<EcRequirement, Lon
 
     @Query(value = "select case when count(*) > 0 then 'true' else 'false' end from ec_requirement where parent_id = :reqId", nativeQuery = true)
     public Boolean checkIfHasChildren(@Param("reqId") Long reqId);
-    
+
+    @Query(value = "SELECT a.* FROM ec_requirement a LEFT OUTER JOIN ec_testcase_requirement_mapping  b ON a.id=b.requirement_id where a.coverage = 1  and b.requirement_id is null", nativeQuery = true)
+    public List<EcRequirement> findAllMissingCoverage();
+
 }
