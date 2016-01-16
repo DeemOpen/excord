@@ -21,7 +21,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class AuthFilter extends RequestFilter {
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthFilter.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(AuthFilter.class);
 
     @Bean
     public FilterRegistrationBean remoteAddressFilter() {

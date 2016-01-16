@@ -9,10 +9,10 @@ import org.springframework.context.ApplicationContext;
 @SpringBootApplication
 public class Main {
 
-    private static final Logger logger = LoggerFactory.getLogger(Main.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Main.class);
 
     public static void main(String[] args) throws Exception {
-        logger.info("Starting Server!");
+        LOGGER.info("Starting Server!");
         ApplicationContext ctx = SpringApplication.run(Main.class, args);
 
     }

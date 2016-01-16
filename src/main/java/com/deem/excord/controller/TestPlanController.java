@@ -36,7 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class TestPlanController {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestPlanController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestPlanController.class);
 
     @Autowired
     TestPlanRepository tpDao;
@@ -245,7 +245,7 @@ public class TestPlanController {
             }
             return "redirect:/";
         } catch (Exception ex) {
-            logger.error(ex.getMessage());
+            LOGGER.error(ex.getMessage());
         }
         return "redirect:/error";
     }
@@ -302,7 +302,7 @@ public class TestPlanController {
             EcTestplanTestcaseMapping tptcMap = tptcDao.findByTestplanIdAndTestcaseId(tp, tc);
             tptcMap.setAssignedTo(testcaseAssignedTo);
             tptcDao.save(tptcMap);
-            logger.info("Assigned testcase: {} to user:{}", tc.getName(), testcaseAssignedTo);
+            LOGGER.info("Assigned testcase: {} to user:{}", tc.getName(), testcaseAssignedTo);
 
         }
         session.setAttribute("flashMsg", "Successfully Assigned Testcases!");

@@ -51,7 +51,7 @@ public class RestService {
     @Value("${test.env}")
     String testEnvArr;
 
-    private static final Logger logger = LoggerFactory.getLogger(RestService.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RestService.class);
 
     @RequestMapping(value = "/rest/run/{testplanId}/{testcaseId}/{tenv}/{tstatus}/{tcomments}", method = RequestMethod.POST)
     @ResponseBody
@@ -110,7 +110,7 @@ public class RestService {
             trDao.save(tr);
 
         } catch (Exception ex) {
-            logger.error(ex.getMessage());
+            LOGGER.error(ex.getMessage());
             return new ResponseEntity<String>("ERROR!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 

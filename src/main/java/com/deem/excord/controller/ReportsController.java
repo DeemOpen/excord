@@ -5,6 +5,8 @@ import com.deem.excord.repository.TestPlanRepository;
 import com.deem.excord.repository.TestResultRepository;
 import com.deem.excord.repository.TestcaseRequirementRepository;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class ReportsController {
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(ReportsController.class);
+
     @Autowired
     TestPlanRepository tpDao;
 
@@ -24,8 +28,8 @@ public class ReportsController {
     @Autowired
     TestcaseRequirementRepository tcrDao;
 
-    @RequestMapping(value = "/report_testrun", method = RequestMethod.GET)
-    public String reportsHome(Model model) {
+    @RequestMapping(value = "/report_execution", method = RequestMethod.GET)
+    public String reportExecution(Model model) {
         List<Object[]> topTesterMonthLst = trDao.findByTopTesterByEnvByMonth();
         List<Object[]> topTesterYearLst = trDao.findByTopTesterByEnvByYear();
         List<Object[]> mostExeTestsLst = trDao.mostexecutedManualTests();
@@ -44,7 +48,7 @@ public class ReportsController {
     }
 
     @RequestMapping(value = "/report_review", method = RequestMethod.GET)
-    public String testcasePendingReview(Model model) {
+    public String reportReview(Model model) {
         List<EcTestcaseRequirementMapping> reviewLst = tcrDao.findAllByReviewTrue();
         model.addAttribute("reviewLst", reviewLst);
         return "report_review";

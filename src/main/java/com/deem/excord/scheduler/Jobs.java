@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class Jobs {
 
-    private static final Logger logger = LoggerFactory.getLogger(Jobs.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(Jobs.class);
 
     @Autowired
     UserRepository uDao;
@@ -20,7 +20,7 @@ public class Jobs {
     //Everyday at 6:00 AM
     @Scheduled(cron = "0 0 6 * * ?")
     public void dailyJob() {
-        logger.info("Running daily job!");
+        LOGGER.info("Running daily job!");
         uDao.disableOldUsers();
 
     }

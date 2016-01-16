@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class HistoryController {
 
-    private static final Logger logger = LoggerFactory.getLogger(HistoryController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HistoryController.class);
 
     @Autowired
     HistoryRepository hDao;
@@ -29,7 +29,7 @@ public class HistoryController {
 
     @RequestMapping(value = "/history", method = RequestMethod.POST)
     public String searchHistory(Model model, @RequestParam(value = "searchKey", required = true) String searchKey) {
-        logger.info("Search key: {}", searchKey);
+        LOGGER.info("Search key: {}", searchKey);
         List<EcHistory> historyLst = hDao.findByChangeSummaryLikeOrderByIdDesc("%" + searchKey + "%");
         model.addAttribute("searchKey", searchKey);
         model.addAttribute("historyLst", historyLst);

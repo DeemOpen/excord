@@ -13,7 +13,7 @@ import org.slf4j.LoggerFactory;
 public enum BizUtil {
 
     INSTANCE;
-    private static final Logger logger = LoggerFactory.getLogger(BizUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BizUtil.class);
 
     public List<TestPlanMetricVo> flattenTestPlanMetrics(List<Object[]> tmLst) {
         Map<Long, TestPlanMetricVo> tmMap = new HashMap<Long, TestPlanMetricVo>();
@@ -99,7 +99,7 @@ public enum BizUtil {
                 }
             }
         }
-        logger.debug("PlanId:{},Pass:{},Total:{},Progress:{}", tp.getId(), tpm.getPassCount(), tpm.getTotal(), tpm.getProgressCount());
+        LOGGER.debug("PlanId:{},Pass:{},Total:{},Progress:{}", tp.getId(), tpm.getPassCount(), tpm.getTotal(), tpm.getProgressCount());
         tpm.setPassRate(Math.round((tpm.getPassCount() * 100.0) / tpm.getTotal()));
         tpm.setProgressRate(Math.round((tpm.getProgressCount() * 100.0) / tpm.getTotal()));
         resultLst.add(tpm);

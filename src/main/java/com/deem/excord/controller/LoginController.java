@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 public class LoginController {
 
-    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LoginController.class);
 
     @Autowired
     LdapAuth authUtil;
@@ -47,10 +47,10 @@ public class LoginController {
 
         session.setMaxInactiveInterval(6000);
         if (authUtil.authenticateUser(username, password)) {
-            logger.info("Successfull login: {}", username);
+            LOGGER.info("Successfull login: {}", username);
             EcUser user = uDao.findByUsername(username);
             if (user == null) {
-                logger.info("First time login: {}", username);
+                LOGGER.info("First time login: {}", username);
                 user = new EcUser();
                 user.setEnabled(true);
                 user.setCreatedDate(new Date());
@@ -67,14 +67,14 @@ public class LoginController {
             session.setAttribute("authName", username);
             session.setAttribute("authRole", "user");
             String nextUrl = (String) session.getAttribute("nextUrl");
-            logger.info("Next Url: {}", nextUrl);
+            LOGGER.info("Next Url: {}", nextUrl);
             if (nextUrl != null && !nextUrl.equals("/login")) {
                 return "redirect:" + nextUrl;
             } else {
                 return "redirect:/";
             }
         } else {
-            logger.info("Invalid login: {}", username);
+            LOGGER.info("Invalid login: {}", username);
             model.addAttribute("flashMsg", "Invalid Login!");
             return "login";
         }

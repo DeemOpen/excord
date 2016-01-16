@@ -13,14 +13,14 @@ import org.springframework.stereotype.Component;
 @Component
 public class HistoryUtil {
 
-    private static final Logger logger = LoggerFactory.getLogger(HistoryUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HistoryUtil.class);
 
     @Autowired
     HistoryRepository hDao;
 
     public void addHistory(String logMsg, HttpSession session, HttpServletRequest request) {
         String user = (String) session.getAttribute("authName");
-        logger.info("{} by {} from {}", logMsg, user, getClientIpAddr(request));
+        LOGGER.info("{} by {} from {}", logMsg, user, getClientIpAddr(request));
         EcHistory history = new EcHistory();
         history.setChangeDate(new Date());
         history.setChangeUser(user);

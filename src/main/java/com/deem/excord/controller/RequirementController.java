@@ -42,10 +42,10 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class RequirementController {
 
-    private static final Logger logger = LoggerFactory.getLogger(RequirementController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(RequirementController.class);
 
     @Autowired
-    RequirementRepository reqDao;
+    RequirementRepository rDao;
 
     @Autowired
     TestcaseRequirementRepository tcrDao;
@@ -60,7 +60,7 @@ public class RequirementController {
     public String requirement(Model model, HttpSession session, @RequestParam(value = "reqId", required = false, defaultValue = "1") Long reqId) {
 
         FlashMsgUtil.INSTANCE.checkFlashMsg(session, model);
-        EcRequirement currReq = reqDao.findOne(reqId);
+        EcRequirement currReq = rDao.findOne(reqId);
         EcRequirement parentReq = currReq.getParentId();
         if (parentReq == null) {
             parentReq = currReq;
@@ -75,10 +75,10 @@ public class RequirementController {
         }
         Collections.reverse(parentReqLst);
 
-        Iterable<EcRequirement> nodeLst = reqDao.findAllByParentIdOrderByNameAsc(currReq);
+        Iterable<EcRequirement> nodeLst = rDao.findAllByParentIdOrderByNameAsc(currReq);
         List<Long> childReqLst = new ArrayList<Long>();
         for (EcRequirement d : nodeLst) {
-            if (reqDao.checkIfHasChildren(d.getId())) {
+            if (rDao.checkIfHasChildren(d.getId())) {
                 childReqLst.add(d.getId());
             }
         }
@@ -104,7 +104,7 @@ public class RequirementController {
             for (String tcId : clipboardLinkTcLst) {
 
                 EcTestcase tcObj = tcDao.findOne(Long.parseLong(tcId));
-                EcRequirement reqObj = reqDao.findOne(reqId);
+                EcRequirement reqObj = rDao.findOne(reqId);
                 if (tcrDao.findByTestcaseIdAndRequirementId(tcObj, reqObj) == null) {
                     EcTestcaseRequirementMapping tcrObj = new EcTestcaseRequirementMapping();
                     tcrObj.setRequirementId(reqObj);
@@ -126,7 +126,7 @@ public class RequirementController {
     public String testcaseRequirementUnLink(Model model, HttpSession session, HttpServletRequest request, @RequestParam(value = "reqId", required = true) Long reqId, @RequestParam(value = "tcId", required = true) Long tcId) {
 
         EcTestcase tcObj = tcDao.findOne(tcId);
-        EcRequirement reqObj = reqDao.findOne(reqId);
+        EcRequirement reqObj = rDao.findOne(reqId);
         if (tcObj != null && reqObj != null) {
             tcrDao.deleteByTestcaseIdAndRequirementId(tcObj, reqObj);
             session.setAttribute("flashMsg", "Successfully Unlinked testcases from requirement!");
@@ -146,14 +146,14 @@ public class RequirementController {
 
     @RequestMapping(value = "/req_create", method = RequestMethod.GET)
     public String requirementCreate(Model model, HttpSession session, @RequestParam(value = "reqId", required = false, defaultValue = "1") Long reqId) {
-        EcRequirement parentReq = reqDao.findOne(reqId);
+        EcRequirement parentReq = rDao.findOne(reqId);
         model.addAttribute("parentReq", parentReq);
         return "requirement_form";
     }
 
     @RequestMapping(value = "/req_edit", method = RequestMethod.GET)
     public String requirementEdit(Model model, HttpSession session, @RequestParam(value = "reqId", required = false, defaultValue = "1") Long reqId) {
-        EcRequirement req = reqDao.findOne(reqId);
+        EcRequirement req = rDao.findOne(reqId);
         model.addAttribute("req", req);
         model.addAttribute("parentReq", req.getParentId());
         return "requirement_form";
@@ -162,7 +162,7 @@ public class RequirementController {
     @RequestMapping(value = "/req_delete", method = RequestMethod.POST)
     public String requirementDelete(Model model, HttpSession session, HttpServletRequest request, @RequestParam(value = "reqId", required = false, defaultValue = "1") Long reqId) {
 
-        EcRequirement req = reqDao.findOne(reqId);
+        EcRequirement req = rDao.findOne(reqId);
         if (req.getParentId() == null) {
             session.setAttribute("flashMsg", "Cant delete root requirement!");
             return "redirect:/requirement?reqId=" + reqId;
@@ -174,7 +174,7 @@ public class RequirementController {
 
         Long parentId = req.getParentId().getId();
         String reqName = req.getName();
-        reqDao.delete(req);
+        rDao.delete(req);
         historyUtil.addHistory("Deleted requirement: [" + reqId + ":" + reqName + "]", session, request);
         session.setAttribute("flashMsg", "Successfully deleted requirement!");
         return "redirect:/requirement?reqId=" + parentId;
@@ -196,11 +196,11 @@ public class RequirementController {
 
         EcRequirement parentReq = null;
         if (!rParentId.equals(-1L)) {
-            parentReq = reqDao.findOne(rParentId);
+            parentReq = rDao.findOne(rParentId);
         }
         EcRequirement req = null;
         if (reqId != null) {
-            req = reqDao.findOne(reqId);
+            req = rDao.findOne(reqId);
         } else {
             req = new EcRequirement();
         }
@@ -219,7 +219,7 @@ public class RequirementController {
             }
         }
         req.setStory(rstory);
-        reqDao.save(req);
+        rDao.save(req);
         if (!rParentId.equals(-1L)) {
             historyUtil.addHistory("Saved requirement: [" + rname + "] under [" + parentReq.getId() + ":" + parentReq.getName() + "]", session, request);
         } else {
@@ -235,8 +235,8 @@ public class RequirementController {
 
         ServletOutputStream outputStream = null;
 
-        EcRequirement currenReq = reqDao.findOne(reqId);
-        List<EcRequirement> requirementLst = reqDao.findAllByParentIdOrderByNameAsc(currenReq);
+        EcRequirement currenReq = rDao.findOne(reqId);
+        List<EcRequirement> requirementLst = rDao.findAllByParentIdOrderByNameAsc(currenReq);
         if (requirementLst == null) {
             requirementLst = new ArrayList<EcRequirement>();
         }
@@ -298,12 +298,12 @@ public class RequirementController {
             try {
                 byte[] bytes = file.getBytes();
                 String fileName = file.getOriginalFilename();
-                logger.info("Uploading requirements file: {}", fileName);
+                LOGGER.info("Uploading requirements file: {}", fileName);
                 ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                 XSSFWorkbook workbook = new XSSFWorkbook(bis);
                 XSSFSheet sheet = workbook.getSheetAt(0);
                 Iterator<Row> rowIterator = sheet.iterator();
-                EcRequirement reqObj = reqDao.findOne(reqId);
+                EcRequirement reqObj = rDao.findOne(reqId);
                 Boolean skipHeader = true;
                 final DataFormatter df = new DataFormatter();
                 Long childReqId = -1L;
@@ -316,7 +316,7 @@ public class RequirementController {
                     EcRequirement childReq = null;
                     if (row.getCell(0) != null) {
                         childReqId = Long.parseLong(df.formatCellValue(row.getCell(0)));
-                        childReq = reqDao.findOne(childReqId);
+                        childReq = rDao.findOne(childReqId);
                     } else {
                         childReq = new EcRequirement();
                         childReq.setParentId(reqObj);
@@ -352,7 +352,7 @@ public class RequirementController {
                     }
                     childReq.setStory(rStory);
 
-                    reqDao.save(childReq);
+                    rDao.save(childReq);
                     historyUtil.addHistory("Requirement [" + childReq.getId() + ":" + childReq.getName() + "] added/updated by import, file: " + fileName, session, request);
                 }
                 historyUtil.addHistory("Uploaded requirements file: " + fileName + " to requirement [" + reqObj.getId() + ":" + reqObj.getName() + "]", session, request);

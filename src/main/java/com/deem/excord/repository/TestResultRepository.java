@@ -29,10 +29,10 @@ public interface TestResultRepository extends CrudRepository<EcTestresult, Long>
 
     @Query(value = "select tester,environment,count(*) from ec_testresult where DATE_FORMAT(`timestamp`,'%Y') = DATE_FORMAT(NOW(),'%Y') group by tester,environment order by count(*) desc", nativeQuery = true)
     public List<Object[]> findByTopTesterByEnvByYear();
-    
+
     @Query(value = "select c.folder_id,c.`name`,count(*) from ec_testresult a,ec_testplan_testcase_mapping b, ec_testcase c where DATE_FORMAT(a.`timestamp`,'%Y') = DATE_FORMAT(NOW(),'%Y') and a.testplan_testcase_link_id = b.id and b.testcase_id = c.id and c.automated = 0 group by c.id,c.`name` order by count(*) desc limit 50", nativeQuery = true)
     public List<Object[]> mostexecutedManualTests();
-    
+
     @Query(value = "select DATE_FORMAT(`timestamp`,'%m-%Y'),count(*) from ec_testresult where DATE_FORMAT(`timestamp`,'%Y') = DATE_FORMAT(NOW(),'%Y') group by DATE_FORMAT(`timestamp`,'%m-%Y') order by DATE_FORMAT(`timestamp`,'%m-%Y') asc", nativeQuery = true)
     public List<Object[]> executionByMonth();
 }

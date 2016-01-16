@@ -10,6 +10,7 @@ import com.deem.excord.repository.TestCaseRepository;
 import com.deem.excord.repository.TestFolderRepository;
 import com.deem.excord.repository.TestPlanRepository;
 import com.deem.excord.repository.TestPlanTestCaseRepository;
+import com.deem.excord.repository.TestResultRepository;
 import com.deem.excord.repository.TestStepRepository;
 import com.deem.excord.repository.TestcaseRequirementRepository;
 import com.deem.excord.util.Constants;
@@ -48,7 +49,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 public class TestCaseController {
 
-    private static final Logger logger = LoggerFactory.getLogger(TestCaseController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(TestCaseController.class);
 
     @Autowired
     TestFolderRepository tfDao;
@@ -67,6 +68,9 @@ public class TestCaseController {
 
     @Autowired
     TestcaseRequirementRepository tcrDao;
+
+    @Autowired
+    TestResultRepository trDao;
 
     @Autowired
     HistoryUtil historyUtil;
@@ -164,6 +168,9 @@ public class TestCaseController {
             //Delete all existing steps of testcase.
             tsDao.deleteTeststepByTestcaseId(tid);
             tcrDao.updateAllLinkedTestcaseAsReviewed(tid);
+            //Mark all active testplan where status is run to not run for re-run of testcases.
+            //TODO:
+
         } else {
             tc = new EcTestcase();
         }
@@ -238,10 +245,10 @@ public class TestCaseController {
                     tptcDao.save(tptcMap);
                 } else {
                     disabledTcPresent = true;
-                    logger.info("Cant link disabled test case: [{}:{}] to test plan: [{}:{}]", tc.getId(), tc.getName(), tp.getId(), tp.getName());
+                    LOGGER.info("Cant link disabled test case: [{}:{}] to test plan: [{}:{}]", tc.getId(), tc.getName(), tp.getId(), tp.getName());
                 }
             } else {
-                logger.info("Link already exists for test case: [{}:{}] to test plan: [{}:{}]", tc.getId(), tc.getName(), tp.getId(), tp.getName());
+                LOGGER.info("Link already exists for test case: [{}:{}] to test plan: [{}:{}]", tc.getId(), tc.getName(), tp.getId(), tp.getName());
             }
         }
 
@@ -543,7 +550,7 @@ public class TestCaseController {
             try {
                 byte[] bytes = file.getBytes();
                 String fileName = file.getOriginalFilename();
-                logger.info("Uploading testcase file: {}", fileName);
+                LOGGER.info("Uploading testcase file: {}", fileName);
                 ByteArrayInputStream bis = new ByteArrayInputStream(bytes);
                 XSSFWorkbook workbook = new XSSFWorkbook(bis);
                 XSSFSheet sheet = workbook.getSheetAt(0);

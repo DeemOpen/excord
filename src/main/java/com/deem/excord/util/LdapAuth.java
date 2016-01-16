@@ -7,6 +7,7 @@ import javax.naming.Context;
 import javax.naming.NamingException;
 import javax.naming.directory.DirContext;
 import javax.naming.directory.InitialDirContext;
+import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -26,7 +27,7 @@ public class LdapAuth {
     UserRepository uDao;
 
     DirContext ctx = null;
-    private final static org.slf4j.Logger logger = LoggerFactory.getLogger(LdapAuth.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(LdapAuth.class);
 
     public boolean authenticateUser(String username, String password) {
 
@@ -49,7 +50,7 @@ public class LdapAuth {
                         try {
                             ctx.close();
                         } catch (NamingException ex) {
-                            logger.warn(ex.getMessage());
+                            LOGGER.warn(ex.getMessage());
                         }
                     }
                 }
