@@ -632,8 +632,11 @@ public class TestCaseController {
     public String testcaseEdit(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "testcaseId", required = true) Long testcaseId) {
         EcTestcase tc = tcDao.findOne(testcaseId);
         List<EcTeststep> tsLst = tsDao.findByTestcaseId(tc);
+
+        Boolean reviewTc = tcrDao.checkIfNeedsReview(testcaseId);
         model.addAttribute("currentNode", tc.getFolderId());
         model.addAttribute("tc", tc);
+        model.addAttribute("reviewTc", reviewTc);
         model.addAttribute("tsLst", tsLst);
         return "testcase_form";
     }

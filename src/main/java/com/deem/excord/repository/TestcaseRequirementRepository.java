@@ -19,6 +19,11 @@ public interface TestcaseRequirementRepository extends CrudRepository<EcTestcase
 
     public List<EcTestcaseRequirementMapping> findAllByRequirementId(EcRequirement req);
 
+    public List<EcTestcaseRequirementMapping> findAllByReviewTrue();
+
+    @Query(value = "select case when count(*) > 0 then 'true' else 'false' end from ec_testcase_requirement_mapping where testcase_id = :tcId and review = 1", nativeQuery = true)
+    public Boolean checkIfNeedsReview(@Param("tcId") Long tcId);
+
     @Transactional
     public Integer deleteByTestcaseIdAndRequirementId(EcTestcase tc, EcRequirement req);
 

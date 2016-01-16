@@ -24,7 +24,6 @@
                     <textarea class="form-control" name="tdescription" id="tdescription" rows="4" required><#if tc??>${tc.description}</#if></textarea>
                     <br/>
                 </div>
-
                 <div>
                     <label for="tpriority">Priority<font color="red">*</font></label>
                     <select class="form-control" id="tpriority" name="tpriority">
@@ -225,6 +224,8 @@
 
         <div class="row">
             <div class="col-md-12 text-center">
+                <#if reviewTc?c == 'true'><span class="label label-danger">Review Testcase!</span> &nbsp;&nbsp;<br/><br/></#if> 
+
                 <button type="submit" name="action" id="testcase_save" value="testcase_save" class="btn btn-info"><i class="fa fa-floppy-o"></i>&nbsp;Save</button>
                 <#if tc??><a href="/testcase?nodeId=${tc.folderId.id?c}" class="btn btn-info"><i class="fa fa-backward"></i>&nbsp;Back To Folders</a></#if>
                 <button type="button" name="action" id="cancel" value="cancel" class="btn btn-info" onclick="history.back()" >Cancel</button>

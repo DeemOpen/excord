@@ -1,7 +1,9 @@
 package com.deem.excord.controller;
 
+import com.deem.excord.domain.EcTestcaseRequirementMapping;
 import com.deem.excord.repository.TestPlanRepository;
 import com.deem.excord.repository.TestResultRepository;
+import com.deem.excord.repository.TestcaseRequirementRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,7 +21,10 @@ public class ReportsController {
     @Autowired
     TestResultRepository trDao;
 
-    @RequestMapping(value = "/reports", method = RequestMethod.GET)
+    @Autowired
+    TestcaseRequirementRepository tcrDao;
+
+    @RequestMapping(value = "/report_testrun", method = RequestMethod.GET)
     public String reportsHome(Model model) {
         List<Object[]> topTesterMonthLst = trDao.findByTopTesterByEnvByMonth();
         List<Object[]> topTesterYearLst = trDao.findByTopTesterByEnvByYear();
@@ -28,7 +33,7 @@ public class ReportsController {
         model.addAttribute("topTesterMonthLst", topTesterMonthLst);
         model.addAttribute("topTesterYearLst", topTesterYearLst);
         model.addAttribute("mostExeTestsLst", mostExeTestsLst);
-        return "reports";
+        return "report_testrun";
     }
 
     @RequestMapping(value = "/testplan_metric", method = RequestMethod.GET)
@@ -36,6 +41,13 @@ public class ReportsController {
         List<Object[]> metricLst = tpDao.findByPriorityByTester(testplanId);
         model.addAttribute("metricLst", metricLst);
         return "testplan_metric";
+    }
+
+    @RequestMapping(value = "/report_review", method = RequestMethod.GET)
+    public String testcasePendingReview(Model model) {
+        List<EcTestcaseRequirementMapping> reviewLst = tcrDao.findAllByReviewTrue();
+        model.addAttribute("reviewLst", reviewLst);
+        return "report_review";
     }
 
 }
