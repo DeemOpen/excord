@@ -14,8 +14,9 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Parent Requirement</th>
                             <th>Requirement</th>
+                            <th>Priority</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -23,8 +24,9 @@
                         <#assign inc = 0/>
                         <tr>
                             <td>${inc}</td>
-                            <td><a href="/requirement?reqId=${req.parentId.id?c}">${req.parentId.name}</a></td>
                             <td><a href="/requirement?reqId=${req.id?c}">${req.name}</a></td>
+                            <td>${req.priority}</td>
+                            <td>${req.status}</td>
                         </tr>
                         <#assign inc = inc + 1/>
                         </#list>
