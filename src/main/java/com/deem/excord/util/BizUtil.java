@@ -1,5 +1,6 @@
 package com.deem.excord.util;
 
+import com.deem.excord.domain.EcRequirement;
 import com.deem.excord.domain.EcTestplan;
 import com.deem.excord.vo.TestPlanMetricVo;
 import java.math.BigInteger;
@@ -199,6 +200,24 @@ public enum BizUtil {
                 return false;
         }
 
+    }
+
+    public List<Long> getListOfAllChildReq(EcRequirement currReq) {
+        if (currReq.getEcRequirementList().isEmpty()) {
+            return null;
+        } else {
+            List<Long> allReqIdLst = new ArrayList<Long>();
+            for (EcRequirement req : currReq.getEcRequirementList()) {
+                if (req.getCoverage()) {
+                    allReqIdLst.add(req.getId());
+                }
+                List<Long> nestedChildReqLst = getListOfAllChildReq(req);
+                if (nestedChildReqLst != null) {
+                    allReqIdLst.addAll(nestedChildReqLst);
+                }
+            }
+            return allReqIdLst;
+        }
     }
 
 }

@@ -102,10 +102,39 @@
         </div>
 
         <div class="form-group">
-            <div class="col-md-5">
-                &nbsp;
+            <label for="rstate" class="col-md-2 control-label">
+                Story Point<font color="red">*</font>
+            </label>
+            <div class="col-md-4">
+                <select class="form-control" name="rstorypoint">
+                    <#if req?? && req.storyPoint == 1>
+                    <option value="1" selected>1</option>
+                    <#else>
+                    <option value="1">1</option>
+                    </#if>
+                    <#if req?? && req.storyPoint == 2>
+                    <option value="2" selected>2</option>
+                    <#else>
+                    <option value="2">2</option>
+                    </#if>
+                    <#if req?? && req.storyPoint == 3>
+                    <option value="3" selected>3</option>
+                    <#else>
+                    <option value="3">3</option>
+                    </#if>
+                    <#if req?? && req.storyPoint == 4>
+                    <option value="4" selected>4</option>
+                    <#else>
+                    <option value="4">4</option>
+                    </#if>
+                    <#if req?? && req.storyPoint == 5>
+                    <option value="5" selected>5</option>
+                    <#else>
+                    <option value="5">5</option>
+                    </#if>
+                </select>    
             </div>
-            <label class="col-md-2 control-label">
+            <label class="col-md-1 control-label">
                 Product
             </label>
             <div class="col-md-4">

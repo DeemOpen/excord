@@ -84,6 +84,24 @@ public class RequirementController {
         }
 
         List<EcTestcaseRequirementMapping> tcrLst = tcrDao.findAllByRequirementId(currReq);
+        List<Long> listOfAllChildReqLst = BizUtil.INSTANCE.getListOfAllChildReq(currReq);
+        if (listOfAllChildReqLst == null) {
+            listOfAllChildReqLst = new ArrayList<>();
+        }
+        if (currReq.getCoverage()) {
+            listOfAllChildReqLst.add(currReq.getId());
+        }
+        List<EcRequirement> reqMissingCoverageLst = rDao.findAllMissingCoverage();
+
+        Integer missCnt = 0;
+        for (EcRequirement coverageReq : reqMissingCoverageLst) {
+            if (listOfAllChildReqLst.contains(coverageReq.getId())) {
+                missCnt++;
+            }
+        }
+        Integer totalReqCnt = listOfAllChildReqLst.size();
+
+        Long coveragePercentage = Math.round(((totalReqCnt - missCnt) * 100.0) / totalReqCnt);
 
         model.addAttribute("currReq", currReq);
         model.addAttribute("parentReq", parentReq);
@@ -91,7 +109,8 @@ public class RequirementController {
         model.addAttribute("nodeLst", nodeLst);
         model.addAttribute("childReqLst", childReqLst);
         model.addAttribute("tcrLst", tcrLst);
-
+        model.addAttribute("childReqCnt", totalReqCnt);
+        model.addAttribute("coveragePercentage", coveragePercentage);
         return "requirement";
     }
 
@@ -191,6 +210,7 @@ public class RequirementController {
             @RequestParam(value = "rpriority", required = true) String rpriority,
             @RequestParam(value = "rrelease", required = false) String rrelease,
             @RequestParam(value = "rproduct", required = false) String rproduct,
+            @RequestParam(value = "rstorypoint", required = true) Integer rstorypoint,
             @RequestParam(value = "rstory", required = true) String rstory
     ) {
 
@@ -211,6 +231,7 @@ public class RequirementController {
         req.setPriority(rpriority);
         req.setReleaseName(rrelease);
         req.setProduct(rproduct);
+        req.setStoryPoint(rstorypoint);
 
         if (req.getStory() != null) {
             if (!req.getStory().equals(rstory)) {
@@ -246,10 +267,10 @@ public class RequirementController {
 
         Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
         Integer idx = 0;
-        data.put(idx, new Object[]{"ID", "NAME", "PRIORITY", "STATUS", "RELEASE_NAME", "PRODUCT", "COVERAGE", "STORY"});
+        data.put(idx, new Object[]{"ID", "NAME", "PRIORITY", "STATUS", "RELEASE_NAME", "PRODUCT", "COVERAGE", "STORY_POINT", "STORY"});
         idx++;
         for (EcRequirement req : requirementLst) {
-            data.put(idx, new Object[]{req.getId().toString(), req.getName(), req.getPriority(), req.getStatus(), req.getReleaseName(), req.getProduct(), req.getCoverage(), req.getStory()});
+            data.put(idx, new Object[]{req.getId().toString(), req.getName(), req.getPriority(), req.getStatus(), req.getReleaseName(), req.getProduct(), req.getCoverage(), req.getStoryPoint(), req.getStory()});
             idx++;
         }
 
@@ -336,14 +357,19 @@ public class RequirementController {
                     String rRelease = validateInput(df.formatCellValue(row.getCell(4)), 45);
                     String rProduct = validateInput(df.formatCellValue(row.getCell(5)), 45);
                     String rCoverage = validateInput(df.formatCellValue(row.getCell(6)), 5);
-                    String rStory = validateInput(df.formatCellValue(row.getCell(4)), -1);
+                    Integer rStoryPoint = Integer.parseInt(validateInput(df.formatCellValue(row.getCell(7)), -1));
+                    String rStory = validateInput(df.formatCellValue(row.getCell(8)), -1);
 
+                    if (rStoryPoint > 5) {
+                        rStoryPoint = 5;
+                    }
                     childReq.setName(rName);
                     childReq.setPriority(rPriority);
                     childReq.setStatus(rStatus);
                     childReq.setReleaseName(rRelease);
                     childReq.setProduct(rProduct);
                     childReq.setCoverage(Boolean.valueOf(rCoverage));
+                    childReq.setStoryPoint(rStoryPoint);
                     if (childReq.getStory() != null) {
                         if (!childReq.getStory().equals(rStory)) {
                             //Story changed then mark all testcases for review.

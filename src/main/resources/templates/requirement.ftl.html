@@ -62,17 +62,19 @@
                     <span class="fa fa-file-text-o"></span>
                     <a href="/requirement?reqId=${parentReq.id?c}"><..></a>
                     <br/>
-
+                    <#assign inc = 1/>
                     <#list nodeLst as node>
                     &nbsp;
                     <#if childReqLst?seq_contains(node.id)>
+                    ${inc}. &nbsp;
                     <span class="fa fa-file-text"></span>
                     <#else>
+                    ${inc}. &nbsp;
                     <span class="fa fa-file-text-o"></span>
                     </#if>
-
                     <a href="/requirement?reqId=${node.id?c}">${node.name}</a>
                     <br/>
+                    <#assign inc = inc + 1/>
                     </#list>
 
                 </div>
@@ -81,38 +83,41 @@
                 <table class="table table-bordered table-hover">
                     <tbody>
                         <tr>
-                            <th width="15%">Requirement Id</th>
-                            <td>${currReq.id}</td>
+                            <th width="25%">Requirement Id</th>
+                            <td width="25%">${currReq.id}</td>
+                            <th width="25%">Story Point</th>
+                            <td width="25%">${currReq.storyPoint}</td>
                         </tr>
                         <tr>
-                            <th width="15%">Requirement Name</th>
+                            <th>Requirement Name</th>
                             <td>${currReq.name}</td>
+                            <th>Total Requirements</th>
+                            <td>${childReqCnt}</td>
                         </tr>
                         <tr>
                             <th>Priority</th>
                             <td>${currReq.priority}</td>
-                        </tr>
-                        <tr>
-                            <th>Status</th>
-                            <td>${currReq.status}</td>
-                        </tr>
-                        <tr>
                             <th>Release</th>
                             <td>${currReq.releaseName}</td>
                         </tr>
                         <tr>
+                            <th>Status</th>
+                            <td>${currReq.status}</td>
                             <th>Product</th>
                             <td>${currReq.product}</td>
                         </tr>
+
                         <tr>
                             <th>Coverage Required</th>
                             <td>${currReq.coverage?c}</td>
+                            <th>Coverage Percentage</th>
+                            <td>${coveragePercentage}%</td>
                         </tr>
                         <tr>
                             <th>
                                 Associated Testcases
                             </th>
-                            <td>
+                            <td colspan="3">
                                 <#assign inc = 0/>
                                 <#list tcrLst as tcr>
                                 <#assign inc = inc + 1/>

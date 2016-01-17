@@ -83,6 +83,8 @@ public class EcTestcase implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "case_type")
     private String caseType;
+    @Column(name = "time_to_run")
+    private Integer timeToRun;
     @JoinColumn(name = "folder_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private EcTestfolder folderId;
@@ -227,6 +229,14 @@ public class EcTestcase implements Serializable {
 
     public void setCaseType(String caseType) {
         this.caseType = caseType;
+    }
+
+    public Integer getTimeToRun() {
+        return timeToRun;
+    }
+
+    public void setTimeToRun(Integer timeToRun) {
+        this.timeToRun = timeToRun;
     }
 
     public EcTestfolder getFolderId() {

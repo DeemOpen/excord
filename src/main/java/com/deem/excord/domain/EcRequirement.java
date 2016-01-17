@@ -28,6 +28,8 @@ public class EcRequirement implements Serializable {
     @Size(max = 90)
     @Column(name = "name")
     private String name;
+    @Column(name = "story_point")
+    private Integer storyPoint;
     @Lob
     @Size(max = 65535)
     @Column(name = "story")
@@ -127,6 +129,14 @@ public class EcRequirement implements Serializable {
 
     public EcRequirement getParentId() {
         return parentId;
+    }
+
+    public Integer getStoryPoint() {
+        return storyPoint;
+    }
+
+    public void setStoryPoint(Integer storyPoint) {
+        this.storyPoint = storyPoint;
     }
 
     public void setParentId(EcRequirement parentId) {
