@@ -75,7 +75,7 @@
                                     ${tc.folderId.name}
                                 </a>
                             </td>
-                            <td style="word-break:break-all;">${tc.name}</td>
+                            <td style="word-break:break-all;"><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
                             <td>
                                 <#list tptcLst as tptc>
                                 <#if tptc.testcaseId.id?c == tc.id?c>
@@ -136,7 +136,8 @@
                                             <b>Deprecated Version</b>: ${tc.deprecatedVersion}
                                             <br/>
                                             <b>Bug Id</b>: ${tc.bugId}
-
+                                            <br/>
+                                            <b>Time to Run</b>: ${tc.timeToRun} mins
                                         </td>
                                     </tr>
                                     <#if tc.ecTeststepList??>
