@@ -3,79 +3,77 @@
 <script src="js/custom/testplan.js"></script>
 
 <div class="container-fluid">
-    <form method="post" action="/" role="form" class="form-horizontal">
-        <div class="row">
-            <div class="col-md-12 left">
-                <#if home??>
-                <h3>Active Test Plans</h3>
-                <#assign tableElement = "testplan"/>
-                <#else>
-                <h3>All Test Plans</h3>
-                <#assign tableElement = "testplan-ele"/>
-                </#if>
-                <br/>
-            </div>
+    <div class="row">
+        <div class="col-md-12 left">
+            <#if home??>
+            <h3>Active Test Plans</h3>
+            <#assign tableElement = "testplan"/>
+            <#else>
+            <h3>All Test Plans</h3>
+            <#assign tableElement = "testplan-ele"/>
+            </#if>
+            <br/>
         </div>
+    </div>
 
-        <table id="${tableElement}" class="table table-striped table-bordered" width="100%" cellspacing="0">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Enabled</th>
-                    <th>Release</th>
-                    <th>Schedule</th>
-                    <th>Leader</th>
-                    <th>Start date</th>
-                    <th>End Date</th>
-                    <th>Pass Rate</th>
-                    <th>Progress Rate</th>
-                </tr>
-            </thead>
+    <table id="${tableElement}" class="table table-striped table-bordered" width="100%" cellspacing="0">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Enabled</th>
+                <th>Release</th>
+                <th>Schedule</th>
+                <th>Leader</th>
+                <th>Start date</th>
+                <th>End Date</th>
+                <th>Pass Rate</th>
+                <th>Progress Rate</th>
+            </tr>
+        </thead>
 
-            <tbody>
-                <#list testPlanLst as testPlan>
-                <tr>
-                    <td>${testPlan.id}</td>
-                    <td><a href="/testplan_view?testplanId=${testPlan.id?c}">${testPlan.name}</a></td>
-                    <td>${testPlan.enabled?c}</td>
-                    <td><#if testPlan.releaseName??>${testPlan.releaseName}</#if></td>
-                    <td><#if testPlan.schedule??>${testPlan.schedule}</#if></td>
-                    <td><#if testPlan.leader??>${testPlan.leader}</#if></td>
-                    <td><#if testPlan.startDate??>${testPlan.startDate}</#if></td>
-                    <td><#if testPlan.endDate??>${testPlan.endDate}</#if></td>
-                    <td>
-                        <#list testPlanMetricsLst as tpm>
-                        <#if tpm.testPlanId == testPlan.id>
-                        ${tpm.passRate}%
-                        </#if>
-                        </#list>
-                    </td>
-                    <td>
-                        <#list testPlanMetricsLst as tpm>
-                        <#if tpm.testPlanId == testPlan.id>
-                        ${tpm.progressRate}%
-                        </#if>
-                        </#list>
-                    </td>
+        <tbody>
+            <#list testPlanLst as testPlan>
+            <tr>
+                <td>${testPlan.id}</td>
+                <td><a href="/testplan_view?testplanId=${testPlan.id?c}">${testPlan.name}</a></td>
+                <td>${testPlan.enabled?c}</td>
+                <td><#if testPlan.releaseName??>${testPlan.releaseName}</#if></td>
+                <td><#if testPlan.schedule??>${testPlan.schedule}</#if></td>
+                <td><#if testPlan.leader??>${testPlan.leader}</#if></td>
+                <td><#if testPlan.startDate??>${testPlan.startDate}</#if></td>
+                <td><#if testPlan.endDate??>${testPlan.endDate}</#if></td>
+                <td>
+                    <#list testPlanMetricsLst as tpm>
+                    <#if tpm.testPlanId == testPlan.id>
+                    ${tpm.passRate}%
+                    </#if>
+                    </#list>
+                </td>
+                <td>
+                    <#list testPlanMetricsLst as tpm>
+                    <#if tpm.testPlanId == testPlan.id>
+                    ${tpm.progressRate}%
+                    </#if>
+                    </#list>
+                </td>
 
-                </tr>
-                </#list>
+            </tr>
+            </#list>
 
-            </tbody>
-        </table>
+        </tbody>
+    </table>
 
-        <#if home??>
-        <#else>
-        <div class="row">
-            <div class="col-md-12 text-center">
-                <br/>
-                <br/>
-                <a href="/testplan_add"  title="Add Test Step" class="btn btn-info" ><i class="fa fa-plus-square"></i> &nbsp; Add Test Plan</a>
-            </div>
+    <#if home??>
+    <#else>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <br/>
+            <br/>
+            <a href="/testplan_add"  title="Add Test Step" class="btn btn-info" ><i class="fa fa-plus-square"></i> &nbsp; Add Test Plan</a>
         </div>
-        </#if>
-        <br/>
-    </form>
+    </div>
+    </#if>
+    <br/>
 </div>
 </@main.page> 

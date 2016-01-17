@@ -17,4 +17,6 @@ public interface TestPlanTestCaseRepository extends CrudRepository<EcTestplanTes
 
     public List<EcTestplanTestcaseMapping> findByTestplanId(EcTestplan tp);
 
+    public List<EcTestplanTestcaseMapping> findByTestcaseId(EcTestcase tc);
+
 }

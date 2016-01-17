@@ -59,8 +59,8 @@ public class TestPlanController {
     @Value("${test.env}")
     String testEnvArr;
 
-    @RequestMapping(value = {"/"}, method = RequestMethod.GET)
-    public String home(HttpSession session, Model model) {
+    @RequestMapping(value = {"/testplan_active"}, method = RequestMethod.GET)
+    public String activeTestplan(HttpSession session, Model model) {
 
         FlashMsgUtil.INSTANCE.checkFlashMsg(session, model);
         List<EcTestplan> testPlanLst = null;
@@ -119,7 +119,7 @@ public class TestPlanController {
         historyUtil.addHistory("Cloned testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request);
         session.setAttribute("flashMsg", "Successfully Cloned TestPlan " + tp.getName());
 
-        return "redirect:/";
+        return "redirect:/testplan";
     }
 
     @RequestMapping(value = "/testplan_history", method = RequestMethod.GET)
@@ -146,7 +146,7 @@ public class TestPlanController {
         EcTestplan tp = tpDao.findOne(testplanId);
         tpDao.delete(tp);
         historyUtil.addHistory("Deleted testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request);
-        return "redirect:/";
+        return "redirect:/testplan";
     }
 
     @RequestMapping(value = "/testplan_run", method = RequestMethod.GET)
@@ -243,7 +243,7 @@ public class TestPlanController {
                 historyUtil.addHistory("Added testplan: [" + tname + "]", session, request);
                 session.setAttribute("flashMsg", "Successfully Added TestPlan " + tp.getName());
             }
-            return "redirect:/";
+            return "redirect:/testplan";
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
         }

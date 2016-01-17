@@ -106,8 +106,11 @@
                                 <#case "FAILED">
                                 <span class="label label-danger"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
                                 <#break>
+                                <#case "NOT_RUN">
+                                <span class="label label-warning"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
+                                <#break>
                                 <#default>
-                                <span class="label label-info"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
+                                <span class="label label-primary"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
                                 </#switch>
                                 </#if>
                             </td>

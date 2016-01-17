@@ -103,7 +103,7 @@ public class RestService {
             tr.setNote(tcomments);
             tr.setStatus(tstatus);
             tr.setTimestamp(new Date());
-            tr.setTester(Constants.AUTOMATION_USER);
+            tr.setTester(Constants.USER_AUTOMATION);
             tr.setEnvironment(tenv);
             tr.setTestplanTestcaseLinkId(tptcLinkId);
             tr.setBugTicket("");

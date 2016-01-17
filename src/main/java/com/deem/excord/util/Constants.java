@@ -10,7 +10,8 @@ public interface Constants {
     String STATUS_OTHER = "OTHER";
 
     String ROLE_USER = "USER";
-    String AUTOMATION_USER = "AUTOMATION";
+    String USER_AUTOMATION = "AUTOMATION";
+    String USER_SYSTEM = "SYSTEM";
 
     String PRIORITY_P1 = "P1";
     String PRIORITY_P2 = "P2";

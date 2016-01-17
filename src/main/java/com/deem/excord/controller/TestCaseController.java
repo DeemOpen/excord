@@ -5,6 +5,7 @@ import com.deem.excord.domain.EcTestcaseRequirementMapping;
 import com.deem.excord.domain.EcTestfolder;
 import com.deem.excord.domain.EcTestplan;
 import com.deem.excord.domain.EcTestplanTestcaseMapping;
+import com.deem.excord.domain.EcTestresult;
 import com.deem.excord.domain.EcTeststep;
 import com.deem.excord.repository.TestCaseRepository;
 import com.deem.excord.repository.TestFolderRepository;
@@ -22,6 +23,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -170,6 +172,20 @@ public class TestCaseController {
             tcrDao.updateAllLinkedTestcaseAsReviewed(tid);
             //Mark all active testplan where status is run to not run for re-run of testcases.
             //TODO:
+            List<EcTestplanTestcaseMapping> tptcMappingLst = tptcDao.findByTestcaseId(tc);
+            for (EcTestplanTestcaseMapping tptcLink : tptcMappingLst) {
+                trDao.updateAllTestRunsLatestFlag(tptcLink.getId());
+                EcTestresult tr = new EcTestresult();
+                tr.setLatest(true);
+                tr.setNote("");
+                tr.setStatus(Constants.STATUS_NOT_RUN);
+                tr.setTimestamp(new Date());
+                tr.setTester(Constants.USER_SYSTEM);
+                tr.setEnvironment("NA");
+                tr.setBugTicket("");
+                tr.setTestplanTestcaseLinkId(tptcLink);
+                trDao.save(tr);
+            }
 
         } else {
             tc = new EcTestcase();

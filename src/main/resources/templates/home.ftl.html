@@ -1,0 +1,29 @@
+<#import "layouts/main-layout.ftl.html" as main> 
+<@main.page>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-6">
+            <div class="jumbotron">
+                <h2>Requirements: ${rCnt}</h2>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="jumbotron">
+                <h2>Testplans: ${tpCnt}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="jumbotron">
+                <h2>Testcases: ${tcCnt}</h2>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="jumbotron">
+                <h2>Test Execution: ${trCnt}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+</@main.page> 

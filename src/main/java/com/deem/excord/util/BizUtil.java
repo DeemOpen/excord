@@ -128,6 +128,8 @@ public enum BizUtil {
                     case Constants.STATUS_PASSED:
                         tpm.setPassCount(tpCount);
                         break;
+                    case Constants.STATUS_NOT_RUN:
+                        break;
                     case "TOTAL":
                         tpm.setTotal(tpCount);
                         break;

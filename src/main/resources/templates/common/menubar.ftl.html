@@ -10,7 +10,13 @@
             <ul class="nav navbar-nav">
                 <li><a href="/">Home</a></li>
                 <li><a href="/requirement">Requirements</a></li>
-                <li><a href="/testplan">Test Plans</a></li>
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Test Plans<span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="/testplan_active">Active Testplans</a></li>
+                        <li><a href="/testplan">All Testplans</a></li>
+                    </ul>
+                </li>
                 <li><a href="/testcase">Test Cases</a></li>
                 <li class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Reports<span class="caret"></span></a>
