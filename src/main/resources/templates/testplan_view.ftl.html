@@ -22,48 +22,60 @@
                         </th>
                     </tr>
                     <tr>
-                        <td>Test Plan Id</td>
+                        <th>Test Plan Id</th>
                         <td>${testPlan.id}</td>
                     </tr>
                     <tr>
-                        <td>Test Cases</td>
+                        <th>Test Cases</th>
                         <td>${tecaseCnt}</td>
                     </tr>
                     <tr>
-                        <td>Enabled</td>
+                        <th>Enabled</th>
                         <td>${testPlan.enabled?c}</td>
                     </tr>
                     <tr>
-                        <td>Creator</td>
+                        <th>Creator</th>
                         <td>${testPlan.creator}</td>
                     </tr>
                     <tr>
-                        <td>Release</td>
+                        <th>Release</th>
                         <td><#if testPlan.releaseName??>${testPlan.releaseName}</#if></td>
                     </tr>
                     <tr>
-                        <td>Leader</td>
+                        <th>Leader</th>
                         <td><#if testPlan.leader??>${testPlan.leader}</#if></td>
                     </tr>
                     <tr>
-                        <td>Schedule</td>
+                        <th>Schedule</th>
                         <td><#if testPlan.schedule??>${testPlan.schedule}</#if></td>
                     </tr>
                     <tr>
-                        <td>Start Date</td>
+                        <th>Start Date</th>
                         <td><#if testPlan.startDate??>${testPlan.startDate}</#if></td>
                     </tr>
                     <tr>
-                        <td>End Date</td>
+                        <th>End Date</th>
                         <td><#if testPlan.endDate??>${testPlan.endDate}</#if></td>
                     </tr>
                     <tr>
-                        <td>Pass Rate</td>
+                        <th>Pass Rate</th>
                         <td>${testPlanPassRate}%</td>
                     </tr>
                     <tr>
-                        <td>Progress</td>
+                        <th>Progress</th>
                         <td>${testPlanProgressRate}%</td>
+                    </tr>
+                    <tr>
+                        <th>Total Time To Run</th>
+                        <td>
+                            <#assign timeToRun = 0>
+                            <#if testCaseLst??>
+                            <#list testCaseLst as tc>
+                            <#assign timeToRun = timeToRun + tc.timeToRun>
+                            </#list>
+                            </#if>
+                            ${timeToRun} mins
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -104,6 +116,7 @@
                         <td>${tpm.total}</td>
                         <td>${tpm.passRate}%</td>
                         <td>${tpm.progressRate}%</td>
+
                     </tr>
                     </#list>
 

@@ -159,7 +159,8 @@ public class TestCaseController {
             @RequestParam(value = "tproduct", required = false) String tproduct,
             @RequestParam(value = "tfeature", required = false) String tfeature,
             @RequestParam(value = "taversion", required = false) String taversion,
-            @RequestParam(value = "tdversion", required = false) String tdversion
+            @RequestParam(value = "tdversion", required = false) String tdversion,
+            @RequestParam(value = "ttrun", required = true) Integer timeToRun
     ) {
 
         EcTestfolder folder = tfDao.findOne(tfolderId);
@@ -206,6 +207,7 @@ public class TestCaseController {
         tc.setFeature(tfeature);
         tc.setAddedVersion(taversion);
         tc.setDeprecatedVersion(tdversion);
+        tc.setTimeToRun(timeToRun);
         tcDao.save(tc);
 
         for (int i = 1; i <= tstepCount; i++) {
@@ -501,20 +503,22 @@ public class TestCaseController {
 
         Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
         Integer idx = 0;
-        data.put(idx, new Object[]{"ID", "NAME", "DESCRIPTION", "STEP", "PROCEDURE", "EXPECTED"});
+        data.put(idx, new Object[]{"ID", "NAME", "DESCRIPTION", "TIME_TO_RUN", "STEP", "PROCEDURE", "EXPECTED"});
         idx++;
         for (EcTestcase tc : testCaseLst) {
             if (testcaseChkLst.contains(tc.getId())) {
                 String testcaseName = tc.getName();
                 String testcaseDesc = tc.getDescription();
+                String timetToRun = String.valueOf(tc.getTimeToRun());
                 if (tc.getEcTeststepList().isEmpty()) {
-                    data.put(idx, new Object[]{tc.getId().toString(), testcaseName, testcaseDesc, 1, "", ""});
+                    data.put(idx, new Object[]{tc.getId().toString(), testcaseName, testcaseDesc, timetToRun, 1, "", ""});
                     idx++;
                 } else {
                     for (EcTeststep step : tc.getEcTeststepList()) {
-                        data.put(idx, new Object[]{tc.getId().toString(), testcaseName, testcaseDesc, step.getStepNumber(), step.getDescription(), step.getExpected()});
+                        data.put(idx, new Object[]{tc.getId().toString(), testcaseName, testcaseDesc, timetToRun, step.getStepNumber(), step.getDescription(), step.getExpected()});
                         testcaseDesc = "";
                         testcaseName = "";
+                        timetToRun = "";
                         idx++;
                     }
                 }
@@ -586,8 +590,8 @@ public class TestCaseController {
                     }
                     if (row.getCell(0) != null) {
                         newTestId = Long.parseLong(df.formatCellValue(row.getCell(0)));
-                        String testProcedure = validateInput(df.formatCellValue(row.getCell(4)), -1);
-                        String testExpected = validateInput(df.formatCellValue(row.getCell(5)), -1);
+                        String testProcedure = validateInput(df.formatCellValue(row.getCell(5)), -1);
+                        String testExpected = validateInput(df.formatCellValue(row.getCell(6)), -1);
 
                         if (newTestId.equals(previousTestId) && tc != null) {
                             //Just keep adding steps.
@@ -601,6 +605,12 @@ public class TestCaseController {
                         } else {
                             String testName = validateInput(df.formatCellValue(row.getCell(1)), 90);
                             String testDescription = validateInput(df.formatCellValue(row.getCell(2)), -1);
+                            Integer timeToRun = Integer.parseInt(validateInput(df.formatCellValue(row.getCell(3)), -1));
+
+                            if (timeToRun != 1 & timeToRun != 5 && timeToRun != 10 && timeToRun != 15 && timeToRun != 20 && timeToRun != 30) {
+                                timeToRun = 5;
+                            }
+
                             previousTestId = newTestId;
                             stepNumber = 1;
                             tc = tcDao.findByIdAndFolderId(previousTestId, currentNode);
@@ -626,6 +636,7 @@ public class TestCaseController {
                             tc.setDescription(testDescription);
                             tc.setEnabled(true);
                             tc.setFolderId(currentNode);
+                            tc.setTimeToRun(timeToRun);
                             tcDao.save(tc);
                             EcTeststep tp = new EcTeststep();
                             tp.setStepNumber(stepNumber);
