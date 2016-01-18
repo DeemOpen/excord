@@ -1,10 +1,14 @@
 package com.deem.excord.controller;
 
+import com.deem.excord.domain.EcRequirement;
 import com.deem.excord.repository.RequirementRepository;
 import com.deem.excord.repository.TestCaseRepository;
 import com.deem.excord.repository.TestPlanRepository;
 import com.deem.excord.repository.TestResultRepository;
+import com.deem.excord.util.BizUtil;
 import com.deem.excord.util.FlashMsgUtil;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -34,10 +38,35 @@ public class HomeController {
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String home(Model model, HttpSession session) {
         FlashMsgUtil.INSTANCE.checkFlashMsg(session, model);
-        model.addAttribute("tcCnt", tcDao.count());
+
+        EcRequirement currReq = rDao.findByParentIdIsNull();
+        List<Long> listOfAllChildReqLst = BizUtil.INSTANCE.getListOfAllChildReq(currReq);
+        if (listOfAllChildReqLst == null) {
+            listOfAllChildReqLst = new ArrayList<>();
+        }
+        if (currReq.getCoverage()) {
+            listOfAllChildReqLst.add(currReq.getId());
+        }
+        List<EcRequirement> reqMissingCoverageLst = rDao.findAllMissingCoverage();
+        Integer missCnt = 0;
+        for (EcRequirement coverageReq : reqMissingCoverageLst) {
+            if (listOfAllChildReqLst.contains(coverageReq.getId())) {
+                missCnt++;
+            }
+        }
+        Integer totalReqCnt = listOfAllChildReqLst.size();
+        Long coveragePercentage = Math.round(((totalReqCnt - missCnt) * 100.0) / totalReqCnt);
+
+        Integer automationCnt = tcDao.automationCnt();
+        Long testcaseCnt = tcDao.count();
+        Long automationPercentage = Math.round((automationCnt * 100.0) / testcaseCnt);
+
+        model.addAttribute("tcCnt", testcaseCnt);
         model.addAttribute("tpCnt", tpDao.count());
         model.addAttribute("rCnt", rDao.count());
         model.addAttribute("trCnt", trDao.count());
+        model.addAttribute("coveragePercentage", coveragePercentage);
+        model.addAttribute("automationPercentage", automationPercentage);
         return "home";
     }
 

@@ -15,5 +15,7 @@ public interface RequirementRepository extends CrudRepository<EcRequirement, Lon
 
     @Query(value = "SELECT a.* FROM ec_requirement a LEFT OUTER JOIN ec_testcase_requirement_mapping  b ON a.id=b.requirement_id where a.status = 'ACTIVE' and a.coverage = 1  and b.requirement_id is null", nativeQuery = true)
     public List<EcRequirement> findAllMissingCoverage();
+    
+    public EcRequirement findByParentIdIsNull();
 
 }

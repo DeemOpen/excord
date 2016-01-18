@@ -16,4 +16,7 @@ public interface TestCaseRepository extends CrudRepository<EcTestcase, Long> {
 
     public EcTestcase findByIdAndFolderId(Long id, EcTestfolder folder);
 
+    @Query(value = "SELECT count(*) FROM ec_testcase where automated = true", nativeQuery = true)
+    public Integer automationCnt();
+
 }
