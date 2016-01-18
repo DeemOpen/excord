@@ -1,6 +1,25 @@
 <#import "layouts/main-layout.ftl.html" as main> 
 <@main.page>
+<script src="js/3p/highcharts.js"></script>
+<script src="js/3p/exporting.js"></script>
+<script src="js/custom/home.js"></script>
 <div class="container-fluid">
+
+    <div class="row">
+        <div class="col-md-3 text-center">
+            <div id="requirementPriorityChart"></div>
+        </div>
+        <div class="col-md-3">
+            <div id="requirementStatusChart"></div>
+        </div>
+        <div class="col-md-3">
+            <div id="runStatusChart"></div>
+        </div>
+        <div class="col-md-3">
+            <div id="testcaseTypeChart"></div>
+        </div>
+    </div>
+    <br/>
     <div class="row">
         <div class="col-md-6">
             <div class="jumbotron well well-lg">
@@ -28,7 +47,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="jumbotron well well-lg">
-                <h2>Coverage: ${coveragePercentage}%</h2>
+                <h2>Requirement Coverage: ${coveragePercentage}%</h2>
             </div>
         </div>
         <div class="col-md-6">

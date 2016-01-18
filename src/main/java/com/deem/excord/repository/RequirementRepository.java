@@ -15,7 +15,19 @@ public interface RequirementRepository extends CrudRepository<EcRequirement, Lon
 
     @Query(value = "SELECT a.* FROM ec_requirement a LEFT OUTER JOIN ec_testcase_requirement_mapping  b ON a.id=b.requirement_id where a.status = 'ACTIVE' and a.coverage = 1  and b.requirement_id is null", nativeQuery = true)
     public List<EcRequirement> findAllMissingCoverage();
-    
+
     public EcRequirement findByParentIdIsNull();
+
+    @Query(value = "SELECT priority,count(*) as cnt FROM ec_requirement group by priority", nativeQuery = true)
+    public List<Object[]> getRequirementByPriorityCnt();
+
+    @Query(value = "SELECT status,count(*) as cnt FROM ec_requirement group by status", nativeQuery = true)
+    public List<Object[]> getRequirementByStatusCnt();
+
+    @Query(value = "SELECT `status`,count(*) FROM ec_testresult where latest = 1 and DATE_FORMAT(`timestamp`,'%m-%Y') = DATE_FORMAT(NOW(),'%m-%Y') group by `status`", nativeQuery = true)
+    public List<Object[]> getCurrentMonthRunStatus();
+
+    @Query(value = "SELECT case_type,count(*) FROM ec_testcase group by case_type", nativeQuery = true)
+    public List<Object[]> getTestcaseTypeCnt();
 
 }

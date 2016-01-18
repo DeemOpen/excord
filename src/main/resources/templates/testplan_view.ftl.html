@@ -173,7 +173,7 @@
                                 ${tc.folderId.name}
                             </a>
                         </td>
-                        <td>${tc.name}</td>
+                        <td><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
                         <td>
                             <#if tc.priority??>
                             ${tc.priority}

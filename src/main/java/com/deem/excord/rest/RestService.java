@@ -4,6 +4,7 @@ import com.deem.excord.domain.EcTestcase;
 import com.deem.excord.domain.EcTestplan;
 import com.deem.excord.domain.EcTestplanTestcaseMapping;
 import com.deem.excord.domain.EcTestresult;
+import com.deem.excord.repository.RequirementRepository;
 import com.deem.excord.repository.TestCaseRepository;
 import com.deem.excord.repository.TestPlanRepository;
 import com.deem.excord.repository.TestPlanTestCaseRepository;
@@ -47,6 +48,9 @@ public class RestService {
 
     @Autowired
     TestPlanTestCaseRepository tptcDao;
+
+    @Autowired
+    RequirementRepository rDao;
 
     @Value("${test.env}")
     String testEnvArr;
@@ -288,5 +292,61 @@ public class RestService {
         columnData.add(dataElement1);
 
         return columnData;
+    }
+
+    @RequestMapping(value = "/rest/req-priority-data", method = RequestMethod.GET)
+    public List getRequirementPriority() {
+
+        List pieData = new ArrayList<>();
+        List<Object[]> reqCntLst = rDao.getRequirementByPriorityCnt();
+        for (Object[] result : reqCntLst) {
+            List element = new ArrayList();
+            element.add((String) result[0]);
+            element.add(((BigInteger) result[1]));
+            pieData.add(element);
+        }
+        return pieData;
+    }
+
+    @RequestMapping(value = "/rest/req-status-data", method = RequestMethod.GET)
+    public List getRequirementStatus() {
+
+        List pieData = new ArrayList<>();
+        List<Object[]> reqCntLst = rDao.getRequirementByStatusCnt();
+        for (Object[] result : reqCntLst) {
+            List element = new ArrayList();
+            element.add((String) result[0]);
+            element.add(((BigInteger) result[1]));
+            pieData.add(element);
+        }
+        return pieData;
+    }
+
+    @RequestMapping(value = "/rest/run-status-data", method = RequestMethod.GET)
+    public List getCurrentMonthRunStatus() {
+
+        List pieData = new ArrayList<>();
+        List<Object[]> runStatusLst = rDao.getCurrentMonthRunStatus();
+        for (Object[] result : runStatusLst) {
+            List element = new ArrayList();
+            element.add((String) result[0]);
+            element.add(((BigInteger) result[1]));
+            pieData.add(element);
+        }
+        return pieData;
+    }
+
+    @RequestMapping(value = "/rest/testcase-type-data", method = RequestMethod.GET)
+    public List getTestcaseType() {
+
+        List pieData = new ArrayList<>();
+        List<Object[]> tcTypeLst = rDao.getTestcaseTypeCnt();
+        for (Object[] result : tcTypeLst) {
+            List element = new ArrayList();
+            element.add((String) result[0]);
+            element.add(((BigInteger) result[1]));
+            pieData.add(element);
+        }
+        return pieData;
     }
 }
