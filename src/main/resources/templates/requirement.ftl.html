@@ -66,13 +66,11 @@
                     <#list nodeLst as node>
                     &nbsp;
                     <#if childReqLst?seq_contains(node.id)>
-                    ${inc}. &nbsp;
                     <span class="fa fa-file-text"></span>
                     <#else>
-                    ${inc}. &nbsp;
                     <span class="fa fa-file-text-o"></span>
                     </#if>
-                    <a href="/requirement?reqId=${node.id?c}">${node.name}</a>
+                    ${inc}.&nbsp;<a href="/requirement?reqId=${node.id?c}">${node.name}</a>
                     <br/>
                     <#assign inc = inc + 1/>
                     </#list>
