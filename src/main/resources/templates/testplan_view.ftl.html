@@ -151,10 +151,11 @@
                 <thead>
                     <tr>
                         <th class="no-sort"><input type="checkbox" id="checkAll"/> </th>
-                        <th>ID</th>
+                        <th>Testcase ID</th>
                         <th>Test Folder</th>
                         <th>Test Name</th>
-                        <th>Priority</th>
+                        <th>Requirement</th>
+                        <th>Testcase Priority</th>
                         <th>Assigned To</th>
                     </tr>
                 </thead>
@@ -174,6 +175,15 @@
                             </a>
                         </td>
                         <td><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
+                        <td>
+                            <#if tc.ecTestcaseRequirementMappingLst??>
+                            <#list tc.ecTestcaseRequirementMappingLst as tcrMap>
+                            <#if tcrMap.testcaseId.id == tc.id>
+                            <a href="/requirement?reqId=${tcrMap.requirementId.id?c}">${tcrMap.requirementId.name}</a>
+                            </#if>
+                            </#list>
+                            </#if>
+                        </td>
                         <td>
                             <#if tc.priority??>
                             ${tc.priority}
