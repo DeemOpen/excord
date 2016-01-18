@@ -337,11 +337,13 @@ public class RequirementController {
                     EcRequirement childReq = null;
                     if (row.getCell(0) != null) {
                         childReqId = Long.parseLong(df.formatCellValue(row.getCell(0)));
-                        childReq = rDao.findOne(childReqId);
-                    } else {
+                        childReq = rDao.findByIdAndParentId(reqId, reqObj);
+                    }
+                    if (childReq == null) {
                         childReq = new EcRequirement();
                         childReq.setParentId(reqObj);
                     }
+
                     String rName = validateInput(df.formatCellValue(row.getCell(1)), 90);
                     String rPriority = validateInput(df.formatCellValue(row.getCell(2)), 45);
                     if (!BizUtil.INSTANCE.checkReqPriority(rPriority)) {

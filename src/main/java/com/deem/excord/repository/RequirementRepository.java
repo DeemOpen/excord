@@ -30,4 +30,6 @@ public interface RequirementRepository extends CrudRepository<EcRequirement, Lon
     @Query(value = "SELECT case_type,count(*) FROM ec_testcase group by case_type", nativeQuery = true)
     public List<Object[]> getTestcaseTypeCnt();
 
+    public EcRequirement findByIdAndParentId(Long id, EcRequirement parentRequirement);
+
 }
