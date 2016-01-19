@@ -29,14 +29,24 @@
 
 ### Features
 
-1. Lightweight application, Easy to Setup & Run.
+1. Lightweight application, Easy to Setup & Navigate.
 2. Create Requirements.
 3. Create Testcases.
 4. Create Testplans.
 5. Associate Testcases with Requirements.
 5. Associate Testcases with Testplan for execution.
 6. Reports
-7. REST API's for integration with automation tools
+7. REST API's for integration with automation tools. Automation scripts can POST the test results against testcases.
+8. History of changes tracked.
+9. Import & Export to and from Excel.
+10. Assign testcases to tester for execution.
+11. View all test steps on single test run page.
+12. View Execution history on a test plan.
+13. Test plan overall progress, pass rate, time to run visible.
+14. Cut & Paste test cases to different folders.
+15. Requirement coverage analysis
+16. Change in requirement triggers testcase for review and testcases for re-runs
+
 
 
 ### DB Setup
@@ -107,7 +117,13 @@ VALUES ('1', 'admin', 'admin', 'manager', 'USER', '1', NOW(),'test@blackhole.com
 <img src="https://raw.github.com/DeemOpen/excord/master/images/excord-11.png"/>
 <br/>
 
+<br/>
+<img src="https://raw.github.com/DeemOpen/excord/master/images/excord-12.png"/>
+<br/>
 
+<br/>
+<img src="https://raw.github.com/DeemOpen/excord/master/images/excord-13.png"/>
+<br/>
 
 ### License & Contribution
 
