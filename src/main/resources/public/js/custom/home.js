@@ -9,7 +9,7 @@ $(document).ready(function () {
         },
         colors: ['#DB7093', '#FFDEAD', '#7B68EE', '#2E8B57'],
         title: {
-            text: 'Active Covered Requirement By Priority'
+            text: 'Requirement By Priority'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -45,7 +45,7 @@ $(document).ready(function () {
         },
         colors: ['#336633', '#A52A2A', '#FFD700'],
         title: {
-            text: 'Covered Requirement By Status'
+            text: 'Requirement By Status'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'

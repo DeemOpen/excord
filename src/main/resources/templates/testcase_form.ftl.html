@@ -135,7 +135,7 @@
                         <#else>
                         <option value="20">20 Mins</option>
                         </#if>
-                        
+
                         <#if tc?? && tc.timeToRun == 30>
                         <option value="30" selected>30 Mins</option>
                         <#else>
@@ -224,9 +224,11 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <#assign incId = 0>
                         <#if tsLst?? && tsLst?has_content>
                         <#list tsLst as ts>
                         <tr>
+                            <#assign incId = incId+1>
                             <td>${ts.stepNumber}</td>
                             <td><textarea class="expandable-textarea" id="testStep_${ts.stepNumber}" name="testStep_${ts.stepNumber}" required>${ts.description}</textarea></td>
                             <td><textarea class="expandable-textarea" id="testExpected_${ts.stepNumber}" name="testExpected_${ts.stepNumber}" required>${ts.expected}</textarea></td>
@@ -235,6 +237,7 @@
                         <#else>
                         <#list 1..2 as n>
                         <tr>
+                            <#assign incId = incId+1>
                             <td>${n}</td>
                             <td><textarea class="expandable-textarea" id="testStep_${n}" name="testStep_${n}" required></textarea></td>
                             <td><textarea class="expandable-textarea" id="testExpected_${n}" name="testExpected_${n}" required></textarea></td>
@@ -249,11 +252,7 @@
 
         <div class="row">
             <div class="col-md-12 text-right">
-                <#if tsLst??>
-                <input type="hidden" name="tstepCount" id="tstepCount" value="${tsLst?size}"/>
-                <#else>
-                <input type="hidden" name="tstepCount" id="tstepCount" value="2"/>
-                </#if>
+                <input type="hidden" name="tstepCount" id="tstepCount" value="${incId}"/>
                 <a id="addTestStep"  href="#" title="Add Test Step" ><i class="fa fa-plus-square fa-2x"></i></a>
                 <a id="delTestStep"  href="#" title="Delete Test Step" ><i class="fa fa-minus-square fa-2x"></i></a>
             </div>
