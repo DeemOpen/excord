@@ -26,4 +26,7 @@ public interface TestPlanRepository extends CrudRepository<EcTestplan, Long> {
     @Query(value = "select priority,assigned_to,status,SUM(cnt) from (SELECT b.priority,a.assigned_to,'NOT_RUN' as `status`,count(*) as cnt FROM  ec_testcase b, ec_testplan_testcase_mapping a LEFT JOIN ec_testresult c ON a.id = c.testplan_testcase_link_id where a.testplan_id = :testplanId  and  a.testcase_id = b.id and c.status is null group by a.assigned_to,b.priority UNION ALL SELECT b.priority,a.assigned_to,c.`status`,count(*) as cnt FROM  ec_testcase b, ec_testplan_testcase_mapping a,ec_testresult c where a.id = c.testplan_testcase_link_id and a.testplan_id = :testplanId  and  a.testcase_id = b.id and c.latest = 1 group by a.assigned_to,b.priority,c.status ) as tab1 group by assigned_to,priority,status order by assigned_to,priority,status", nativeQuery = true)
     public List<Object[]> findByPriorityByTester(@Param("testplanId") Long testplanId);
 
+    @Query(value = "SELECT count(*) FROM ec_testplan where enabled = 1", nativeQuery = true)
+    public Integer getCountOfActiveTestplan();
+
 }

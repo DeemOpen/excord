@@ -19,4 +19,7 @@ public interface TestCaseRepository extends CrudRepository<EcTestcase, Long> {
     @Query(value = "SELECT count(*) FROM ec_testcase where automated = true", nativeQuery = true)
     public Integer automationCnt();
 
+    @Query(value = "SELECT count(*) FROM ec_testcase where enabled = 1", nativeQuery = true)
+    public Integer getCountOfActiveTestcases();
+
 }

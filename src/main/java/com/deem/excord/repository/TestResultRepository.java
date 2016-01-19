@@ -35,4 +35,7 @@ public interface TestResultRepository extends CrudRepository<EcTestresult, Long>
 
     @Query(value = "select DATE_FORMAT(`timestamp`,'%m-%Y'),count(*) from ec_testresult where DATE_FORMAT(`timestamp`,'%Y') = DATE_FORMAT(NOW(),'%Y') group by DATE_FORMAT(`timestamp`,'%m-%Y') order by DATE_FORMAT(`timestamp`,'%m-%Y') asc", nativeQuery = true)
     public List<Object[]> executionByMonth();
+    
+    @Query(value = "SELECT count(*) FROM excord.ec_testresult where latest = 1 and YEAR(timestamp) = YEAR(NOW())", nativeQuery = true)
+    public Integer getCountOfExecutionByYear();
 }

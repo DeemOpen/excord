@@ -58,13 +58,13 @@ public class HomeController {
         Long coveragePercentage = Math.round(((totalReqCnt - missCnt) * 100.0) / totalReqCnt);
 
         Integer automationCnt = tcDao.automationCnt();
-        Long testcaseCnt = tcDao.count();
+        Integer testcaseCnt = tcDao.getCountOfActiveTestcases();
         Long automationPercentage = Math.round((automationCnt * 100.0) / testcaseCnt);
 
         model.addAttribute("tcCnt", testcaseCnt);
-        model.addAttribute("tpCnt", tpDao.count());
-        model.addAttribute("rCnt", rDao.count());
-        model.addAttribute("trCnt", trDao.count());
+        model.addAttribute("tpCnt", tpDao.getCountOfActiveTestplan());
+        model.addAttribute("rCnt", rDao.getCountOfActiveRequirements());
+        model.addAttribute("trCnt", trDao.getCountOfExecutionByYear());
         model.addAttribute("coveragePercentage", coveragePercentage);
         model.addAttribute("automationPercentage", automationPercentage);
         return "home";

@@ -35,4 +35,7 @@ public interface RequirementRepository extends CrudRepository<EcRequirement, Lon
 
     public EcRequirement findByIdAndParentId(Long id, EcRequirement parentRequirement);
 
+    @Query(value = "SELECT count(*) FROM ec_requirement where STATUS = 'ACTIVE' and coverage = 1", nativeQuery = true)
+    public Integer getCountOfActiveRequirements();
+
 }
