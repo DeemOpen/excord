@@ -18,10 +18,10 @@ public interface RequirementRepository extends CrudRepository<EcRequirement, Lon
 
     public EcRequirement findByParentIdIsNull();
 
-    @Query(value = "SELECT priority,count(*) as cnt FROM ec_requirement group by priority", nativeQuery = true)
+    @Query(value = "SELECT priority,count(*) as cnt FROM ec_requirement where status='ACTIVE' and coverage = 1 group by priority", nativeQuery = true)
     public List<Object[]> getRequirementByPriorityCnt();
 
-    @Query(value = "SELECT status,count(*) as cnt FROM ec_requirement group by status", nativeQuery = true)
+    @Query(value = "SELECT status,count(*) as cnt FROM ec_requirement where coverage = 1 group by status", nativeQuery = true)
     public List<Object[]> getRequirementByStatusCnt();
 
     @Query(value = "SELECT `status`,count(*) FROM ec_testresult where latest = 1 and DATE_FORMAT(`timestamp`,'%m-%Y') = DATE_FORMAT(NOW(),'%m-%Y') group by `status`", nativeQuery = true)
