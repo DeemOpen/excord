@@ -72,16 +72,16 @@ $(document).ready(function () {
         chart = new Highcharts.Chart(requirementStatusChart);
     });
 
-    var testcaseTypeChart = {
+    var testcaseRunChart = {
         chart: {
-            renderTo: 'testcaseTypeChart',
+            renderTo: 'testcaseRunChart',
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: false
         },
         colors: ['#FF9966', '#99CC66', '#660066', '#00CCFF', '#FF6699'],
         title: {
-            text: 'Testcase By Type'
+            text: 'Monthly Test Run By'
         },
         tooltip: {
             pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
@@ -103,9 +103,9 @@ $(document).ready(function () {
             }]
     }
 
-    $.getJSON("/rest/testcase-type-data", function (json) {
-        testcaseTypeChart.series[0].data = json;
-        chart = new Highcharts.Chart(testcaseTypeChart);
+    $.getJSON("/rest/testcase-run-data", function (json) {
+        testcaseRunChart.series[0].data = json;
+        chart = new Highcharts.Chart(testcaseRunChart);
     });
 
     var runStatusChart = {

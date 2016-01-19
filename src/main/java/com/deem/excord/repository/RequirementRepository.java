@@ -30,6 +30,9 @@ public interface RequirementRepository extends CrudRepository<EcRequirement, Lon
     @Query(value = "SELECT case_type,count(*) FROM ec_testcase group by case_type", nativeQuery = true)
     public List<Object[]> getTestcaseTypeCnt();
 
+    @Query(value = "SELECT 'AUTOMATION',count(*) FROM ec_testresult where TESTER = 'AUTOMATION' and latest = 1 and DATE_FORMAT(`timestamp`,'%m-%Y') = DATE_FORMAT(NOW(),'%m-%Y') UNION ALL SELECT 'MANUAL',count(*) FROM ec_testresult where TESTER != 'AUTOMATION' and latest = 1 and DATE_FORMAT(`timestamp`,'%m-%Y') = DATE_FORMAT(NOW(),'%m-%Y')", nativeQuery = true)
+    public List<Object[]> getCurrentMonthTestRunTypeCnt();
+
     public EcRequirement findByIdAndParentId(Long id, EcRequirement parentRequirement);
 
 }

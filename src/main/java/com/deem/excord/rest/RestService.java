@@ -295,7 +295,7 @@ public class RestService {
     }
 
     @RequestMapping(value = "/rest/req-priority-data", method = RequestMethod.GET)
-    public List getRequirementPriority() {
+    public List getRequirementByPriorityCnt() {
 
         List pieData = new ArrayList<>();
         List<Object[]> reqCntLst = rDao.getRequirementByPriorityCnt();
@@ -309,7 +309,7 @@ public class RestService {
     }
 
     @RequestMapping(value = "/rest/req-status-data", method = RequestMethod.GET)
-    public List getRequirementStatus() {
+    public List getRequirementByStatusCnt() {
 
         List pieData = new ArrayList<>();
         List<Object[]> reqCntLst = rDao.getRequirementByStatusCnt();
@@ -337,10 +337,24 @@ public class RestService {
     }
 
     @RequestMapping(value = "/rest/testcase-type-data", method = RequestMethod.GET)
-    public List getTestcaseType() {
+    public List getTestcaseTypeCnt() {
 
         List pieData = new ArrayList<>();
         List<Object[]> tcTypeLst = rDao.getTestcaseTypeCnt();
+        for (Object[] result : tcTypeLst) {
+            List element = new ArrayList();
+            element.add((String) result[0]);
+            element.add(((BigInteger) result[1]));
+            pieData.add(element);
+        }
+        return pieData;
+    }
+
+    @RequestMapping(value = "/rest/testcase-run-data", method = RequestMethod.GET)
+    public List getCurrentMonthTestRunTypeCnt() {
+
+        List pieData = new ArrayList<>();
+        List<Object[]> tcTypeLst = rDao.getCurrentMonthTestRunTypeCnt();
         for (Object[] result : tcTypeLst) {
             List element = new ArrayList();
             element.add((String) result[0]);
