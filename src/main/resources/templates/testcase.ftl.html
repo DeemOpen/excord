@@ -140,49 +140,12 @@
                         </tr>
                         <tr>
                             <td colspan="6">
-                                <table id="teststeps_${tc.id?c}" class="teststepsTable table table-bordered" width="100%" cellspacing="0">
-                                    <tr>
-                                        <td colspan="3">
-                                            <b>Description</b>: ${tc.description?replace("\n", "<br/>")}
-                                            <br/>
-                                            <b>Type</b>: ${tc.caseType}
-                                            <br/>
-                                            <b>Product</b>: ${tc.product}
-                                            <br/>
-                                            <b>Feature</b>: ${tc.feature}
-                                            <br/>
-                                            <b>Added Version</b>: ${tc.addedVersion}
-                                            <br/>
-                                            <b>Deprecated Version</b>: ${tc.deprecatedVersion}
-                                            <br/>
-                                            <b>Bug Id</b>: ${tc.bugId}
-                                        </td>
-                                    </tr>
-                                    <#if tc.ecTeststepList??>
-                                    <#list tc.ecTeststepList as step>
-                                    <tr>
-                                        <td>
-                                            ${step.stepNumber}    
-                                        </td>
-                                        <td style="width:45%;">
-                                            ${step.description?replace("\n", "<br/>")} 
-                                        </td>
-                                        <td style="width:50%;">
-                                            ${step.expected?replace("\n", "<br/>")}
-                                        </td>
-                                    </tr>
-                                    </#list>
-                                    </#if>
-                                </table>
+                                <div id="tcstep_${tc.id?c}"></div>
                             </td>
                         </tr>
-
                         </#list>
-
                     </tbody>
                 </table>
-
-
             </div>
         </div>
     </form>

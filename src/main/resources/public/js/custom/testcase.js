@@ -1,21 +1,25 @@
 $(document).ready(function () {
 
-    $(".teststepsTable").hide();
+    $(".teststepShow").click(function () {
+        event.preventDefault();
+        var testcaseId = $(this).attr("id");
+        if ($("#tcstep_" + testcaseId).html().length > 0) {
+            $("#tcstep_" + testcaseId).html("");
+        } else {
+            $.ajax({url: "/testcase_view?testcaseId=" + testcaseId, success: function (result) {
+                    $("#tcstep_" + testcaseId).html(result);
+                }
+            });
+        }
+    });
+
 
     $("#checkAll").click(function (event) {
         $('input:checkbox').not(this).prop('checked', this.checked);
     });
 
-    $(".teststepShow").click(function (event) {
-        event.preventDefault();
-        var id = $(this).attr("id");
-        $("#teststeps_" + id).toggle();
-    });
-
-
     $("#addFolder").click(function (event) {
         event.preventDefault();
-
         var folderPath = $("#breadCrumbPath").val();
         bootbox.prompt("Parent folder path: " + folderPath + ",<br/> Please enter folder name:", function (result) {
             if (result !== null) {
@@ -35,7 +39,7 @@ $(document).ready(function () {
             bootbox.alert("Please check a testcase!");
         }
     });
-    
+
     $("#linkTestcaseRequirement").click(function (event) {
         event.preventDefault();
         if ($('input[name="testcaseChk"]:checked').length > 0) {

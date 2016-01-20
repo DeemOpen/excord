@@ -657,6 +657,15 @@ public class TestCaseController {
         return "testcase_form";
     }
 
+    @RequestMapping(value = "/testcase_view", method = RequestMethod.GET)
+    public String testcaseView(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "testcaseId", required = true) Long testcaseId) {
+        EcTestcase tc = tcDao.findOne(testcaseId);
+        List<EcTeststep> tsLst = tsDao.findByTestcaseId(tc);
+        model.addAttribute("tc", tc);
+        model.addAttribute("tsLst", tsLst);
+        return "testcase_step";
+    }
+
     @RequestMapping(value = "/testcase_req_link", method = RequestMethod.POST)
     public String testCaseRequirementLink(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "nodeId", required = true) Long nodeId, @RequestParam(value = "testcaseChk") List<Long> testcaseChkLst) {
         String clipboardLinkTc = StringUtils.arrayToCommaDelimitedString(testcaseChkLst.toArray());
