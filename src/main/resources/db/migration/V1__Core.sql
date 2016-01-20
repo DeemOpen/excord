@@ -13,7 +13,6 @@ CREATE  TABLE IF NOT EXISTS `excord`.`ec_testfolder` (
   `name` VARCHAR(90) NOT NULL ,
   `parent_id` BIGINT(20) NULL ,
   PRIMARY KEY (`id`) ,
-  UNIQUE INDEX `testfolder_uq1` (`name` ASC, `parent_id` ASC) ,
   INDEX `testfolder_idx1` (`name` ASC) ,
   INDEX `testfolder_idx2` (`parent_id` ASC) ,
   CONSTRAINT `testfolder_fk1`

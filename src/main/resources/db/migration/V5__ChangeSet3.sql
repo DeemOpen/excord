@@ -15,6 +15,7 @@ ALTER TABLE `excord`.`ec_testplan` ADD COLUMN `slug` VARCHAR(45) NULL DEFAULT NU
 ALTER TABLE `excord`.`ec_testfolder` ADD COLUMN `slug` VARCHAR(45) NULL DEFAULT NULL;
 
 update `excord`.`ec_testfolder` set `slug` = 'root-testfolder-slug' where id = 1;
+update `excord`.`ec_testfolder` set `slug` = 'trash-testfolder-slug' where id = 2;
 update `excord`.`ec_requirement` set `slug` = 'root-requirement-slug' where id = 1;
 
 ALTER TABLE `excord`.`ec_history` PARTITION BY LIST(MOD(YEAR(`change_date`),10))
