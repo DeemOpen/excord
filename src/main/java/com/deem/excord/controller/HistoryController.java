@@ -30,7 +30,7 @@ public class HistoryController {
     @RequestMapping(value = "/history", method = RequestMethod.POST)
     public String searchHistory(Model model, @RequestParam(value = "searchKey", required = true) String searchKey) {
         LOGGER.info("Search key: {}", searchKey);
-        List<EcHistory> historyLst = hDao.findByChangeSummaryLikeOrderByIdDesc("%" + searchKey + "%");
+        List<EcHistory> historyLst = hDao.searchHistory(searchKey);
         model.addAttribute("searchKey", searchKey);
         model.addAttribute("historyLst", historyLst);
         return "history";

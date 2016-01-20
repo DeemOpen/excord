@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -15,6 +16,10 @@ public enum BizUtil {
 
     INSTANCE;
     private static final Logger LOGGER = LoggerFactory.getLogger(BizUtil.class);
+
+    public String getSlug() {
+        return UUID.randomUUID().toString();
+    }
 
     public List<TestPlanMetricVo> flattenTestPlanMetrics(List<Object[]> tmLst) {
         Map<Long, TestPlanMetricVo> tmMap = new HashMap<Long, TestPlanMetricVo>();
@@ -220,4 +225,13 @@ public enum BizUtil {
         }
     }
 
+    public String validateInput(String value, Integer length) {
+        if (value == null || value.isEmpty()) {
+            return " ";
+        }
+        if (length > 0 && value.length() > length) {
+            value = value.substring(0, length);
+        }
+        return value;
+    }
 }

@@ -34,6 +34,9 @@ public class EcHistory implements Serializable {
     @Size(max = 90)
     @Column(name = "change_ip")
     private String changeIp;
+    @Size(max = 45)
+    @Column(name = "slug")
+    private String slug;
 
     public EcHistory() {
     }
@@ -82,6 +85,14 @@ public class EcHistory implements Serializable {
         this.changeIp = changeIp;
     }
 
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+    
     @Override
     public int hashCode() {
         int hash = 0;

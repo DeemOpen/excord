@@ -31,6 +31,9 @@ public class EcTestfolder implements Serializable {
     @Size(min = 1, max = 90)
     @Column(name = "name")
     private String name;
+    @Size(max = 45)
+    @Column(name = "slug")
+    private String slug;
     @OneToMany(mappedBy = "parentId")
     private List<EcTestfolder> ecTestfolderList;
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
@@ -65,6 +68,14 @@ public class EcTestfolder implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
     public List<EcTestfolder> getEcTestfolderList() {

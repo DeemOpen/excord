@@ -12,13 +12,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HistoryUtil {
-
+    
     private static final Logger LOGGER = LoggerFactory.getLogger(HistoryUtil.class);
-
+    
     @Autowired
     HistoryRepository hDao;
-
-    public void addHistory(String logMsg, HttpSession session, HttpServletRequest request) {
+    
+    public void addHistory(String logMsg, String slug, HttpServletRequest request, HttpSession session) {
         String user = (String) session.getAttribute("authName");
         LOGGER.info("{} by {} from {}", logMsg, user, getClientIpAddr(request));
         EcHistory history = new EcHistory();
@@ -26,10 +26,11 @@ public class HistoryUtil {
         history.setChangeUser(user);
         history.setChangeSummary(logMsg);
         history.setChangeIp(getClientIpAddr(request));
+        history.setSlug(slug);
         hDao.save(history);
-
+        
     }
-
+    
     public String getClientIpAddr(HttpServletRequest request) {
         String ip = request.getHeader("X-Forwarded-For");
         if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
@@ -49,5 +50,5 @@ public class HistoryUtil {
         }
         return ip;
     }
-
+    
 }

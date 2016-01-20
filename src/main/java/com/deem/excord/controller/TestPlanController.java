@@ -96,28 +96,29 @@ public class TestPlanController {
     @RequestMapping(value = "/testplan_clone", method = RequestMethod.GET)
     public String cloneTestplan(HttpSession session, HttpServletRequest request, Model model, @RequestParam(value = "testplanId", required = true) Long testplanId) {
 
-        EcTestplan tp = tpDao.findOne(testplanId);
-        EcTestplan newTp = new EcTestplan();
-        newTp.setName(tp.getName() + "_CLONE");
-        newTp.setCreator((String) session.getAttribute("authName"));
-        newTp.setEnabled(tp.getEnabled());
-        newTp.setEndDate(tp.getEndDate());
-        newTp.setStartDate(tp.getStartDate());
-        newTp.setReleaseName(tp.getReleaseName());
-        newTp.setSchedule(tp.getSchedule());
-        newTp.setLeader(tp.getLeader());
-        tpDao.save(newTp);
+        EcTestplan tpObj = tpDao.findOne(testplanId);
+        EcTestplan newTpObj = new EcTestplan();
+        newTpObj.setSlug(BizUtil.INSTANCE.getSlug());
+        newTpObj.setName(tpObj.getName() + "_CLONE");
+        newTpObj.setCreator((String) session.getAttribute("authName"));
+        newTpObj.setEnabled(tpObj.getEnabled());
+        newTpObj.setEndDate(tpObj.getEndDate());
+        newTpObj.setStartDate(tpObj.getStartDate());
+        newTpObj.setReleaseName(tpObj.getReleaseName());
+        newTpObj.setSchedule(tpObj.getSchedule());
+        newTpObj.setLeader(tpObj.getLeader());
+        tpDao.save(newTpObj);
         //Find all testcases associated with the testplan and copy.
         List<EcTestcase> tcLst = tcDao.findAllTestCasesByTestPlanId(testplanId);
         for (EcTestcase tc : tcLst) {
             EcTestplanTestcaseMapping tptcObj = new EcTestplanTestcaseMapping();
             tptcObj.setTestcaseId(tc);
-            tptcObj.setTestplanId(newTp);
+            tptcObj.setTestplanId(newTpObj);
             tptcDao.save(tptcObj);
 
         }
-        historyUtil.addHistory("Cloned testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request);
-        session.setAttribute("flashMsg", "Successfully Cloned TestPlan " + tp.getName());
+        historyUtil.addHistory("Cloned testplan: [" + tpObj.getName() + "]", tpObj.getSlug(), request, session);
+        session.setAttribute("flashMsg", "Successfully Cloned TestPlan " + tpObj.getName());
 
         return "redirect:/testplan";
     }
@@ -143,9 +144,9 @@ public class TestPlanController {
     @RequestMapping(value = "/testplan_delete", method = RequestMethod.GET)
     public String deleteTestplan(HttpSession session, HttpServletRequest request, Model model, @RequestParam(value = "testplanId", required = true) Long testplanId) {
 
-        EcTestplan tp = tpDao.findOne(testplanId);
-        tpDao.delete(tp);
-        historyUtil.addHistory("Deleted testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request);
+        EcTestplan tpObj = tpDao.findOne(testplanId);
+        tpDao.delete(tpObj);
+        historyUtil.addHistory("Deleted testplan: [" + tpObj.getName() + "]", tpObj.getSlug(), request, session);
         return "redirect:/testplan";
     }
 
@@ -156,9 +157,9 @@ public class TestPlanController {
         //Get all test cases associated with this test plan
         List<EcTestcase> testCaseLst = tcDao.findAllTestCasesByTestPlanId(testplanId);
         if (testCaseLst == null) {
-            testCaseLst = new ArrayList<EcTestcase>();
+            testCaseLst = new ArrayList<>();
         }
-        Map<String, EcTestresult> trMap = new HashMap<String, EcTestresult>();
+        Map<String, EcTestresult> trMap = new HashMap<>();
         for (EcTestcase tc : testCaseLst) {
             EcTestresult testresult = trDao.findLatestTestResultsByTestplanIdAndTestcaseId(testplanId, tc.getId());
             if (testresult != null) {
@@ -195,7 +196,7 @@ public class TestPlanController {
         //Get all test cases associated with this test plan
         List<EcTestcase> testCaseLst = tcDao.findAllTestCasesByTestPlanId(testplanId);
         if (testCaseLst == null) {
-            testCaseLst = new ArrayList<EcTestcase>();
+            testCaseLst = new ArrayList<>();
         }
         List<EcUser> activeUsersLst = uDao.findByEnabledOrderByUsernameAsc(Boolean.TRUE);
         model.addAttribute("activeUsersLst", activeUsersLst);
@@ -226,6 +227,7 @@ public class TestPlanController {
                 tp = tpDao.findOne(Long.parseLong(tid));
             } else {
                 tp = new EcTestplan();
+                tp.setSlug(BizUtil.INSTANCE.getSlug());
             }
             tp.setName(tname);
             tp.setCreator(tcreator);
@@ -236,13 +238,9 @@ public class TestPlanController {
             tp.setReleaseName(trelease);
             tp.setSchedule(tschedule);
             tpDao.save(tp);
-            if (!tid.equals("")) {
-                historyUtil.addHistory("Updated testplan: [" + tp.getId() + ":" + tp.getName() + "]", session, request);
-                session.setAttribute("flashMsg", "Successfully Updated TestPlan " + tp.getName());
-            } else {
-                historyUtil.addHistory("Added testplan: [" + tname + "]", session, request);
-                session.setAttribute("flashMsg", "Successfully Added TestPlan " + tp.getName());
-            }
+            historyUtil.addHistory("Added/Updated testplan: [" + tname + "]", tp.getSlug(), request, session);
+            session.setAttribute("flashMsg", "Successfully Saved TestPlan " + tp.getName());
+
             return "redirect:/testplan";
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
@@ -283,7 +281,7 @@ public class TestPlanController {
             EcTestcase tc = tcDao.findOne(testCaseId);
             EcTestplan tp = tpDao.findOne(testPlanId);
             EcTestplanTestcaseMapping tptcMap = tptcDao.findByTestplanIdAndTestcaseId(tp, tc);
-            historyUtil.addHistory("UnLinked TestPlan : [" + tp.getId() + ":" + tp.getName() + "] with TestCase: [" + tc.getId() + ":" + tc.getName() + "] ", session, request);
+            historyUtil.addHistory("UnLinked TestPlan : [" + tp.getName() + "] with TestCase: [" + tc.getName() + "] ", tp.getSlug(), request, session);
             tptcDao.delete(tptcMap);
         }
         session.setAttribute("flashMsg", "Successfully Unlinked!");
@@ -302,6 +300,7 @@ public class TestPlanController {
             EcTestplanTestcaseMapping tptcMap = tptcDao.findByTestplanIdAndTestcaseId(tp, tc);
             tptcMap.setAssignedTo(testcaseAssignedTo);
             tptcDao.save(tptcMap);
+            historyUtil.addHistory("Assigned Testcase : [" + tc.getName() + "] to User : [" + testcaseAssignedTo + "] ", tc.getSlug(), request, session);
             LOGGER.info("Assigned testcase: {} to user:{}", tc.getName(), testcaseAssignedTo);
 
         }

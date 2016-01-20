@@ -82,6 +82,9 @@ public class EcTestcase implements Serializable {
     private String caseType;
     @Column(name = "time_to_run")
     private Integer timeToRun;
+    @Size(max = 45)
+    @Column(name = "slug")
+    private String slug;
     @JoinColumn(name = "folder_id", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private EcTestfolder folderId;
@@ -244,6 +247,14 @@ public class EcTestcase implements Serializable {
 
     public void setFolderId(EcTestfolder folderId) {
         this.folderId = folderId;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
     public List<EcTestupload> getEcTestuploadList() {

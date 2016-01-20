@@ -183,6 +183,10 @@
                     <label for="tmethod">Automation Test Method Name:</label>
                     <input type="text" name="tmethod" class="form-control" id="tmethod" maxlength="45" value="<#if tc??>${tc.methodName}</#if>"/>
                 </div>
+                <div class="form-group">
+                    <label for="tmethod">Slug</label>
+                    <input type="text" class="form-control" readonly value="<#if tc??>${tc.slug}</#if>"/>
+                </div>
             </div>
 
             <div class="col-md-1">

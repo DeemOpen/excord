@@ -107,6 +107,11 @@
             </label>
             <div class="col-md-4">
                 <select class="form-control" name="rstorypoint">
+                    <#if req?? && req.storyPoint == 0>
+                    <option value="0" selected>0</option>
+                    <#else>
+                    <option value="0">0</option>
+                    </#if>
                     <#if req?? && req.storyPoint == 1>
                     <option value="1" selected>1</option>
                     <#else>

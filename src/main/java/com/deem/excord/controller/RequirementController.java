@@ -76,7 +76,7 @@ public class RequirementController {
         Collections.reverse(parentReqLst);
 
         Iterable<EcRequirement> nodeLst = rDao.findAllByParentIdOrderByNameAsc(currReq);
-        List<Long> childReqLst = new ArrayList<Long>();
+        List<Long> childReqLst = new ArrayList<>();
         for (EcRequirement d : nodeLst) {
             if (rDao.checkIfHasChildren(d.getId())) {
                 childReqLst.add(d.getId());
@@ -130,7 +130,7 @@ public class RequirementController {
                     tcrObj.setTestcaseId(tcObj);
                     tcrObj.setReview(Boolean.FALSE);
                     tcrDao.save(tcrObj);
-                    historyUtil.addHistory("Linked testcase: [" + tcObj.getId() + ":" + tcObj.getName() + "] with requirement: [" + reqObj.getId() + ":" + reqObj.getName() + "]", session, request);
+                    historyUtil.addHistory("Linked testcase: [" + tcObj.getName() + "] with requirement: [" + reqObj.getName() + "]", reqObj.getSlug(), request, session);
                 }
 
             }
@@ -149,7 +149,7 @@ public class RequirementController {
         if (tcObj != null && reqObj != null) {
             tcrDao.deleteByTestcaseIdAndRequirementId(tcObj, reqObj);
             session.setAttribute("flashMsg", "Successfully Unlinked testcases from requirement!");
-            historyUtil.addHistory("Unlinked testcase: [" + tcObj.getId() + ":" + tcObj.getName() + "] from requirement: [" + reqObj.getId() + ":" + reqObj.getName() + "]", session, request);
+            historyUtil.addHistory("Unlinked testcase: [" + tcObj.getName() + "] from requirement: [" + reqObj.getName() + "]", reqObj.getSlug(), request, session);
         }
         return "redirect:/requirement?reqId=" + reqId;
     }
@@ -181,8 +181,8 @@ public class RequirementController {
     @RequestMapping(value = "/req_delete", method = RequestMethod.POST)
     public String requirementDelete(Model model, HttpSession session, HttpServletRequest request, @RequestParam(value = "reqId", required = false, defaultValue = "1") Long reqId) {
 
-        EcRequirement req = rDao.findOne(reqId);
-        if (req.getParentId() == null) {
+        EcRequirement reqObj = rDao.findOne(reqId);
+        if (reqObj.getParentId() == null) {
             session.setAttribute("flashMsg", "Cant delete root requirement!");
             return "redirect:/requirement?reqId=" + reqId;
         }
@@ -191,10 +191,10 @@ public class RequirementController {
         //    return "redirect:/requirement?reqId=" + reqId;
         //}
 
-        Long parentId = req.getParentId().getId();
-        String reqName = req.getName();
-        rDao.delete(req);
-        historyUtil.addHistory("Deleted requirement: [" + reqId + ":" + reqName + "]", session, request);
+        Long parentId = reqObj.getParentId().getId();
+        String reqName = reqObj.getName();
+        rDao.delete(reqObj);
+        historyUtil.addHistory("Deleted requirement: [" + reqName + "]", reqObj.getSlug(), request, session);
         session.setAttribute("flashMsg", "Successfully deleted requirement!");
         return "redirect:/requirement?reqId=" + parentId;
 
@@ -218,54 +218,53 @@ public class RequirementController {
         if (!rParentId.equals(-1L)) {
             parentReq = rDao.findOne(rParentId);
         }
-        EcRequirement req = null;
+        EcRequirement reqObj = null;
         if (reqId != null) {
-            req = rDao.findOne(reqId);
+            reqObj = rDao.findOne(reqId);
         } else {
-            req = new EcRequirement();
+            reqObj = new EcRequirement();
+            reqObj.setSlug(BizUtil.INSTANCE.getSlug());
         }
-        req.setParentId(parentReq);
-        req.setName(rname);
-        req.setStatus(rstatus);
-        req.setCoverage(rcoverage);
-        req.setPriority(rpriority);
-        req.setReleaseName(rrelease);
-        req.setProduct(rproduct);
-        req.setStoryPoint(rstorypoint);
+        reqObj.setParentId(parentReq);
+        reqObj.setName(rname);
+        reqObj.setStatus(rstatus);
+        reqObj.setCoverage(rcoverage);
+        reqObj.setPriority(rpriority);
+        reqObj.setReleaseName(rrelease);
+        reqObj.setProduct(rproduct);
+        reqObj.setStoryPoint(rstorypoint);
 
-        if (req.getStory() != null) {
-            if (!req.getStory().equals(rstory)) {
+        if (reqObj.getStory() != null) {
+            if (!reqObj.getStory().equals(rstory)) {
                 //Story changed then mark all testcases for review.
                 tcrDao.updateAllLinkedTestcaseForReview(reqId);
             }
         }
-        req.setStory(rstory);
-        rDao.save(req);
+        reqObj.setStory(rstory);
+        rDao.save(reqObj);
         if (!rParentId.equals(-1L)) {
-            historyUtil.addHistory("Saved requirement: [" + rname + "] under [" + parentReq.getId() + ":" + parentReq.getName() + "]", session, request);
+            historyUtil.addHistory("Saved requirement: [" + reqObj.getName() + "] under [" + parentReq.getName() + "]", reqObj.getSlug(), request, session);
         } else {
-            historyUtil.addHistory("Saved requirement: [" + rname + "] under [ - ]", session, request);
+            historyUtil.addHistory("Saved requirement: [" + reqObj.getName() + "] under [ - ]", reqObj.getSlug(), request, session);
         }
         session.setAttribute("flashMsg", "Successfully saved requirement: " + rname);
 
-        return "redirect:/requirement?reqId=" + req.getId();
+        return "redirect:/requirement?reqId=" + reqObj.getId();
     }
 
     @RequestMapping(value = "/req_export", method = RequestMethod.GET)
     public void requirementExport(HttpServletResponse response, @RequestParam(value = "reqId", required = true, defaultValue = "1") Long reqId) {
 
-        ServletOutputStream outputStream = null;
-
         EcRequirement currenReq = rDao.findOne(reqId);
         List<EcRequirement> requirementLst = rDao.findAllByParentIdOrderByNameAsc(currenReq);
         if (requirementLst == null) {
-            requirementLst = new ArrayList<EcRequirement>();
+            requirementLst = new ArrayList<>();
         }
 
         XSSFWorkbook workbook = new XSSFWorkbook();
         XSSFSheet sheet = workbook.createSheet("Requirements");
 
-        Map<Integer, Object[]> data = new TreeMap<Integer, Object[]>();
+        Map<Integer, Object[]> data = new TreeMap<>();
         Integer idx = 0;
         data.put(idx, new Object[]{"ID", "NAME", "PRIORITY", "STATUS", "RELEASE_NAME", "PRODUCT", "COVERAGE", "STORY_POINT", "STORY"});
         idx++;
@@ -290,24 +289,16 @@ public class RequirementController {
             }
 
         }
-
-        try {
+        try (ServletOutputStream outputStream = response.getOutputStream()) {
             response.setContentType("application/octet-stream");
             Calendar cal = Calendar.getInstance();
             SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
             String dateStr = sdf.format(cal.getTime());
             response.setHeader("Content-Disposition", "attachment; fileName=Requirements_" + currenReq.getId() + "_" + dateStr + ".xlsx");
-            outputStream = response.getOutputStream();
+
             workbook.write(outputStream);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                outputStream.flush();
-                outputStream.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
+        } catch (Exception ex) {
+            LOGGER.error("Req Export Error!", ex);
         }
     }
 
@@ -327,7 +318,6 @@ public class RequirementController {
                 EcRequirement reqObj = rDao.findOne(reqId);
                 Boolean skipHeader = true;
                 final DataFormatter df = new DataFormatter();
-                Long childReqId = -1L;
                 while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
                     if (skipHeader) {
@@ -336,35 +326,36 @@ public class RequirementController {
                     }
                     EcRequirement childReq = null;
                     if (row.getCell(0) != null) {
-                        childReqId = Long.parseLong(df.formatCellValue(row.getCell(0)));
                         childReq = rDao.findByIdAndParentId(reqId, reqObj);
                     }
                     if (childReq == null) {
                         childReq = new EcRequirement();
                         childReq.setParentId(reqObj);
+                        childReq.setSlug(BizUtil.INSTANCE.getSlug());
                     }
 
-                    String rName = validateInput(df.formatCellValue(row.getCell(1)), 90);
-                    String rPriority = validateInput(df.formatCellValue(row.getCell(2)), 45);
+                    String rName = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(1)), 90);
+                    String rPriority = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(2)), 45);
                     if (!BizUtil.INSTANCE.checkReqPriority(rPriority)) {
                         priorityError = true;
                         continue;
                     }
-                    String rStatus = validateInput(df.formatCellValue(row.getCell(3)), 45);
+                    String rStatus = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(3)), 45);
                     if (!BizUtil.INSTANCE.checkReqStatus(rStatus)) {
                         statusError = true;
                         continue;
                     }
 
-                    String rRelease = validateInput(df.formatCellValue(row.getCell(4)), 45);
-                    String rProduct = validateInput(df.formatCellValue(row.getCell(5)), 45);
-                    String rCoverage = validateInput(df.formatCellValue(row.getCell(6)), 5);
-                    Integer rStoryPoint = Integer.parseInt(validateInput(df.formatCellValue(row.getCell(7)), -1));
-                    String rStory = validateInput(df.formatCellValue(row.getCell(8)), -1);
+                    String rRelease = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(4)), 45);
+                    String rProduct = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(5)), 45);
+                    String rCoverage = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(6)), 5);
+                    Integer rStoryPoint = Integer.parseInt(BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(7)), -1));
+                    String rStory = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(8)), -1);
 
-                    if (rStoryPoint > 5) {
-                        rStoryPoint = 5;
+                    if (rStoryPoint != 0 && rStoryPoint != 1 & rStoryPoint != 2 && rStoryPoint != 3 && rStoryPoint != 4 && rStoryPoint != 5) {
+                        rStoryPoint = 0;
                     }
+
                     childReq.setName(rName);
                     childReq.setPriority(rPriority);
                     childReq.setStatus(rStatus);
@@ -381,9 +372,8 @@ public class RequirementController {
                     childReq.setStory(rStory);
 
                     rDao.save(childReq);
-                    historyUtil.addHistory("Requirement [" + childReq.getId() + ":" + childReq.getName() + "] added/updated by import, file: " + fileName, session, request);
+                    historyUtil.addHistory("Requirement [" + childReq.getName() + "] added/updated by import, file: " + fileName, childReq.getSlug(), request, session);
                 }
-                historyUtil.addHistory("Uploaded requirements file: " + fileName + " to requirement [" + reqObj.getId() + ":" + reqObj.getName() + "]", session, request);
 
                 if (statusError) {
                     session.setAttribute("flashMsg", "Invalid Status codes found in :" + fileName);
@@ -393,9 +383,9 @@ public class RequirementController {
                     session.setAttribute("flashMsg", "Successfully Imported :" + fileName);
                 }
 
-            } catch (Exception ex) {
+            } catch (IOException | NumberFormatException ex) {
                 session.setAttribute("flashMsg", "File upload failed! " + ex.getMessage());
-                ex.printStackTrace();
+                LOGGER.error("Req Upload Error!", ex);
             }
         } else {
             session.setAttribute("flashMsg", "File is empty!");
@@ -403,13 +393,4 @@ public class RequirementController {
         return "redirect:/requirement?reqId=" + reqId;
     }
 
-    public String validateInput(String value, Integer length) {
-        if (value == null || value.isEmpty()) {
-            return " ";
-        }
-        if (length > 0 && value.length() > length) {
-            value = value.substring(0, length);
-        }
-        return value;
-    }
 }

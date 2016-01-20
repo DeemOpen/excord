@@ -58,6 +58,9 @@ public class EcTestplan implements Serializable {
     @Size(max = 45)
     @Column(name = "leader")
     private String leader;
+    @Size(max = 45)
+    @Column(name = "slug")
+    private String slug;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "testplanId")
     private List<EcTestplanTestcaseMapping> ecTestplanTestcaseMappingList;
 
@@ -146,6 +149,14 @@ public class EcTestplan implements Serializable {
 
     public void setLeader(String leader) {
         this.leader = leader;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
     public List<EcTestplanTestcaseMapping> getEcTestplanTestcaseMappingList() {

@@ -48,6 +48,9 @@ public class EcRequirement implements Serializable {
     @Size(max = 90)
     @Column(name = "product")
     private String product;
+    @Size(max = 45)
+    @Column(name = "slug")
+    private String slug;
     @OneToMany(mappedBy = "parentId")
     private List<EcRequirement> ecRequirementList;
     @JoinColumn(name = "parent_id", referencedColumnName = "id")
@@ -141,6 +144,14 @@ public class EcRequirement implements Serializable {
 
     public void setParentId(EcRequirement parentId) {
         this.parentId = parentId;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
     }
 
     public List<EcRequirement> getEcRequirementList() {
