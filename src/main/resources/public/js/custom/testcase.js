@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-    $(".teststepShow").click(function () {
+    $(".teststepShow").click(function (event) {
         event.preventDefault();
         var testcaseId = $(this).attr("id");
         if ($("#tcstep_" + testcaseId).html().length > 0) {
