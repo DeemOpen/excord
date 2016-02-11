@@ -23,5 +23,7 @@ public interface Constants {
     String REQ_STATUS_PROPOSED = "PROPOSED";
 
     String TYPE_MANUAL = "MANUAL";
+    
+    Long TRASH_NODE = 2L;
 
 }
