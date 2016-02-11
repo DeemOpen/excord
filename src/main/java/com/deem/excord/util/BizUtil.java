@@ -21,7 +21,7 @@ public enum BizUtil {
         return UUID.randomUUID().toString();
     }
 
-    public List<TestPlanMetricVo> flattenTestPlanMetrics(List<Object[]> tmLst) {
+    public List<TestPlanMetricVo> flattenTestPlanMetricsByFolder(List<Object[]> tmLst) {
         Map<Long, TestPlanMetricVo> tmMap = new HashMap<Long, TestPlanMetricVo>();
         for (Object[] result : tmLst) {
             Long folderId = ((BigInteger) result[0]).longValue();
@@ -72,6 +72,65 @@ public enum BizUtil {
 
         List<TestPlanMetricVo> finalMetricLst = new ArrayList<TestPlanMetricVo>();
         for (Map.Entry<Long, TestPlanMetricVo> entry : tmMap.entrySet()) {
+            TestPlanMetricVo value = entry.getValue();
+            value.setPassRate(Math.round((value.getPassCount() * 100.0) / value.getTotal()));
+            value.setProgressRate(Math.round(((value.getTotal() - value.getNotrunCount()) * 100.0) / value.getTotal()));
+            finalMetricLst.add(value);
+        }
+        return finalMetricLst;
+    }
+
+    public List<TestPlanMetricVo> flattenTestPlanMetricsByProduct(List<Object[]> tmLst) {
+        Map<String, TestPlanMetricVo> tmMap = new HashMap<String, TestPlanMetricVo>();
+        for (Object[] result : tmLst) {
+            String product = (String) result[0];
+            String status = (String) result[1];
+
+            if (status == null) {
+                status = Constants.STATUS_NOT_RUN;
+            }
+            TestPlanMetricVo tpm = tmMap.get(product);
+            if (tpm == null) {
+                tpm = new TestPlanMetricVo();
+                tpm.setProduct(product);
+                tpm.setPassCount(0);
+                tpm.setFailCount(0);
+                tpm.setNaCount(0);
+                tpm.setBlockedCount(0);
+                tpm.setFutureCount(0);
+                tpm.setNotcompleteCount(0);
+                tpm.setNotrunCount(0);
+                tpm.setTotal(0);
+            }
+
+            Integer count = 0;
+            if (result[2] != null) {
+                count = ((BigInteger) result[2]).intValue();
+            }
+            tpm.setTotal(tpm.getTotal() + count);
+            switch (status) {
+                case Constants.STATUS_PASSED:
+                    tpm.setPassCount(count);
+                    break;
+                case Constants.STATUS_FAILED:
+                    tpm.setFailCount(count);
+                    break;
+                case Constants.STATUS_BLOCKED:
+                    tpm.setBlockedCount(count);
+                    break;
+                case Constants.STATUS_NOT_COMPLETED:
+                    tpm.setNotcompleteCount(count);
+                    break;
+                default:
+                    tpm.setNotrunCount(tpm.getNotrunCount() + count);
+                    break;
+            }
+            tmMap.put(product, tpm);
+
+        }
+
+        List<TestPlanMetricVo> finalMetricLst = new ArrayList<TestPlanMetricVo>();
+        for (Map.Entry<String, TestPlanMetricVo> entry : tmMap.entrySet()) {
             TestPlanMetricVo value = entry.getValue();
             value.setPassRate(Math.round((value.getPassCount() * 100.0) / value.getTotal()));
             value.setProgressRate(Math.round(((value.getTotal() - value.getNotrunCount()) * 100.0) / value.getTotal()));

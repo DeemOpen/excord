@@ -186,7 +186,7 @@ public class TestPlanController {
         EcTestplan testPlan = tpDao.findOne(testplanId);
         List<EcTestplanTestcaseMapping> tptcLst = tptcDao.findByTestplanId(testPlan);
         List<Object[]> tmLst = tpDao.findMetricsByTestplanId(testplanId);
-        List<TestPlanMetricVo> testPlanMetricLst = BizUtil.INSTANCE.flattenTestPlanMetrics(tmLst);
+        List<TestPlanMetricVo> testPlanMetricLst = BizUtil.INSTANCE.flattenTestPlanMetricsByFolder(tmLst);
         Integer totalPassCount = 0;
         Integer totalCount = 0;
         Integer totalNotRunCount = 0;

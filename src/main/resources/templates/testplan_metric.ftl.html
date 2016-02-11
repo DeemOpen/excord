@@ -18,6 +18,43 @@
     <br/><br/>
     <div class="row">
         <div class="col-md-12">
+            <table class="table table-striped table-bordered" width="100%" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th colspan="9">Progress Report By Product</th>
+                    </tr>
+                    <tr>
+                        <th>Product</th>
+                        <th>PASSED</th>
+                        <th>FAILED</th>
+                        <th>BLOCKED</th>
+                        <th>NOT_COMPLETED</th>
+                        <th>NOT_RUN</th>
+                        <th>Total</th>
+                        <th>Pass Rate</th>
+                        <th>Progress</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <#list testPlanMetricLst as tpm>
+                    <tr>
+                        <td>${tpm.product}</td>
+                        <td>${tpm.passCount}</td>
+                        <td>${tpm.failCount}</td>
+                        <td>${tpm.blockedCount}</td>
+                        <td>${tpm.notcompleteCount}</td>
+                        <td>${tpm.notrunCount}</td>
+                        <td>${tpm.total}</td>
+                        <td>${tpm.passRate}%</td>
+                        <td>${tpm.progressRate}%</td>
+                    </tr>
+                    </#list>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
             <table id="testmetric-ele" class="table table-striped table-bordered" width="100%" cellspacing="0">
                 <thead>
                     <tr>
@@ -45,10 +82,13 @@
                     </tr>
 
                     </#list>
-
-
                 </tbody>
             </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center">
+            <button type="button" name="action" id="back" value="back" class="btn btn-info" onclick="history.back()">Back</button>
         </div>
     </div>
 </div>

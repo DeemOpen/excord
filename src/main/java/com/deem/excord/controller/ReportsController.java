@@ -6,6 +6,8 @@ import com.deem.excord.repository.RequirementRepository;
 import com.deem.excord.repository.TestPlanRepository;
 import com.deem.excord.repository.TestResultRepository;
 import com.deem.excord.repository.TestcaseRequirementRepository;
+import com.deem.excord.util.BizUtil;
+import com.deem.excord.vo.TestPlanMetricVo;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -48,6 +50,9 @@ public class ReportsController {
     @RequestMapping(value = "/testplan_metric", method = RequestMethod.GET)
     public String testplanMetric(Model model, @RequestParam(value = "testplanId", required = true) Long testplanId) {
         List<Object[]> metricLst = tpDao.findByPriorityByTester(testplanId);
+        List<Object[]> tmLst = tpDao.findProductMetricsByTestplanId(testplanId);
+        List<TestPlanMetricVo> testPlanMetricLst = BizUtil.INSTANCE.flattenTestPlanMetricsByProduct(tmLst);
+        model.addAttribute("testPlanMetricLst", testPlanMetricLst);
         model.addAttribute("metricLst", metricLst);
         return "testplan_metric";
     }

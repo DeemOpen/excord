@@ -17,7 +17,16 @@ public class TestPlanMetricVo {
     private Long passRate;
     private Integer progressCount;
     private Long progressRate;
+    private String product;
 
+    public String getProduct() {
+        return product;
+    }
+
+    public void setProduct(String product) {
+        this.product = product;
+    }
+    
     public Long getTestPlanId() {
         return testPlanId;
     }

@@ -112,7 +112,7 @@
                     <tbody>
                         <#list testPlanMetricLst as tpm>
                         <tr>
-                            <td>${tpm.folderName}</td>
+                            <td><a href="/testcase?nodeId=${tpm.folderId?c}">${tpm.folderName}</a></td>
                             <td>${tpm.passCount}</td>
                             <td>${tpm.failCount}</td>
                             <td>${tpm.blockedCount}</td>
@@ -159,6 +159,7 @@
                             <th>Testcase ID</th>
                             <th>Test Folder</th>
                             <th>Test Name</th>
+                            <th>Product</th>
                             <th>Requirement</th>
                             <th>Testcase Priority</th>
                             <th>Assigned To</th>
@@ -180,6 +181,9 @@
                                 </a>
                             </td>
                             <td><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
+                            <td>
+                                ${tc.product}
+                            </td>
                             <td>
                                 <#if tc.ecTestcaseRequirementMappingLst??>
                                 <#list tc.ecTestcaseRequirementMappingLst as tcrMap>

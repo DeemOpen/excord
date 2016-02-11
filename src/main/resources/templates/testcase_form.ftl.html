@@ -172,6 +172,12 @@
                     <input type="text" name="tfolder" class="form-control" id="tfolder" value="${currentNode.name}" readonly>
                 </div>
                 <div class="form-group">
+                    <label for="tproduct">Product</label><font color="red">*</font></label>
+                    <input type="text" name="tproduct" class="form-control" id="tproduct" maxlength="45" required value="<#if tc??>${tc.product}</#if>"/>
+                </div>
+
+
+                <div class="form-group">
                     <label for="tlanguage">Language</label>
                     <input type="text" name="tlanguage" class="form-control" id="tlanguage" maxlength="45" value="<#if tc??>${tc.language}</#if>"/>
                 </div>
@@ -194,10 +200,7 @@
                     <label for="tbugid">Bug Id</label>
                     <input name="tbugid" type="text" class="form-control" id="tbugid" maxlength="45" value="<#if tc??>${tc.bugId}</#if>"/>
                 </div>
-                <div class="form-group">
-                    <label for="tproduct">Product</label>
-                    <input type="text" name="tproduct" class="form-control" id="tproduct" maxlength="45" value="<#if tc??>${tc.product}</#if>"/>
-                </div>
+
                 <div class="form-group">
                     <label for="tfeature">Feature</label>
                     <input type="text" name="tfeature" class="form-control" id="tfeature" maxlength="45" value="<#if tc??>${tc.feature}</#if>"/>
