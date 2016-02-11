@@ -64,6 +64,9 @@ If you are using DB authentication insert this row.
 INSERT INTO `excord`.`ec_user` (`id`, `username`, `name`, `password`, `role`, `enabled`, `created_date`,`email`) 
 VALUES ('1', 'admin', 'admin', 'manager', 'USER', '1', NOW(),'test@blackhole.com');
 ```
+### Log Monitoring
+tail -f excord.log
+grep 'GET' access_log.*.log | egrep -v "(.gif|.jpg|.png|.swf|.ico|.txt|.xml|.css|.js|.rss)"
 
 ### Screenshots
 

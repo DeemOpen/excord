@@ -145,8 +145,10 @@ public class TestPlanController {
     public String deleteTestplan(HttpSession session, HttpServletRequest request, Model model, @RequestParam(value = "testplanId", required = true) Long testplanId) {
 
         EcTestplan tpObj = tpDao.findOne(testplanId);
+        String tpName = tpObj.getName();
+        String tpSlug = tpObj.getSlug();
         tpDao.delete(tpObj);
-        historyUtil.addHistory("Deleted testplan: [" + tpObj.getName() + "]", tpObj.getSlug(), request, session);
+        historyUtil.addHistory("Deleted testplan: [" + tpName + "]", tpSlug, request, session);
         return "redirect:/testplan";
     }
 
@@ -281,8 +283,8 @@ public class TestPlanController {
             EcTestcase tc = tcDao.findOne(testCaseId);
             EcTestplan tp = tpDao.findOne(testPlanId);
             EcTestplanTestcaseMapping tptcMap = tptcDao.findByTestplanIdAndTestcaseId(tp, tc);
-            historyUtil.addHistory("UnLinked TestPlan : [" + tp.getName() + "] with TestCase: [" + tc.getName() + "] ", tp.getSlug(), request, session);
             tptcDao.delete(tptcMap);
+            historyUtil.addHistory("UnLinked TestPlan : [" + tp.getName() + "] with TestCase: [" + tc.getName() + "] ", tp.getSlug(), request, session);
         }
         session.setAttribute("flashMsg", "Successfully Unlinked!");
         return "redirect:/testplan_view?testplanId=" + testPlanId;

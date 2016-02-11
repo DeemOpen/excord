@@ -220,8 +220,8 @@ public class TestCaseController {
         childFolder.setSlug(BizUtil.INSTANCE.getSlug());
         childFolder.setName(folderName);
         childFolder.setParentId(parentFolder);
-        historyUtil.addHistory("Added folder: [" + folderName + "] under [" + parentFolder.getName() + "]", parentFolder.getSlug(), request, session);
         tfDao.save(childFolder);
+        historyUtil.addHistory("Added folder: [" + folderName + "] under [" + parentFolder.getName() + "]", parentFolder.getSlug(), request, session);
         return "redirect:/testcase?nodeId=" + parentFolder.getId();
     }
 
@@ -247,8 +247,8 @@ public class TestCaseController {
                 if (tcObj.getEnabled()) {
                     //Dont map disabled test cases.
                     enabledTcPresent = true;
-                    historyUtil.addHistory("Linked TestPlan : [" + tpObj.getName() + "] with TestCase: [" + tcObj.getName() + "]", tpObj.getSlug(), request, session);
                     tptcDao.save(tptcMap);
+                    historyUtil.addHistory("Linked TestPlan : [" + tpObj.getName() + "] with TestCase: [" + tcObj.getName() + "]", tpObj.getSlug(), request, session);
                 } else {
                     disabledTcPresent = true;
                     LOGGER.info("Cant link disabled test case: [{}:{}] to test plan: [{}:{}]", tcObj.getId(), tcObj.getName(), tpObj.getId(), tpObj.getName());
@@ -277,8 +277,8 @@ public class TestCaseController {
         for (Long testCaseId : testcaseChkLst) {
             EcTestcase tcObj = tcDao.findOne(testCaseId);
             tcObj.setEnabled(true);
-            historyUtil.addHistory("Enabled testcase : [" + tcObj.getName() + "]", tcObj.getSlug(), request, session);
             tcDao.save(tcObj);
+            historyUtil.addHistory("Enabled testcase : [" + tcObj.getName() + "]", tcObj.getSlug(), request, session);
         }
         session.setAttribute("flashMsg", "Successfully enabled testcase!");
         return "redirect:/testcase?nodeId=" + nodeId;
@@ -290,8 +290,8 @@ public class TestCaseController {
         for (Long testCaseId : testcaseChkLst) {
             EcTestcase tcObj = tcDao.findOne(testCaseId);
             tcObj.setEnabled(false);
-            historyUtil.addHistory("Disabled testcase : [" + tcObj.getName() + "]", tcObj.getSlug(), request, session);
             tcDao.save(tcObj);
+            historyUtil.addHistory("Disabled testcase : [" + tcObj.getName() + "]", tcObj.getSlug(), request, session);
         }
         session.setAttribute("flashMsg", "Successfully disabled testcase!");
         return "redirect:/testcase?nodeId=" + nodeId;
@@ -302,8 +302,10 @@ public class TestCaseController {
 
         for (Long testCaseId : testcaseChkLst) {
             EcTestcase tcObj = tcDao.findOne(testCaseId);
-            historyUtil.addHistory("Deleted testcase : [" + tcObj.getName() + "]", tcObj.getSlug(), request, session);
+            String testcaseName = tcObj.getName();
+            String testcaseSlug = tcObj.getSlug();
             tcDao.delete(tcObj);
+            historyUtil.addHistory("Deleted testcase : [" + testcaseName + "]", testcaseSlug, request, session);
         }
         session.setAttribute("flashMsg", "Successfully deleted testcase!");
         return "redirect:/testcase?nodeId=" + nodeId;
@@ -331,8 +333,10 @@ public class TestCaseController {
 
         if (currentNode.getParentId() != null) {
             Long parentId = currentNode.getParentId().getId();
-            historyUtil.addHistory("Folder Deleted : [" + currentNode.getName() + "]", currentNode.getSlug(), request, session);
+            String folderName = currentNode.getName();
+            String folderSlug = currentNode.getSlug();
             tfDao.delete(currentNode);
+            historyUtil.addHistory("Folder Deleted : [" + folderName + "]", folderSlug, request, session);
             session.setAttribute("flashMsg", "Successfully deleted folder!");
             return "redirect:/testcase?nodeId=" + parentId;
         } else {
@@ -391,8 +395,8 @@ public class TestCaseController {
             if (tproduct != null) {
                 tcObj.setProduct(tproduct);
             }
-            historyUtil.addHistory("Testcase Bulk Updated : [" + tcObj.getName() + "]", tcObj.getSlug(), request, session);
             tcDao.save(tcObj);
+            historyUtil.addHistory("Testcase Bulk Updated : [" + tcObj.getName() + "]", tcObj.getSlug(), request, session);
         }
         return "redirect:/testcase?nodeId=" + nodeId;
     }
@@ -414,9 +418,11 @@ public class TestCaseController {
             for (String tc : clipboardTcLst) {
                 EcTestcase tcObj = tcDao.findOne(Long.parseLong(tc));
                 EcTestfolder newNode = tfDao.findOne(nodeId);
-                historyUtil.addHistory("Moved testcase : [" + tcObj.getName() + "] from [" + tcObj.getFolderId().getName() + " ] to [" + newNode.getName() + " ]", tcObj.getSlug(), request, session);
                 tcObj.setFolderId(newNode);
+                String oldFolder = tcObj.getFolderId().getName();
+                String newFolder = newNode.getName();
                 tcDao.save(tcObj);
+                historyUtil.addHistory("Moved testcase : [" + tcObj.getName() + "] from [" + oldFolder + " ] to [" + newFolder + " ]", tcObj.getSlug(), request, session);
             }
             session.setAttribute("clipboardTc", null);
             session.setAttribute("flashMsg", "Testcases moved successfully!");
@@ -430,9 +436,12 @@ public class TestCaseController {
 
         EcTestfolder currenNode = tfDao.findOne(nodeId);
         if (currenNode.getParentId() != null) {
+            String currentName = currenNode.getName();
+            String currentSlug = currenNode.getSlug();
+            String newName = newNodeName;
             currenNode.setName(newNodeName);
-            historyUtil.addHistory("Folder Renamed from : [" + currenNode.getName() + "] to [" + newNodeName + "]", currenNode.getSlug(), request, session);
             tfDao.save(currenNode);
+            historyUtil.addHistory("Folder Renamed from : [" + currentName + "] to [" + newName + "]", currentSlug, request, session);
             session.setAttribute("flashMsg", "Successfully renamed folder!");
         } else {
             session.setAttribute("flashMsg", "Cant rename root folder!");

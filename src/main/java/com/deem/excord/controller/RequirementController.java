@@ -193,8 +193,9 @@ public class RequirementController {
 
         Long parentId = reqObj.getParentId().getId();
         String reqName = reqObj.getName();
+        String reqSlug = reqObj.getSlug();
         rDao.delete(reqObj);
-        historyUtil.addHistory("Deleted requirement: [" + reqName + "]", reqObj.getSlug(), request, session);
+        historyUtil.addHistory("Deleted requirement: [" + reqName + "]", reqSlug, request, session);
         session.setAttribute("flashMsg", "Successfully deleted requirement!");
         return "redirect:/requirement?reqId=" + parentId;
 
