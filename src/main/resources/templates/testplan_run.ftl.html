@@ -50,6 +50,7 @@
                             <th>Test Id</th>
                             <th>Test Folder</th>
                             <th>Test Name</th>
+                            <th>Product</th>
                             <th>Assigned</th>
                             <th>Priority</th>
                             <th>Comments</th>
@@ -60,69 +61,82 @@
                             <th>Status</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <#if testCaseLst??>
-                        <#list testCaseLst as tc>
-                        <tr>
-                            <td class="no-sort">
-                                <input type="checkbox" name="testcaseChk" value="${tc.id?c}"/>
-                            </td>
-                            <td style="white-space: nowrap">
-                                <a href="#" class="teststepShow" id="${tc.id?c}">${tc.id?c} &nbsp;<i class="fa fa-sort-desc"></i></a>
-                            </td>
-                            <td>
-                                <a href="/testcase?nodeId=${tc.folderId.id?c}">
-                                    ${tc.folderId.name}
-                                </a>
-                            </td>
-                            <td style="word-break:break-all;"><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
-                            <td>
-                                <#list tptcLst as tptc>
-                                <#if tptc.testcaseId.id?c == tc.id?c>
-                                <#if tptc.assignedTo??>
-                                ${tptc.assignedTo}
-                                </#if>
-                                </#if>
-                                </#list>
-                            </td>
-                            <td>
-                                <#if tc.priority??>
-                                ${tc.priority}
-                                </#if>
-                            </td>
-                            <td><input type="text" name="tcomments_${tc.id?c}" size="55" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].note}</#if>"/></td>
-                            <td><input type="text" name="tbug_${tc.id?c}" size="10" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].bugTicket}</#if>"/></td>
-                            <td><#if trMap[tc.id?c]??>${trMap[tc.id?c].environment}</#if></td>
-                            <td>
-                                <#if trMap[tc.id?c]??>${trMap[tc.id?c].timestamp}</#if>
-                            </td>
-                            <td><#if trMap[tc.id?c]??>${trMap[tc.id?c].tester}</#if></td>
-                            <td>
-                                <#if trMap[tc.id?c]??>
-                                <#switch trMap[tc.id?c].status>
-                                <#case "PASSED">
-                                <span class="label label-success"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
-                                <#break>
-                                <#case "FAILED">
-                                <span class="label label-danger"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
-                                <#break>
-                                <#case "NOT_RUN">
-                                <span class="label label-warning"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
-                                <#break>
-                                <#default>
-                                <span class="label label-primary"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
-                                </#switch>
-                                </#if>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td colspan="12" class="no-sort">
-                                <div id="tcstep_${tc.id?c}"></div>
-                            </td>
-                        </tr>
-                        </#list>
-                        </#if>
-                    </tbody>
+
+                    <#if testCaseLst??>
+                    <#list testCaseLst as tc>
+                    <tr>
+                        <td class="no-sort">
+                            <input type="checkbox" name="testcaseChk" value="${tc.id?c}"/>
+                        </td>
+                        <td style="white-space: nowrap">
+                            <a href="#" class="teststepShow" id="${tc.id?c}">${tc.id?c} &nbsp;<i class="fa fa-sort-desc"></i></a>
+                        </td>
+                        <td>
+                            <a href="/testcase?nodeId=${tc.folderId.id?c}">
+                                ${tc.folderId.name}
+                            </a>
+                        </td>
+                        <td style="word-break:break-all;"><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
+                        <td>${tc.product}</td>
+                        <td>
+                            <#list tptcLst as tptc>
+                            <#if tptc.testcaseId.id?c == tc.id?c>
+                            <#if tptc.assignedTo??>
+                            ${tptc.assignedTo}
+                            </#if>
+                            </#if>
+                            </#list>
+                        </td>
+                        <td>
+                            <#if tc.priority??>
+                            ${tc.priority}
+                            </#if>
+                        </td>
+                        <td><input type="text" name="tcomments_${tc.id?c}" size="55" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].note}</#if>"/></td>
+                        <td><input type="text" name="tbug_${tc.id?c}" size="10" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].bugTicket}</#if>"/></td>
+                        <td><#if trMap[tc.id?c]??>${trMap[tc.id?c].environment}</#if></td>
+                        <td>
+                            <#if trMap[tc.id?c]??>${trMap[tc.id?c].timestamp}</#if>
+                        </td>
+                        <td><#if trMap[tc.id?c]??>${trMap[tc.id?c].tester}</#if></td>
+                        <td>
+                            <#if trMap[tc.id?c]??>
+                            <#switch trMap[tc.id?c].status>
+                            <#case "PASSED">
+                            <span class="label label-success"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
+                            <#break>
+                            <#case "FAILED">
+                            <span class="label label-danger"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
+                            <#break>
+                            <#case "NOT_RUN">
+                            <span class="label label-warning"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
+                            <#break>
+                            <#default>
+                            <span class="label label-primary"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
+                            </#switch>
+                            </#if>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="13">
+                            <div id="tcstep_${tc.id?c}"></div>
+                        </td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                        <td style="display: none;"></td>
+                    </tr>
+                    </#list>
+                    </#if>
+
                 </table>
             </div>
         </div>

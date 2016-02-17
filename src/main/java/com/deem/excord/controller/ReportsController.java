@@ -50,8 +50,8 @@ public class ReportsController {
     @RequestMapping(value = "/testplan_metric", method = RequestMethod.GET)
     public String testplanMetric(Model model, @RequestParam(value = "testplanId", required = true) Long testplanId) {
         List<Object[]> metricLst = tpDao.findByPriorityByTester(testplanId);
-        List<Object[]> tmLst = tpDao.findProductMetricsByTestplanId(testplanId);
-        List<TestPlanMetricVo> testPlanMetricLst = BizUtil.INSTANCE.flattenTestPlanMetricsByProduct(tmLst);
+        List<Object[]> tmLst = tpDao.findMetricsByTestplanId(testplanId);
+        List<TestPlanMetricVo> testPlanMetricLst = BizUtil.INSTANCE.flattenTestPlanMetricsByFolder(tmLst);
         model.addAttribute("testPlanMetricLst", testPlanMetricLst);
         model.addAttribute("metricLst", metricLst);
         return "testplan_metric";

@@ -1,5 +1,9 @@
 $(document).ready(function () {
 
+    $('#testplanrun-ele').DataTable({
+        "bPaginate": false
+    });
+
     $("#checkAll").click(function (event) {
         $('input:checkbox').not(this).prop('checked', this.checked);
     });

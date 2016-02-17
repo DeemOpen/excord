@@ -89,16 +89,15 @@
                 <div id="linechartContainer" style="min-width: 310px; height: 400px; max-width: 600px; margin: 0 auto"></div>
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-12">
                 <table class="table table-striped table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th colspan="9">Progress Report</th>
+                            <th colspan="9">Progress Report By Product</th>
                         </tr>
                         <tr>
-                            <th>Test Case Node</th>
+                            <th>Product</th>
                             <th>PASSED</th>
                             <th>FAILED</th>
                             <th>BLOCKED</th>
@@ -112,7 +111,7 @@
                     <tbody>
                         <#list testPlanMetricLst as tpm>
                         <tr>
-                            <td><a href="/testcase?nodeId=${tpm.folderId?c}">${tpm.folderName}</a></td>
+                            <td>${tpm.product}</td>
                             <td>${tpm.passCount}</td>
                             <td>${tpm.failCount}</td>
                             <td>${tpm.blockedCount}</td>
@@ -121,14 +120,13 @@
                             <td>${tpm.total}</td>
                             <td>${tpm.passRate}%</td>
                             <td>${tpm.progressRate}%</td>
-
                         </tr>
                         </#list>
-
                     </tbody>
                 </table>
             </div>
         </div>
+        
         <#if testPlan.enabled?c == 'true'>
         <div class="row">
             <div class="col-md-1">

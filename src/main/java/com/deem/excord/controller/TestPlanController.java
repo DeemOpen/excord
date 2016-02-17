@@ -185,8 +185,8 @@ public class TestPlanController {
         FlashMsgUtil.INSTANCE.checkFlashMsg(session, model);
         EcTestplan testPlan = tpDao.findOne(testplanId);
         List<EcTestplanTestcaseMapping> tptcLst = tptcDao.findByTestplanId(testPlan);
-        List<Object[]> tmLst = tpDao.findMetricsByTestplanId(testplanId);
-        List<TestPlanMetricVo> testPlanMetricLst = BizUtil.INSTANCE.flattenTestPlanMetricsByFolder(tmLst);
+        List<Object[]> tmLst = tpDao.findProductMetricsByTestplanId(testplanId);
+        List<TestPlanMetricVo> testPlanMetricLst = BizUtil.INSTANCE.flattenTestPlanMetricsByProduct(tmLst);
         Integer totalPassCount = 0;
         Integer totalCount = 0;
         Integer totalNotRunCount = 0;
