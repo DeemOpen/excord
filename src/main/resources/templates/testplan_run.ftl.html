@@ -48,8 +48,7 @@
                         <tr>
                             <th><input type="checkbox" id="checkAll"/> </th>
                             <th>Test Id</th>
-                            <th>Test Details</th>
-                            <th>Comments</th>
+                            <th>Details</th>
                             <th>By</th>
                             <th>Status</th>
                         </tr>
@@ -87,15 +86,13 @@
                             <br/>
                             Run On:
                             <#if trMap[tc.id?c]??>${trMap[tc.id?c].timestamp}</#if>
+                            <br/><br/>
+                            <b>Comments:</b>
                             <br/>
-                        </td>
-                        <td>
-                            Comments
-                            <br/>
-                            <input type="text" class="form-control" name="tcomments_${tc.id?c}" maxlength="90" size="45" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].note}</#if>"/>
+                            <input type="text" class="form-control" name="tcomments_${tc.id?c}" maxlength="90" size="90" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].note}</#if>"/>
                             <br/>
                             <br/>
-                            Bug
+                            <b>Bug:</b>
                             <br/>
                             <input type="text" class="form-control" name="tbug_${tc.id?c}" maxlength="45" size="45" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].bugTicket}</#if>"/>
                         </td>
@@ -119,10 +116,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="6">
+                        <td colspan="5">
                             <div id="tcstep_${tc.id?c}"></div>
                         </td>
-                        <td style="display: none;"></td>
                         <td style="display: none;"></td>
                         <td style="display: none;"></td>
                         <td style="display: none;"></td>
