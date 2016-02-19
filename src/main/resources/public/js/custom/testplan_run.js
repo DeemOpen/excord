@@ -1,7 +1,10 @@
 $(document).ready(function () {
 
     $('#testplanrun-ele').DataTable({
-        "bPaginate": false
+        "bPaginate": false,
+        "aoColumnDefs": [
+            {'bSortable': false, 'aTargets': [1]}
+        ]
     });
 
     $("#checkAll").click(function (event) {
