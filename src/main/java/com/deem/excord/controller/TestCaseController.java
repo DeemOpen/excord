@@ -78,6 +78,20 @@ public class TestCaseController {
     @Autowired
     HistoryUtil historyUtil;
 
+    @RequestMapping(value = {"/search"}, method = RequestMethod.GET)
+    public String search(HttpSession session, Model model) {
+        return "search";
+    }
+
+    @RequestMapping(value = {"/search"}, method = RequestMethod.POST)
+    public String searchKey(HttpSession session, Model model, @RequestParam(value = "searchKey", required = true) String searchKey) {
+        LOGGER.info("Search key: {}", searchKey);
+        List<EcTestcase> testCaseLst = tcDao.searchTestcase(searchKey);
+        model.addAttribute("searchKey", searchKey);
+        model.addAttribute("testCaseLst", testCaseLst);
+        return "search";
+    }
+
     @RequestMapping(value = "/testcase", method = RequestMethod.GET)
     public String testCases(Model model, HttpSession session, @RequestParam(value = "nodeId", required = false, defaultValue = "1") Long nodeId) {
 

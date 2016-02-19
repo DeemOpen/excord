@@ -22,4 +22,7 @@ public interface TestCaseRepository extends CrudRepository<EcTestcase, Long> {
     @Query(value = "SELECT count(*) FROM ec_testcase where enabled = 1", nativeQuery = true)
     public Integer getCountOfActiveTestcases();
 
+    @Query(value = "select * from ec_testcase where `name` like CONCAT('%',:searchKey,'%') or `description` like CONCAT('%',:searchKey,'%') order by id desc", nativeQuery = true)
+    public List<EcTestcase> searchTestcase(@Param("searchKey") String searchKey);
+
 }

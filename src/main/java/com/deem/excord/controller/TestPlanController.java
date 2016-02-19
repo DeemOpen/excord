@@ -67,10 +67,9 @@ public class TestPlanController {
         testPlanLst = tpDao.findByEnabledOrderByIdDesc(true);
         List<Object[]> metricsLst = tpDao.findMetrics();
         List<TestPlanMetricVo> testPlanMetricsLst = BizUtil.INSTANCE.gererateAllTestPlanMetrics(testPlanLst, metricsLst);
-        model.addAttribute("home", "yes");
         model.addAttribute("testPlanMetricsLst", testPlanMetricsLst);
         model.addAttribute("testPlanLst", testPlanLst);
-        return "testplan";
+        return "testplan_active";
     }
 
     @RequestMapping(value = {"/testplan"}, method = RequestMethod.GET)
@@ -243,7 +242,7 @@ public class TestPlanController {
             historyUtil.addHistory("Added/Updated testplan: [" + tname + "]", tp.getSlug(), request, session);
             session.setAttribute("flashMsg", "Successfully Saved TestPlan " + tp.getName());
 
-            return "redirect:/testplan";
+            return "redirect:/testplan_active";
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
         }
