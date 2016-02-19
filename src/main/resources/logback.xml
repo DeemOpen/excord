@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     
-    <property name="LOG_PATH" value="." />
+    <property name="LOG_PATH" value="logs" />
     <property name="LOG_FILE" value="excord.log" />
     
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
@@ -11,7 +11,7 @@
     </appender>
            
     <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${LOG_FILE}</file>
+        <file>${LOG_PATH}/${LOG_FILE}</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
             <Pattern>
                 %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n
