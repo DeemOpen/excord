@@ -24,7 +24,7 @@ public class EcTestupload implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
-    @Size(max = 90)
+    @Size(max = 45)
     @Column(name = "caption")
     private String caption;
     @Basic(optional = false)

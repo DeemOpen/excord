@@ -37,7 +37,7 @@ public class EcTestresult implements Serializable {
     @Size(min = 1, max = 20)
     @Column(name = "status")
     private String status;
-    @Size(max = 90)
+    @Size(max = 45)
     @Column(name = "environment")
     private String environment;
     @Basic(optional = false)

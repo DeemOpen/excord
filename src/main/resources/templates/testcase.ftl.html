@@ -70,11 +70,10 @@
                     <#list nodeLst as node>
                     &nbsp;
                     <#if childNodeLst?seq_contains(node.id)>
-                    <span class="fa fa-folder"></span>
+                    <span class="fa fa-folder">&nbsp;<a href="/testcase?nodeId=${node.id?c}">${node.name}</a></span>
                     <#else>
-                    <span class="fa fa-folder-o"></span>
+                    <span class="fa fa-folder-o">&nbsp;<a href="/testcase?nodeId=${node.id?c}">${node.name}</a></span>
                     </#if>
-                    <a href="/testcase?nodeId=${node.id?c}">${node.name}</a>
                     <br/>
                     </#list>
                 </div>
@@ -84,11 +83,9 @@
                     <thead>
                         <tr>
                             <th><input type="checkbox" id="checkAll"/></th>
-                            <th>Testcase ID</th>
-                            <th>Test Plans</th>
-                            <th>Requirement</th>
-                            <th>Test Name</th>
-                            <th>Fields</th>
+                            <th>Id</th>
+                            <th>Links</th>
+                            <th>Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,16 +98,19 @@
                                 <a href="#" class="teststepShow" id="${tc.id?c}">${tc.id?c} &nbsp;<i class="fa fa-sort-desc"></i></a>
                             </td>
                             <td>
+                                Test Plans:
+                                <br/>
                                 <#assign inc = 0/>
                                 <#list tptcmapLst as tptc>
                                 <#if tptc.testcaseId.id == tc.id>
                                 <#assign inc = inc + 1/>
-                                ${inc}. <a href="/testplan_view?testplanId=${tptc.testplanId.id}">${tptc.testplanId.name}</a>
+                                ${inc}.<a href="/testplan_view?testplanId=${tptc.testplanId.id}">${tptc.testplanId.name}</a>
                                 <br/>
                                 </#if>
                                 </#list>
-                            </td>
-                            <td>
+                                <br/><br/>
+                                Requirements:
+                                <br/>
                                 <#assign inc = 0/>
                                 <#assign review = 'false'/>
                                 <#list tcreqmapLst as tcr>
@@ -119,13 +119,15 @@
                                 <#if tcr.review?c == 'true'>
                                 <#assign review = 'true'/>
                                 </#if>
-                                ${inc}. <a href="/requirement?reqId=${tcr.requirementId.id}">${tcr.requirementId.name}</a>
+                                ${inc}.<a href="/requirement?reqId=${tcr.requirementId.id}">${tcr.requirementId.name}</a>
                                 <br/>
                                 </#if>
                                 </#list>
                             </td>
-                            <td style="word-break:break-all;"><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
-                            <td>
+                            <td style="word-break:break-all;">
+                                <b>Name:</b>
+                                <a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a>
+                                <br><br>
                                 <#if review == 'true'>
                                 <span class="label label-danger">Requirement Updated!</span>
                                 <br/><br/>
@@ -135,11 +137,10 @@
                                 <b>Priority:</b> ${tc.priority}
                                 <br/>
                                 <b>Automated:</b> ${tc.automated?c}
-
                             </td>
                         </tr>
                         <tr>
-                            <td colspan="6">
+                            <td colspan="4">
                                 <div id="tcstep_${tc.id?c}"></div>
                             </td>
                         </tr>

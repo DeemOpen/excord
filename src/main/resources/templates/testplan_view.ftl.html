@@ -19,7 +19,7 @@
                             <th>Test Plan</th>
                             <th>
                                 <input type="hidden" id="testplanId" name="testPlanId" value="${testPlan.id}"/>
-                                ${testPlan.name}
+                                <div style="word-wrap: break-word;">${testPlan.name}</div> 
                             </th>
                         </tr>
                         <tr>
@@ -126,7 +126,7 @@
                 </table>
             </div>
         </div>
-        
+
         <#if testPlan.enabled?c == 'true'>
         <div class="row">
             <div class="col-md-1">
@@ -154,12 +154,10 @@
                     <thead>
                         <tr>
                             <th class="no-sort"><input type="checkbox" id="checkAll"/> </th>
-                            <th>Testcase ID</th>
-                            <th>Test Folder</th>
-                            <th>Test Name</th>
-                            <th>Product</th>
-                            <th>Requirement</th>
-                            <th>Testcase Priority</th>
+                            <th>Id</th>
+                            <th>Details</th>
+                            <th>Product & Requirements</th>
+                            <th>Priority</th>
                             <th>Assigned To</th>
                         </tr>
                     </thead>
@@ -174,15 +172,15 @@
                                 ${tc.id?c}
                             </td>
                             <td>
-                                <a href="/testcase?nodeId=${tc.folderId.id?c}">
-                                    ${tc.folderId.name}
-                                </a>
-                            </td>
-                            <td><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
-                            <td>
-                                ${tc.product}
+                                <b>Folder:</b><a href="/testcase?nodeId=${tc.folderId.id?c}">${tc.folderId.name}</a>
+                                <br/><br/>
+                                <b>Name:</b><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a>
                             </td>
                             <td>
+                                <b>Product:</b>${tc.product}
+                                <br/><br/>
+                                <b>Requirements:</b>
+                                <br/>
                                 <#if tc.ecTestcaseRequirementMappingLst??>
                                 <#list tc.ecTestcaseRequirementMappingLst as tcrMap>
                                 <#if tcrMap.testcaseId.id == tc.id>

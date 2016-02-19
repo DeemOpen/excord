@@ -25,7 +25,7 @@ public class EcRequirement implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Long id;
-    @Size(max = 90)
+    @Size(max = 45)
     @Column(name = "name")
     private String name;
     @Column(name = "story_point")
@@ -42,10 +42,10 @@ public class EcRequirement implements Serializable {
     private String status;
     @Column(name = "coverage")
     private Boolean coverage;
-    @Size(max = 90)
+    @Size(max = 45)
     @Column(name = "release_name")
     private String releaseName;
-    @Size(max = 90)
+    @Size(max = 45)
     @Column(name = "product")
     private String product;
     @Size(max = 45)

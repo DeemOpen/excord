@@ -5,7 +5,6 @@
     <div class="row">
         <div class="col-md-12 left">
             <h3>Active Test Plans</h3>
-            <br/>
         </div>
     </div>
 
@@ -14,26 +13,30 @@
             <tr>
                 <th>ID</th>
                 <th>Name</th>
-                <th>Enabled</th>
-                <th>Release</th>
-                <th>Schedule</th>
-                <th>Leader</th>
+                <th>Details</th>
                 <th>Start date</th>
                 <th>End Date</th>
                 <th>Pass Rate</th>
                 <th>Progress Rate</th>
             </tr>
         </thead>
-
         <tbody>
             <#list testPlanLst as testPlan>
             <tr>
                 <td>${testPlan.id}</td>
-                <td><a href="/testplan_view?testplanId=${testPlan.id?c}">${testPlan.name}</a></td>
-                <td>${testPlan.enabled?c}</td>
-                <td><#if testPlan.releaseName??>${testPlan.releaseName}</#if></td>
-                <td><#if testPlan.schedule??>${testPlan.schedule}</#if></td>
-                <td><#if testPlan.leader??>${testPlan.leader}</#if></td>
+                <td>
+                    <a href="/testplan_view?testplanId=${testPlan.id?c}">${testPlan.name}</a>
+                </td>
+                <td>
+                    <b>Enabled:</b> ${testPlan.enabled?c}
+                    <br/>
+                    <b>Release:</b> <#if testPlan.releaseName??>${testPlan.releaseName}</#if>
+                    <br/>
+                    <b>Schedule:</b> <#if testPlan.schedule??>${testPlan.schedule}</#if>
+                    <br/>
+                    <b>Leader:</b> <#if testPlan.leader??>${testPlan.leader}</#if>
+
+                </td>
                 <td><#if testPlan.startDate??>${testPlan.startDate}</#if></td>
                 <td><#if testPlan.endDate??>${testPlan.endDate}</#if></td>
                 <td>
@@ -64,6 +67,6 @@
             <a href="/testplan_add"  title="Add Test Step" class="btn btn-info" ><i class="fa fa-plus-square"></i> &nbsp; Add Test Plan</a>
         </div>
     </div>
-    <br/>
+
 </div>
 </@main.page> 

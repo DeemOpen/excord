@@ -9,10 +9,10 @@
             </div>
         </div>
         <div class="form-group">
-            <div class="col-md-8">
+            <div class="col-md-10">
                 <input type="text" name="searchKey" value="<#if searchKey??>${searchKey}</#if>" class="form-control" placeholder="Search Testcase Name Or Description" required>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-2">
                 <button type="submit" name="action" value="searchtestcase" class="btn btn-primary btn-block">Search Testcase</button>
             </div>
             <br/>
@@ -23,14 +23,11 @@
         <#if testCaseLst??>
         <div class="row">
             <div class="col-md-12">
-                <table id="testcase-ele" class="table table-striped table-bordered wrap-table" width="100%" cellspacing="0">
+                <table id="testcase-ele" class="table table-striped table-bordered" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th width="5%">Testcase ID</th>
-                            <th width="15%">Product</th>
-                            <th width="15%">Test Folder</th>
-                            <th>Test Name</th>
-                            <th>Description</th>
+                            <th>Id</th>
+                            <th>Details</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -40,15 +37,19 @@
                                 ${tc.id?c}
                             </td>
                             <td>
-                                ${tc.product}
-                            </td>
-                            <td>
+                                <b>Product:</b>${tc.product}
+                                <br/>
+                                <b>Folder:</b>
                                 <a href="/testcase?nodeId=${tc.folderId.id?c}">
                                     ${tc.folderId.name}
                                 </a>
+                                <br/><br/>                                
+                                <b>Name:</b>
+                                <a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a>
+                                <br/>
+                                <b>Description:</b>
+                                ${tc.description?html}
                             </td>
-                            <td><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
-                            <td>${tc.description?html}</td>
                         </tr>
                         </#list>
 

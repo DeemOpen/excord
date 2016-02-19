@@ -335,7 +335,7 @@ public class RequirementController {
                         childReq.setSlug(BizUtil.INSTANCE.getSlug());
                     }
 
-                    String rName = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(1)), 90);
+                    String rName = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(1)), 45);
                     String rPriority = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(2)), 45);
                     if (!BizUtil.INSTANCE.checkReqPriority(rPriority)) {
                         priorityError = true;

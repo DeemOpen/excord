@@ -5,7 +5,6 @@
     <div class="row">
         <div class="col-md-12 text-center">
             <h3>Test Plan Execution History</h3>
-            <br/>
         </div>
     </div>
     <div class="row">
@@ -13,31 +12,34 @@
             <table id="testhistory-ele" class="table table-striped table-bordered" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Test Case Id</th>
-                        <th>Test Case Name</th>
-                        <th>Product</th>
+                        <th>Id</th>
+                        <th>Details</th>
                         <th>Execution Date</th>
                         <th>Status</th>
-                        <th>Environment</th>
                         <th>Tester</th>
-                        <th>Note</th>
-                        <th>Bug</th>
-                        <th>Latest</th>
                     </tr>
                 </thead>
                 <tbody>
                     <#list allTestRunsLst as history>
                     <tr>
                         <td>${history.testplanTestcaseLinkId.testcaseId.id?c}</td>
-                        <td>${history.testplanTestcaseLinkId.testcaseId.name}</td>
-                        <td>${history.testplanTestcaseLinkId.testcaseId.product}</td>
+                        <td>
+                            <b>Name:</b>${history.testplanTestcaseLinkId.testcaseId.name}
+                            <br/>
+                            <b>Product:</b>${history.testplanTestcaseLinkId.testcaseId.product}
+                            <br/>
+                            <b>Comments:</b>${history.note}
+                            <br/>
+                            <b>Environment:</b>${history.environment}
+                            <br/>
+                            <b>Latest:</b>${history.latest?c}
+                            <br/>
+                            <b>Bug:</b>
+                            <#if history.bugTicket??>${history.bugTicket}</#if>
+                        </td>
                         <td>${history.timestamp}</td>
                         <td>${history.status}</td>
-                        <td>${history.environment}</td>
                         <td>${history.tester}</td>
-                        <td>${history.note}</td>
-                        <td><#if history.bugTicket??>${history.bugTicket}</#if></td>
-                        <td>${history.latest?c}</td>
                     </tr>
                     </#list>
                 </tbody>

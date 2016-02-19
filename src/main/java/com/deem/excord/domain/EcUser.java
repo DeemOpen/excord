@@ -30,14 +30,14 @@ public class EcUser implements Serializable {
     @Size(min = 1, max = 45)
     @Column(name = "username")
     private String username;
-    @Size(max = 90)
+    @Size(max = 45)
     @Column(name = "name")
     private String name;
     @Size(max = 45)
     @Column(name = "password")
     private String password;
     @Pattern(regexp = "[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message = "Invalid email")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 90)
+    @Size(max = 45)
     @Column(name = "email")
     private String email;
     @Size(max = 10)

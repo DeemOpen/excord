@@ -28,7 +28,7 @@ public class EcTestfolder implements Serializable {
     private Long id;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 90)
+    @Size(min = 1, max = 45)
     @Column(name = "name")
     private String name;
     @Size(max = 45)

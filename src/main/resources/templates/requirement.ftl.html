@@ -112,10 +112,16 @@
                             <td>${coveragePercentage}%</td>
                         </tr>
                         <tr>
+                            <th>Slug</th>
+                            <td>${currReq.slug}</td>
+                            <th>&nbsp;</th>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
                             <th>
                                 Associated Testcases
                             </th>
-                            <td>
+                            <td colspan="3">
                                 <#assign inc = 0/>
                                 <#list tcrLst as tcr>
                                 <#assign inc = inc + 1/>
@@ -125,8 +131,6 @@
                                 <br/><br/>
                                 </#list>
                             </td>
-                            <th>Slug</th>
-                            <td>${currReq.slug}</td>
                         </tr>
                     </tbody>
                 </table>

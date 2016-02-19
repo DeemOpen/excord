@@ -11,7 +11,7 @@
 
         <div class="form-group">
             <div class="col-md-10">
-                <input type="text" name="searchKey" value="<#if searchKey??>${searchKey}</#if>" class="form-control" required>
+                <input type="text" name="searchKey" value="<#if searchKey??>${searchKey}</#if>" class="form-control" placeholder="Search Summary Or Slug" required>
             </div>
             <div class="col-md-2">
                 <button type="submit" name="action" value="searchhistory" class="btn btn-primary btn-block">Search History</button>
@@ -28,8 +28,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Date</th>
-                            <th>User</th>
-                            <th>From</th>
+                            <th>Details</th>
                             <th>Slug</th>
                             <th>Summary</th>
                         </tr>
@@ -39,8 +38,12 @@
                         <tr>
                             <td>${history.id}</td>
                             <td>${history.changeDate}</td>
-                            <td>${history.changeUser}</td>
-                            <td>${history.changeIp}</td>
+                            <td>
+                                <b>By:</b>${history.changeUser}
+                                <br/>
+                                <b>From:</b>${history.changeIp}
+                                <br/>
+                            </td>
                             <td>${history.slug}</td>
                             <td>${history.changeSummary}</td>
                         </tr>

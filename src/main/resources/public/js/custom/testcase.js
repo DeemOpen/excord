@@ -23,6 +23,9 @@ $(document).ready(function () {
         var folderPath = $("#breadCrumbPath").val();
         bootbox.prompt("Parent folder path: " + folderPath + ",<br/> Please enter folder name:", function (result) {
             if (result !== null) {
+                if (result.length > 45) {
+                    result = result.substr(0, 45);
+                }
                 $("#folderName").val(result);
                 $("#testcaseForm").attr("action", "/testcase_addfolder");
                 $("#testcaseForm").submit();
@@ -125,6 +128,9 @@ $(document).ready(function () {
             title: "Enter folder name",
             callback: function (result) {
                 if (result !== null) {
+                    if (result.length > 45) {
+                        result = result.substr(0, 45);
+                    }
                     $("#newNodeName").val(result);
                     $("#testcaseForm").attr("action", "/testcase_renamefolder");
                     $("#testcaseForm").submit();

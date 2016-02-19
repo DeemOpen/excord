@@ -31,7 +31,7 @@ public class EcHistory implements Serializable {
     private Date changeDate;
     @Column(name = "change_summary")
     private String changeSummary;
-    @Size(max = 90)
+    @Size(max = 45)
     @Column(name = "change_ip")
     private String changeIp;
     @Size(max = 45)

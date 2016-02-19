@@ -48,9 +48,7 @@
                         <tr>
                             <th><input type="checkbox" id="checkAll"/> </th>
                             <th>Test Id</th>
-                            <th>Test Folder</th>
-                            <th>Test Name</th>
-                            <th>Info</th>
+                            <th>Test Details</th>
                             <th>Comments</th>
                             <th>By</th>
                             <th>Status</th>
@@ -67,12 +65,8 @@
                             <a href="#" class="teststepShow" id="${tc.id?c}">${tc.id?c} &nbsp;<i class="fa fa-sort-desc"></i></a>
                         </td>
                         <td>
-                            <a href="/testcase?nodeId=${tc.folderId.id?c}">
-                                ${tc.folderId.name}
-                            </a>
-                        </td>
-                        <td><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a></td>
-                        <td>
+                            Test: <a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a>
+                            <br/>
                             Product: ${tc.product}
                             <br/>
                             Assigned To: 
@@ -105,7 +99,6 @@
                             <br/>
                             <input type="text" class="form-control" name="tbug_${tc.id?c}" maxlength="45" size="45" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].bugTicket}</#if>"/>
                         </td>
-
                         <td><#if trMap[tc.id?c]??>${trMap[tc.id?c].tester}</#if></td>
                         <td>
                             <#if trMap[tc.id?c]??>
@@ -126,11 +119,9 @@
                         </td>
                     </tr>
                     <tr>
-                        <td colspan="8">
+                        <td colspan="6">
                             <div id="tcstep_${tc.id?c}"></div>
                         </td>
-                        <td style="display: none;"></td>
-                        <td style="display: none;"></td>
                         <td style="display: none;"></td>
                         <td style="display: none;"></td>
                         <td style="display: none;"></td>
@@ -143,6 +134,7 @@
                 </table>
             </div>
         </div>
+        <br/>
         <div class="row">
             <div class="col-md-12 text-center">
                 <button type="submit" class="btn btn-info" name="status" value="PASSED">PASSED</button>
