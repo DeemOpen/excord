@@ -2,7 +2,9 @@ $(document).ready(function () {
 
     $('#testplanrun-ele').DataTable({
         "bPaginate": false,
-        "aaSorting" : [[]]
+        "aoColumnDefs": [
+            {'bSortable': false, aTargets: [ '_all' ]}
+        ]
     });
 
     $("#checkAll").click(function (event) {
