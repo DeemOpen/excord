@@ -98,7 +98,12 @@ public class TestPlanController {
         EcTestplan tpObj = tpDao.findOne(testplanId);
         EcTestplan newTpObj = new EcTestplan();
         newTpObj.setSlug(BizUtil.INSTANCE.getSlug());
-        newTpObj.setName(tpObj.getName() + "_CLONE");
+
+        String newTPName = tpObj.getName();
+        if (newTPName.length() > 84) {
+            newTPName = newTPName.substring(0, 84) + "_CLONE";
+        }
+        newTpObj.setName(newTPName);
         newTpObj.setCreator((String) session.getAttribute("authName"));
         newTpObj.setEnabled(tpObj.getEnabled());
         newTpObj.setEndDate(tpObj.getEndDate());

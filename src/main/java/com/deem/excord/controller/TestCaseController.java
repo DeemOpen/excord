@@ -487,7 +487,12 @@ public class TestCaseController {
             newTc.setFolderId(tc.getFolderId());
             newTc.setLanguage(tc.getLanguage());
             newTc.setMethodName(tc.getMethodName());
-            newTc.setName(tc.getName() + "_CLONE");
+
+            String newTCName = tc.getName();
+            if (newTCName.length() > 84) {
+                newTCName = newTCName.substring(0, 84) + "_CLONE";
+            }
+            newTc.setName(newTCName);
             newTc.setPriority(tc.getPriority());
             newTc.setProduct(tc.getProduct());
             newTc.setTestScriptFile(tc.getTestScriptFile());
