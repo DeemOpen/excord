@@ -100,8 +100,10 @@ public class TestPlanController {
         newTpObj.setSlug(BizUtil.INSTANCE.getSlug());
 
         String newTPName = tpObj.getName();
-        if (newTPName.length() > 84) {
-            newTPName = newTPName.substring(0, 84) + "_CLONE";
+        if (newTPName.length() > 39) {
+            newTPName = newTPName.substring(0, 39) + "_CLONE";
+        } else {
+            newTPName = newTPName + "_CLONE";
         }
         newTpObj.setName(newTPName);
         newTpObj.setCreator((String) session.getAttribute("authName"));

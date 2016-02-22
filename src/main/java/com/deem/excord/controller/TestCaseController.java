@@ -491,6 +491,8 @@ public class TestCaseController {
             String newTCName = tc.getName();
             if (newTCName.length() > 84) {
                 newTCName = newTCName.substring(0, 84) + "_CLONE";
+            } else {
+                newTCName = newTCName + "_CLONE";
             }
             newTc.setName(newTCName);
             newTc.setPriority(tc.getPriority());
@@ -621,7 +623,7 @@ public class TestCaseController {
                             String testDescription = BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(2)), -1);
                             Integer timeToRun = Integer.parseInt(BizUtil.INSTANCE.validateInput(df.formatCellValue(row.getCell(3)), -1));
 
-                            if (timeToRun != 1 & timeToRun != 5 && timeToRun != 10 && timeToRun != 15 && timeToRun != 20 && timeToRun != 30) {
+                            if (timeToRun != 1 && timeToRun != 5 && timeToRun != 10 && timeToRun != 15 && timeToRun != 20 && timeToRun != 30) {
                                 timeToRun = 5;
                             }
 
