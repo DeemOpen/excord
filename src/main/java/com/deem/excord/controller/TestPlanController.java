@@ -125,8 +125,11 @@ public class TestPlanController {
         }
         historyUtil.addHistory("Cloned testplan: [" + tpObj.getName() + "]", tpObj.getSlug(), request, session);
         session.setAttribute("flashMsg", "Successfully Cloned TestPlan " + tpObj.getName());
-
-        return "redirect:/testplan";
+        if (newTpObj.getEnabled()) {
+            return "redirect:/testplan_active";
+        } else {
+            return "redirect:/testplan";
+        }
     }
 
     @RequestMapping(value = "/testplan_history", method = RequestMethod.GET)
@@ -249,7 +252,11 @@ public class TestPlanController {
             historyUtil.addHistory("Added/Updated testplan: [" + tname + "]", tp.getSlug(), request, session);
             session.setAttribute("flashMsg", "Successfully Saved TestPlan " + tp.getName());
 
-            return "redirect:/testplan_active";
+            if (tp.getEnabled()) {
+                return "redirect:/testplan_active";
+            } else {
+                return "redirect:/testplan";
+            }
         } catch (Exception ex) {
             LOGGER.error(ex.getMessage());
         }
