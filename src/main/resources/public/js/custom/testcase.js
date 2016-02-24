@@ -1,5 +1,14 @@
 $(document).ready(function () {
 
+
+    $('#testcase-ele').DataTable({
+        "bPaginate": false,
+        "aoColumnDefs": [
+            {'bSortable': false, aTargets: ['_all']}
+        ]
+    });
+
+
     $(".teststepShow").click(function (event) {
         event.preventDefault();
         var testcaseId = $(this).attr("id");

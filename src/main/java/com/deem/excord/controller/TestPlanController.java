@@ -120,6 +120,8 @@ public class TestPlanController {
             EcTestplanTestcaseMapping tptcObj = new EcTestplanTestcaseMapping();
             tptcObj.setTestcaseId(tc);
             tptcObj.setTestplanId(newTpObj);
+            //TODO: Clone assign only.
+            //tptcObj.setAssignedTo();
             tptcDao.save(tptcObj);
 
         }

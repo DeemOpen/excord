@@ -64,11 +64,13 @@
                             <a href="#" class="teststepShow" id="${tc.id?c}">${tc.id?c} &nbsp;<i class="fa fa-sort-desc"></i></a>
                         </td>
                         <td>
-                            Test: <a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a>
+                            <b>Name:</b><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a>
                             <br/>
-                            Product: ${tc.product}
+                            <b>Folder:</b><a href="/testcase?nodeId=${tc.folderId.id?c}">${tc.folderId.name}</a>
                             <br/>
-                            Assigned To: 
+                            <b>Product:</b> ${tc.product}
+                            <br/>
+                            <b>Assigned To:</b> 
                             <#list tptcLst as tptc>
                             <#if tptc.testcaseId.id?c == tc.id?c>
                             <#if tptc.assignedTo??>
@@ -77,15 +79,21 @@
                             </#if>
                             </#list>
                             <br/>
-                            Priority: 
+                            <b>Priority:</b>
                             <#if tc.priority??>
                             ${tc.priority}
                             </#if>
                             <br/>
-                            Environment: <#if trMap[tc.id?c]??>${trMap[tc.id?c].environment}</#if>
+                            <b>Environment:</b> <#if trMap[tc.id?c]??>${trMap[tc.id?c].environment}</#if>
                             <br/>
-                            Run On:
+                            <b>Run On:</b>
                             <#if trMap[tc.id?c]??>${trMap[tc.id?c].timestamp}</#if>
+                            <br/>
+                            <b>Automated:</b>
+                            ${tc.automated?c}
+                            <br/>
+                            <b>Type:</b>
+                            ${tc.caseType}
                             <br/><br/>
                             <b>Comments:</b>
                             <br/>

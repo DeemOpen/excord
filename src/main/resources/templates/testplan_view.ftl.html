@@ -172,9 +172,13 @@
                                 ${tc.id?c}
                             </td>
                             <td>
-                                <b>Folder:</b><a href="/testcase?nodeId=${tc.folderId.id?c}">${tc.folderId.name}</a>
-                                <br/><br/>
                                 <b>Name:</b><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a>
+                                <br/>
+                                <b>Folder:</b><a href="/testcase?nodeId=${tc.folderId.id?c}">${tc.folderId.name}</a>
+                                <br/>
+                                <b>Automated:</b> ${tc.automated?c}
+                                <br/>
+                                <b>Type:</b>${tc.caseType}
                             </td>
                             <td>
                                 <b>Product:</b>${tc.product}
