@@ -115,16 +115,16 @@ public class TestPlanController {
         newTpObj.setLeader(tpObj.getLeader());
         tpDao.save(newTpObj);
         //Find all testcases associated with the testplan and copy.
-        List<EcTestcase> tcLst = tcDao.findAllTestCasesByTestPlanId(testplanId);
-        for (EcTestcase tc : tcLst) {
-            EcTestplanTestcaseMapping tptcObj = new EcTestplanTestcaseMapping();
-            tptcObj.setTestcaseId(tc);
-            tptcObj.setTestplanId(newTpObj);
-            //TODO: Clone assign only.
-            //tptcObj.setAssignedTo();
-            tptcDao.save(tptcObj);
+        List<EcTestplanTestcaseMapping> oldTptcLst = tptcDao.findByTestplanId(tpObj);
+        for (EcTestplanTestcaseMapping oldtctpObj : oldTptcLst) {
 
+            EcTestplanTestcaseMapping newtptcObj = new EcTestplanTestcaseMapping();
+            newtptcObj.setTestcaseId(oldtctpObj.getTestcaseId());
+            newtptcObj.setTestplanId(newTpObj);
+            newtptcObj.setAssignedTo(oldtctpObj.getAssignedTo());
+            tptcDao.save(newtptcObj);
         }
+
         historyUtil.addHistory("Cloned testplan: [" + tpObj.getName() + "]", tpObj.getSlug(), request, session);
         session.setAttribute("flashMsg", "Successfully Cloned TestPlan " + tpObj.getName());
         if (newTpObj.getEnabled()) {
