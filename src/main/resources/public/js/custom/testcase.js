@@ -5,7 +5,9 @@ $(document).ready(function () {
         "bPaginate": false,
         "aoColumnDefs": [
             {'bSortable': false, aTargets: ['_all']}
-        ]
+        ],
+        "paging":   false,
+        "info":     false
     });
 
 
