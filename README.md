@@ -68,6 +68,23 @@ VALUES ('1', 'admin', 'admin', 'manager', 'USER', '1', NOW(),'test@blackhole.com
 tail -f excord.log
 grep 'GET' access_log.*.log | egrep -v "(.gif|.jpg|.png|.swf|.ico|.txt|.xml|.css|.js|.rss)"
 
+### Commands
+
+To stop the server.
+curl -X POST http://localhost:9090/shutdown
+
+Health Metrics:
+http://localhost:9090/health
+
+Thread dump:
+http://localhost:9090/dump
+
+Env:
+http://localhost:9090/env
+
+Metrics:
+http://localhost:9090/metrics
+
 ### Screenshots
 
 <br/>
