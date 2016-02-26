@@ -22,7 +22,7 @@ public class HistoryController {
 
     @RequestMapping(value = "/history", method = RequestMethod.GET)
     public String history(Model model) {
-        List<EcHistory> historyLst = hDao.findTopChanges();
+        List<EcHistory> historyLst = hDao.findTop50ByOrderByIdDesc();
         model.addAttribute("historyLst", historyLst);
         return "history";
     }
@@ -30,7 +30,7 @@ public class HistoryController {
     @RequestMapping(value = "/history", method = RequestMethod.POST)
     public String searchHistory(Model model, @RequestParam(value = "searchKey", required = true) String searchKey) {
         LOGGER.info("Search key: {}", searchKey);
-        List<EcHistory> historyLst = hDao.findByChangeSummaryContainingOrSlugIs(searchKey,searchKey);
+        List<EcHistory> historyLst = hDao.findByChangeSummaryContainingOrSlugIs(searchKey, searchKey);
         model.addAttribute("searchKey", searchKey);
         model.addAttribute("historyLst", historyLst);
         return "history";

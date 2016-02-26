@@ -86,7 +86,7 @@ public class TestCaseController {
     @RequestMapping(value = {"/search"}, method = RequestMethod.POST)
     public String searchKey(HttpSession session, Model model, @RequestParam(value = "searchKey", required = true) String searchKey) {
         LOGGER.info("Search key: {}", searchKey);
-        List<EcTestcase> testCaseLst = tcDao.findByNameContainingOrDescriptionContainingOrderByIdDesc(searchKey,searchKey);
+        List<EcTestcase> testCaseLst = tcDao.findByNameContainingOrDescriptionContainingOrderByIdDesc(searchKey, searchKey);
         model.addAttribute("searchKey", searchKey);
         model.addAttribute("testCaseLst", testCaseLst);
         return "search";
@@ -336,29 +336,37 @@ public class TestCaseController {
             return "redirect:/testcase?nodeId=" + nodeId;
         }
 
-//        if (!currentNode.getEcTestcaseList().isEmpty()) {
-//            session.setAttribute("flashMsg", "Cant delete node with testcases. Delete the testcases or move them prior to delete!");
-//            return "redirect:/testcase?nodeId=" + nodeId;
-//        }
-//        if (!currentNode.getEcTestfolderList().isEmpty()) {
-//            session.setAttribute("flashMsg", "Cant delete node with nested nodes. Delete the nested nodes prior to delete!");
-//            return "redirect:/testcase?nodeId=" + nodeId;
-//        }
-        if (currentNode.getParentId() != null) {
+        Boolean softDelete = true;
+        //Soft delete moves to trash, but testcase count doesnt reduce.
+        if (softDelete) {
+            if (currentNode.getParentId() != null) {
+                Long parentId = currentNode.getParentId().getId();
+                String folderName = currentNode.getName();
+                String folderSlug = currentNode.getSlug();
+
+                //Soft delete, node assigned to trash.
+                currentNode.setParentId(tfDao.findOne(Constants.TRASH_NODE));
+                tfDao.save(currentNode);
+
+                historyUtil.addHistory("Folder Deleted : [" + folderName + "]", folderSlug, request, session);
+                session.setAttribute("flashMsg", "Successfully deleted folder!");
+                return "redirect:/testcase?nodeId=" + parentId;
+            }
+        } else if (!currentNode.getEcTestcaseList().isEmpty()) {
+            session.setAttribute("flashMsg", "Cant delete node with testcases. Delete the testcases or move them prior to delete!");
+        } else if (!currentNode.getEcTestfolderList().isEmpty()) {
+            session.setAttribute("flashMsg", "Cant delete node with nested nodes. Delete the nested nodes prior to delete!");
+        } else {
             Long parentId = currentNode.getParentId().getId();
             String folderName = currentNode.getName();
             String folderSlug = currentNode.getSlug();
-
-            //Soft delete, node assigned to trash.
-            currentNode.setParentId(tfDao.findOne(Constants.TRASH_NODE));
-            tfDao.save(currentNode);
-
+            tfDao.delete(currentNode);
             historyUtil.addHistory("Folder Deleted : [" + folderName + "]", folderSlug, request, session);
             session.setAttribute("flashMsg", "Successfully deleted folder!");
             return "redirect:/testcase?nodeId=" + parentId;
-        } else {
-            return "redirect:/testcase?nodeId=" + nodeId;
         }
+
+        return "redirect:/testcase?nodeId=" + nodeId;
     }
 
     @RequestMapping(value = "/testcase_bulkedit", method = RequestMethod.POST)
