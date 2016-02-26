@@ -71,19 +71,19 @@ grep 'GET' access_log.*.log | egrep -v "(.gif|.jpg|.png|.swf|.ico|.txt|.xml|.css
 ### Commands
 
 To stop the server.
-curl -X POST http://localhost:9090/shutdown
+curl -X POST http://localhost:9095/manage/shutdown
 
 Health Metrics:
-http://localhost:9090/health
+http://localhost:9095/manage/health
 
 Thread dump:
-http://localhost:9090/dump
+http://localhost:9095/manage/dump
 
 Env:
-http://localhost:9090/env
+http://localhost:9095/manage/env
 
 Metrics:
-http://localhost:9090/metrics
+http://localhost:9095/manage/metrics
 
 ### Screenshots
 
