@@ -86,7 +86,7 @@ public class TestCaseController {
     @RequestMapping(value = {"/search"}, method = RequestMethod.POST)
     public String searchKey(HttpSession session, Model model, @RequestParam(value = "searchKey", required = true) String searchKey) {
         LOGGER.info("Search key: {}", searchKey);
-        List<EcTestcase> testCaseLst = tcDao.searchTestcase(searchKey);
+        List<EcTestcase> testCaseLst = tcDao.findByNameContainingOrDescriptionContainingOrderByIdDesc(searchKey,searchKey);
         model.addAttribute("searchKey", searchKey);
         model.addAttribute("testCaseLst", testCaseLst);
         return "search";
