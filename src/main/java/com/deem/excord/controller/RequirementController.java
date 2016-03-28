@@ -319,6 +319,8 @@ public class RequirementController {
                 EcRequirement reqObj = rDao.findOne(reqId);
                 Boolean skipHeader = true;
                 final DataFormatter df = new DataFormatter();
+                Long newReqId = -1L;
+                
                 while (rowIterator.hasNext()) {
                     Row row = rowIterator.next();
                     if (skipHeader) {
@@ -327,7 +329,8 @@ public class RequirementController {
                     }
                     EcRequirement childReq = null;
                     if (row.getCell(0) != null) {
-                        childReq = rDao.findByIdAndParentId(reqId, reqObj);
+                        newReqId = Long.parseLong(df.formatCellValue(row.getCell(0)));
+                        childReq = rDao.findByIdAndParentId(newReqId, reqObj);
                     }
                     if (childReq == null) {
                         childReq = new EcRequirement();
