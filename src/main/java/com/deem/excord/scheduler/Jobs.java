@@ -1,5 +1,6 @@
 package com.deem.excord.scheduler;
 
+import com.deem.excord.repository.TestPlanRepository;
 import com.deem.excord.repository.UserRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,11 +18,16 @@ public class Jobs {
     @Autowired
     UserRepository uDao;
 
+    @Autowired
+    TestPlanRepository tpDao;
+
     //Everyday at 6:00 AM
     @Scheduled(cron = "0 0 6 * * ?")
     public void dailyJob() {
-        LOGGER.info("Running daily job!");
+        LOGGER.info("Running user disabled job!");
         uDao.disableOldUsers();
+        LOGGER.info("Running testplan disabled job!");
+        tpDao.disableExpiredActiveTestPlans();
 
     }
 }
