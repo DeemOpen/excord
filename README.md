@@ -58,7 +58,7 @@ grant all on excord.* to 'excord'@'localhost' identified by 'excord';
 flush privileges;
 ```
 
-If you are using DB authentication insert this row.
+If you are using DB authentication insert this row after starting the server first time. The startup creates the necessary tables.
 
 ```sql
 INSERT INTO `excord`.`ec_user` (`id`, `username`, `name`, `password`, `role`, `enabled`, `created_date`,`email`) 
