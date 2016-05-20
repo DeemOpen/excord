@@ -36,7 +36,7 @@
                     <tbody>
                         <#list historyLst as history>
                         <tr>
-                            <td>${history.id}</td>
+                            <td>${history.id?c}</td>
                             <td>${history.changeDate}</td>
                             <td>
                                 <b>By:</b>${history.changeUser}

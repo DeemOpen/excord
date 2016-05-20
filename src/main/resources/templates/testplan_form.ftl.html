@@ -16,7 +16,7 @@
                         Test Plan Name<font color="red">*</font>
                     </label>
                     <div class="col-md-6">
-                        <input type="hidden" name="tid" value="<#if testPlan??>${testPlan.id}</#if>"/>
+                        <input type="hidden" name="tid" value="<#if testPlan??>${testPlan.id?c}</#if>"/>
                         <input class="form-control"  name="tname" value="<#if testPlan??>${testPlan.name}</#if>" maxlength="45" required/>
                     </div>
                 </div>

@@ -28,7 +28,7 @@
             <div class="col-md-8">
                 <select class="form-control" name="testPlanId">
                     <#list testPlanLst as tp>
-                    <option value="${tp.id}">${tp.name}</option>
+                    <option value="${tp.id?c}">${tp.name}</option>
                     </#list>
                 </select>
             </div>
@@ -119,7 +119,7 @@
                                 <#if tcr.review?c == 'true'>
                                 <#assign review = 'true'/>
                                 </#if>
-                                ${inc}.<a href="/requirement?reqId=${tcr.requirementId.id}">${tcr.requirementId.name}</a>
+                                ${inc}.<a href="/requirement?reqId=${tcr.requirementId.id?c}">${tcr.requirementId.name}</a>
                                 <br/>
                                 </#if>
                                 </#list>
