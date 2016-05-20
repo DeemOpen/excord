@@ -22,11 +22,12 @@
         </div>
         <div class="form-group">
             <label class="col-md-2 control-label">
-                <label for="tpriority">Priority<font color="red">*</font></label>
+                Priority
             </label>
             <div class="col-md-6">
                 <select class="form-control" id="tpriority" name="tpriority">
-                    <option value="P1" selected>Critical (P1)</option>
+                    <option value="" selected></option>
+                    <option value="P1">Critical (P1)</option>
                     <option value="P2">Major (P2)</option>
                     <option value="P3">Minor (P3)</option>
                     <option value="P4">Trivial (P4)</option>
@@ -35,10 +36,11 @@
         </div>
         <div class="form-group">
             <label class="col-md-2 control-label">
-                <label for="ttype">Type<font color="red">*</font></label>
+                Type
             </label>
             <div class="col-md-6">
                 <select class="form-control" id="ttype" name="ttype">
+                    <option value="" selected></option>
                     <option value="REGRESSION">Regression</option>
                     <option value="MIXED_MODE">Mixed mode</option>
                     <option value="NEW_FEATURE">New feature</option>
@@ -52,18 +54,17 @@
         </div>
         <div class="form-group">
             <label class="col-md-2 control-label">
-                Flags
+                Automation
             </label>
-            <div class="col-md-6 text-left">
-                <div class="checkbox form-group">
-                    &nbsp;&nbsp;&nbsp;
-                    <label><input type="checkbox" name="tenabled"  data-toggle="toggle" data-on="Yes" data-off="No"  data-onstyle="success"> Enabled</label>
-                    <label><input type="checkbox" name="tautomated"  data-toggle="toggle" data-on="Yes" data-off="No"  data-onstyle="success"> Automated</label>
-                    <br/>
-                    <br/>
-                </div>
+            <div class="col-md-6">
+                <select class="form-control" id="tautomated" name="tautomated">
+                    <option value="" selected></option>
+                    <option value="true">Automated</option>
+                    <option value="false">Not Automated</option>
+                </select>
             </div>
         </div>
+
         <div class="form-group">
             <label class="col-md-2 control-label">
                 <label for="tlanguage">Language</label>
