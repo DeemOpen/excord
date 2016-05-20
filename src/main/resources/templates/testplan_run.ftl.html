@@ -48,92 +48,120 @@
                         <tr>
                             <th><input type="checkbox" id="checkAll"/> </th>
                             <th>Test Id</th>
-                            <th>Details</th>
-                            <th>By</th>
-                            <th>Status</th>
+                            <th>Summary</th>
+                            <th>Run</th>
                         </tr>
                     </thead>
 
-                    <#if testCaseLst??>
-                    <#list testCaseLst as tc>
+                    <#list tptcLst as tptcObj>
                     <tr>
                         <td class="no-sort">
-                            <input type="checkbox" name="testcaseChk" value="${tc.id?c}"/>
+                            <input type="checkbox" name="testcaseChk" value="${tptcObj.testcaseId.id?c}"/>
                         </td>
                         <td>
-                            <a href="#" class="teststepShow" id="${tc.id?c}">${tc.id?c} &nbsp;<i class="fa fa-sort-desc"></i></a>
+                            <a href="#" class="teststepShow" id="${tptcObj.testcaseId.id?c}">${tptcObj.testcaseId.id?c} &nbsp;<i class="fa fa-sort-desc"></i></a>
                         </td>
                         <td>
-                            <b>Name:</b><a href="/testcase_edit?testcaseId=${tc.id?c}">${tc.name}</a>
+                            <b>Name:</b><a href="/testcase_edit?testcaseId=${tptcObj.testcaseId.id?c}">${tptcObj.testcaseId.name}</a>
                             <br/>
-                            <b>Folder:</b><a href="/testcase?nodeId=${tc.folderId.id?c}">${tc.folderId.name}</a>
+                            <b>Folder:</b><a href="/testcase?nodeId=${tptcObj.testcaseId.folderId.id?c}">${tptcObj.testcaseId.folderId.name}</a>
                             <br/>
-                            <b>Product:</b> ${tc.product}
+                            <b>Product:</b> ${tptcObj.testcaseId.product}
                             <br/>
                             <b>Assigned To:</b> 
-                            <#list tptcLst as tptc>
-                            <#if tptc.testcaseId.id?c == tc.id?c>
-                            <#if tptc.assignedTo??>
-                            ${tptc.assignedTo}
+                            <#if tptcObj.assignedTo??>
+                            ${tptcObj.assignedTo}
                             </#if>
-                            </#if>
-                            </#list>
                             <br/>
                             <b>Priority:</b>
-                            <#if tc.priority??>
-                            ${tc.priority}
+                            <#if tptcObj.testcaseId.priority??>
+                            ${tptcObj.testcaseId.priority}
                             </#if>
                             <br/>
-                            <b>Environment:</b> <#if trMap[tc.id?c]??>${trMap[tc.id?c].environment}</#if>
-                            <br/>
-                            <b>Run On:</b>
-                            <#if trMap[tc.id?c]??>${trMap[tc.id?c].timestamp}</#if>
-                            <br/>
                             <b>Automated:</b>
-                            ${tc.automated?c}
+                            ${tptcObj.testcaseId.automated?c}
                             <br/>
                             <b>Type:</b>
-                            ${tc.caseType}
+                            ${tptcObj.testcaseId.caseType}
                             <br/><br/>
+
+
+                        </td>
+                        <td>
+                            <#assign alreadyRun = false>
+                            <#list trLst as trObj>
+                            <#if trObj.testplanTestcaseLinkId.id?c == tptcObj.id?c >
+                            <#assign alreadyRun = true>
+                            <b>Status:</b>
+                            <#switch trObj.status>
+                            <#case "PASSED">
+                            <span class="label label-success">${trObj.status}</span>
+                            <#break>
+                            <#case "FAILED">
+                            <span class="label label-danger">${trObj.status}</span>
+                            <#break>
+                            <#case "NOT_RUN">
+                            <span class="label label-warning">${trObj.status}</span>
+                            <#break>
+                            <#default>
+                            <span class="label label-primary">${trObj.status}</span>
+                            </#switch>
+                            <br/>
+
+                            <b>Environment:</b>
+                            ${trObj.environment}
+                            <br/>
+                            <b>Tester:</b>
+                            ${trObj.tester}
+                            <br/>
+
+                            <b>Run On:</b>
+                            ${trObj.timestamp}
+                            <br/>
+
                             <b>Comments:</b>
                             <br/>
-                            <input type="text" class="form-control" name="tcomments_${tc.id?c}" maxlength="90" size="90" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].note}</#if>"/>
+                            <input type="text" class="form-control" name="tcomments_${tptcObj.testcaseId.id?c}" maxlength="90" size="90" value="${trObj.note}"/>
                             <br/>
+
                             <br/>
                             <b>Bug:</b>
                             <br/>
-                            <input type="text" class="form-control" name="tbug_${tc.id?c}" maxlength="45" size="45" value="<#if trMap[tc.id?c]??>${trMap[tc.id?c].bugTicket}</#if>"/>
-                        </td>
-                        <td><#if trMap[tc.id?c]??>${trMap[tc.id?c].tester}</#if></td>
-                        <td>
-                            <#if trMap[tc.id?c]??>
-                            <#switch trMap[tc.id?c].status>
-                            <#case "PASSED">
-                            <span class="label label-success"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
-                            <#break>
-                            <#case "FAILED">
-                            <span class="label label-danger"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
-                            <#break>
-                            <#case "NOT_RUN">
-                            <span class="label label-warning"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
-                            <#break>
-                            <#default>
-                            <span class="label label-primary"><#if trMap[tc.id?c]??>${trMap[tc.id?c].status}</#if></span>
-                            </#switch>
+                            <input type="text" class="form-control" name="tbug_${tptcObj.testcaseId.id?c}" maxlength="45" size="45" value="${trObj.bugTicket}"/>
+                            <br/>
+
                             </#if>
+                            </#list>
+
+
+                            <#if !alreadyRun>
+                            <b>Status:</b>
+                            <span class="label label-warning">NOT_RUN</span>
+                            <br/>
+                            <b>Comments:</b>
+                            <br/>
+                            <input type="text" class="form-control" name="tcomments_${tptcObj.testcaseId.id?c}" maxlength="90" size="90" value=""/>
+                            <br/>
+
+                            <br/>
+                            <b>Bug:</b>
+                            <br/>
+                            <input type="text" class="form-control" name="tbug_${tptcObj.testcaseId.id?c}" maxlength="45" size="45" value=""/>
+                            <br/>
+                            </#if>
+
                         </td>
+
                     </tr>
                     <tr>
-                        <td colspan="5">
-                            <div id="tcstep_${tc.id?c}"></div>
+                        <td colspan="4">
+                            <div id="tcstep_${tptcObj.testcaseId.id?c}"></div>
                         </td>
-                        <td style="display: none;"></td>
                         <td style="display: none;"></td>
                         <td style="display: none;"></td>
                         <td style="display: none;"></td>
                     </tr>
                     </#list>
-                    </#if>
 
                 </table>
             </div>
