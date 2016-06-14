@@ -167,25 +167,16 @@ public class TestPlanController {
     public String runTestplan(HttpSession session, Model model, @RequestParam(value = "testplanId", required = true) Long testplanId) {
 
         EcTestplan testPlan = tpDao.findOne(testplanId);
-        //Get all test cases associated with this test plan
-        List<EcTestcase> testCaseLst = tcDao.findAllTestCasesByTestPlanId(testplanId);
-        if (testCaseLst == null) {
-            testCaseLst = new ArrayList<>();
-        }
-        Map<String, EcTestresult> trMap = new HashMap<>();
-        for (EcTestcase tc : testCaseLst) {
-            EcTestresult testresult = trDao.findLatestTestResultsByTestplanIdAndTestcaseId(testplanId, tc.getId());
-            if (testresult != null) {
-                trMap.put(tc.getId().toString(), testresult);
-            }
-        }
-
-        List<String> testEnvLst = Arrays.asList(testEnvArr.split(","));
+        //Find all testplan testcase mapping.
         List<EcTestplanTestcaseMapping> tptcLst = tptcDao.findByTestplanId(testPlan);
-        model.addAttribute("tptcLst", tptcLst);
-        model.addAttribute("testCaseLst", testCaseLst);
-        model.addAttribute("trMap", trMap);
+        //Find all latest test results
+        List<EcTestresult> trLst = trDao.findLatestTestResultsByTestplanId(testplanId);
+        //All test env.
+        List<String> testEnvLst = Arrays.asList(testEnvArr.split(","));
+
         model.addAttribute("testPlan", testPlan);
+        model.addAttribute("tptcLst", tptcLst);
+        model.addAttribute("trLst", trLst);
         model.addAttribute("testEnvLst", testEnvLst);
         return "testplan_run";
     }

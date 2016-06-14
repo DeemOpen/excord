@@ -18,13 +18,13 @@
                         <tr>
                             <th>Test Plan</th>
                             <th>
-                                <input type="hidden" id="testplanId" name="testPlanId" value="${testPlan.id}"/>
+                                <input type="hidden" id="testplanId" name="testPlanId" value="${testPlan.id?c}"/>
                                 <div style="word-wrap: break-word;">${testPlan.name}</div> 
                             </th>
                         </tr>
                         <tr>
                             <th>Test Plan Id</th>
-                            <td>${testPlan.id}</td>
+                            <td>${testPlan.id?c}</td>
                         </tr>
                         <tr>
                             <th>Slug</th>
@@ -217,15 +217,15 @@
         </div>
         <div class="row">
             <div class="col-md-12 text-center">
-                <a href="/testplan_edit?testplanId=${testPlan.id}" class="btn btn-info" id="testcase_edit" ><i class="fa fa-pencil"></i>&nbsp;Edit Test Plan</a>
+                <a href="/testplan_edit?testplanId=${testPlan.id?c}" class="btn btn-info" id="testcase_edit" ><i class="fa fa-pencil"></i>&nbsp;Edit Test Plan</a>
                 <#if testPlan.enabled?c == 'true'>
                 <a href="#" class="btn btn-info" id="unlinkTestcaseTestplan" ><i class="fa fa-chain-broken"></i>&nbsp;Remove Test Cases from Plan</a>
-                <a href="/testplan_delete?testplanId=${testPlan.id}" class="btn btn-info" id="testplan_delete" ><i class="fa fa-trash-o"></i>&nbsp;Delete Test Plan</a>
-                <a href="/testplan_run?testplanId=${testPlan.id}" class="btn btn-info" id="testplan_run" ><i class="fa fa-bolt"></i>&nbsp;Run Test Plan</a>
+                <a href="/testplan_delete?testplanId=${testPlan.id?c}" class="btn btn-info" id="testplan_delete" ><i class="fa fa-trash-o"></i>&nbsp;Delete Test Plan</a>
+                <a href="/testplan_run?testplanId=${testPlan.id?c}" class="btn btn-info" id="testplan_run" ><i class="fa fa-bolt"></i>&nbsp;Run Test Plan</a>
                 </#if>
-                <a href="/testplan_history?testplanId=${testPlan.id}" class="btn btn-info" id="testplan_history" ><i class="fa fa-history"></i>&nbsp;Execution History</a>
-                <a href="/testplan_clone?testplanId=${testPlan.id}" class="btn btn-info" id="testplan_clone" ><i class="fa fa-clone"></i>&nbsp;Clone Test Plan</a>
-                <a href="/testplan_metric?testplanId=${testPlan.id}" class="btn btn-info" id="testplan_metric" ><i class="fa fa-line-chart"></i>&nbsp;Test Plan Metrics</a>
+                <a href="/testplan_history?testplanId=${testPlan.id?c}" class="btn btn-info" id="testplan_history" ><i class="fa fa-history"></i>&nbsp;Execution History</a>
+                <a href="/testplan_clone?testplanId=${testPlan.id?c}" class="btn btn-info" id="testplan_clone" ><i class="fa fa-clone"></i>&nbsp;Clone Test Plan</a>
+                <a href="/testplan_metric?testplanId=${testPlan.id?c}" class="btn btn-info" id="testplan_metric" ><i class="fa fa-line-chart"></i>&nbsp;Test Plan Metrics</a>
                 <button type="button" name="action" id="cancel" value="cancel" class="btn btn-info" onclick="history.back()" >Cancel</button>
             </div>
         </div>

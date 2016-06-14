@@ -15,7 +15,7 @@
             </label>
             <div class="col-md-4">
                 <input class="form-control"  name="rname" value="<#if req??>${req.name}</#if>" maxlength="45" required/>
-                <input type="hidden" name="reqId" value="<#if req??>${req.id}</#if>"/>
+                <input type="hidden" name="reqId" value="<#if req??>${req.id?c}</#if>"/>
             </div>
             <label for="rpriority" class="col-md-1 control-label">
                 Priority<font color="red">*</font>
@@ -51,8 +51,8 @@
             </label>
             <div class="col-md-4">
                 <#if parentReq??>
-                <input type="hidden" name="rParentId" value="${parentReq.id}"/>
-                <input type="text"  class="form-control" value="${parentReq.id} :  ${parentReq.name}" readonly/>
+                <input type="hidden" name="rParentId" value="${parentReq.id?c}"/>
+                <input type="text"  class="form-control" value="${parentReq.id?c} :  ${parentReq.name}" readonly/>
                 <#else>
                 <input type="hidden" name="rParentId" value="-1"/>
                 <input type="text"  class="form-control" value="-" readonly/>

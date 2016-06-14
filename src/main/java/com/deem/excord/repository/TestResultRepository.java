@@ -15,6 +15,9 @@ public interface TestResultRepository extends CrudRepository<EcTestresult, Long>
     @Query(value = "update ec_testresult set latest = 0 where testplan_testcase_link_id = :testplantestcaseId", nativeQuery = true)
     public Integer updateAllTestRunsLatestFlag(@Param("testplantestcaseId") Long testplantestcaseId);
 
+    @Query(value = "select b.* from ec_testplan_testcase_mapping a, ec_testresult b where a.testplan_id = :testplanId and a.id = b.testplan_testcase_link_id and b.latest = 1", nativeQuery = true)
+    public List<EcTestresult> findLatestTestResultsByTestplanId(@Param("testplanId") Long testplanId);
+
     @Query(value = "SELECT b.* FROM ec_testplan_testcase_mapping a, ec_testresult b,ec_testcase c where b.testplan_testcase_link_id = a.id and a.testcase_id = c.id and b.latest = 1 and a.testplan_id = :testplanId  and a.testcase_id = :testcaseId", nativeQuery = true)
     public EcTestresult findLatestTestResultsByTestplanIdAndTestcaseId(@Param("testplanId") Long testplanId, @Param("testcaseId") Long testcaseId);
 
@@ -35,7 +38,7 @@ public interface TestResultRepository extends CrudRepository<EcTestresult, Long>
 
     @Query(value = "select DATE_FORMAT(`timestamp`,'%m-%Y'),count(*) from ec_testresult where DATE_FORMAT(`timestamp`,'%Y') = DATE_FORMAT(NOW(),'%Y') group by DATE_FORMAT(`timestamp`,'%m-%Y') order by DATE_FORMAT(`timestamp`,'%m-%Y') asc", nativeQuery = true)
     public List<Object[]> executionByMonth();
-    
+
     @Query(value = "SELECT count(*) FROM excord.ec_testresult where latest = 1 and YEAR(timestamp) = YEAR(NOW())", nativeQuery = true)
     public Integer getCountOfExecutionByYear();
 }

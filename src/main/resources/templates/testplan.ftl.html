@@ -25,7 +25,7 @@
         <tbody>
             <#list testPlanLst as testPlan>
             <tr>
-                <td>${testPlan.id}</td>
+                <td>${testPlan.id?c}</td>
                 <td>
                     <a href="/testplan_view?testplanId=${testPlan.id?c}">${testPlan.name}</a>
                 </td>

@@ -381,10 +381,9 @@ public class TestCaseController {
     public String testcaseBulkSave(Model model, HttpServletRequest request, HttpSession session,
             @RequestParam(value = "nodeId", required = true) Long nodeId,
             @RequestParam(value = "bulkTc", required = true) String bulkTc,
-            @RequestParam(value = "tenabled", required = false) Boolean tenabled,
-            @RequestParam(value = "tautomated", required = false) Boolean tautomated,
-            @RequestParam(value = "tpriority", required = true) String tpriority,
-            @RequestParam(value = "ttype", required = true) String ttype,
+            @RequestParam(value = "tautomated", required = false) String tautomated,
+            @RequestParam(value = "tpriority", required = false) String tpriority,
+            @RequestParam(value = "ttype", required = false) String ttype,
             @RequestParam(value = "tlanguage", required = false) String tlanguage,
             @RequestParam(value = "tproduct", required = false) String tproduct,
             @RequestParam(value = "tfeature", required = false) String tfeature,
@@ -393,34 +392,32 @@ public class TestCaseController {
         String[] tcLst = StringUtils.commaDelimitedListToStringArray(bulkTc);
         for (String tc : tcLst) {
             EcTestcase tcObj = tcDao.findOne(Long.parseLong(tc));
-            if (taversion != null) {
+            if (!StringUtils.isEmpty(taversion)) {
                 tcObj.setAddedVersion(taversion);
             }
-            if (ttype != null) {
+            if (!StringUtils.isEmpty(ttype)) {
                 tcObj.setCaseType(ttype);
             }
-            if (tdversion != null) {
+            if (!StringUtils.isEmpty(tdversion)) {
                 tcObj.setDeprecatedVersion(tdversion);
             }
-            if (tenabled != null) {
-                tcObj.setEnabled(tenabled);
+            if (!StringUtils.isEmpty(tautomated)) {
+                tcObj.setAutomated(Boolean.valueOf(tautomated));
             }
-            if (tautomated != null) {
-                tcObj.setAutomated(tautomated);
-            }
-            if (tfeature != null) {
+            if (!StringUtils.isEmpty(tfeature)) {
                 tcObj.setFeature(tfeature);
             }
-            if (tlanguage != null) {
+            if (!StringUtils.isEmpty(tlanguage)) {
                 tcObj.setLanguage(tlanguage);
             }
-            if (tpriority != null) {
+            if (!StringUtils.isEmpty(tpriority)) {
                 tcObj.setPriority(tpriority);
             }
-            if (tproduct != null) {
+            if (!StringUtils.isEmpty(tproduct)) {
                 tcObj.setProduct(tproduct);
             }
-            if (tcObj.getDescription() == null || tcObj.getDescription().equals("")) {
+            //Safetyblock incase the description is empty. Dont remove.
+            if (StringUtils.isEmpty(tcObj.getDescription())) {
                 tcObj.setDescription(" ");
             }
             tcDao.save(tcObj);
