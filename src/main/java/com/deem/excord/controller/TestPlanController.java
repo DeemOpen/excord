@@ -1,6 +1,7 @@
 package com.deem.excord.controller;
 
 import com.deem.excord.domain.EcTestcase;
+import com.deem.excord.domain.EcTestfolder;
 import com.deem.excord.domain.EcTestplan;
 import com.deem.excord.domain.EcTestplanTestcaseMapping;
 import com.deem.excord.domain.EcTestresult;
@@ -16,10 +17,14 @@ import com.deem.excord.util.HistoryUtil;
 import com.deem.excord.vo.TestPlanMetricVo;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.logging.Level;
+import java.util.HashSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -182,7 +187,9 @@ public class TestPlanController {
     }
 
     @RequestMapping(value = "/testplan_view", method = RequestMethod.GET)
-    public String viewTestPlan(Model model, HttpSession session, @RequestParam(value = "testplanId", required = true) Long testplanId) {
+    public String viewTestPlan(Model model, HttpSession session, @RequestParam(value = "testplanId", required = true) Long testplanId,
+             @RequestParam(value = "folderId", required = false) Long folderId) {
+        //changing the folder should redirect to folderId
 
         FlashMsgUtil.INSTANCE.checkFlashMsg(session, model);
         EcTestplan testPlan = tpDao.findOne(testplanId);
@@ -198,20 +205,55 @@ public class TestPlanController {
             totalNotRunCount = totalNotRunCount + tpm.getNotrunCount();
         }
         //Get all test cases associated with this test plan
-        List<EcTestcase> testCaseLst = tcDao.findAllTestCasesByTestPlanId(testplanId);
+        
+        List<EcTestcase>testCaseLst = null;
+        if (folderId == null)
+        {
+        testCaseLst=tcDao.findAllTestCasesByTestPlanId(testplanId);
+        }
+        else
+        {
+        testCaseLst = tcDao.findAllTestCasesByTestPlanIdAndTestFolderId(testplanId,folderId);
+        }
+        
+        
         if (testCaseLst == null) {
             testCaseLst = new ArrayList<>();
         }
         List<EcUser> activeUsersLst = uDao.findByEnabledOrderByUsernameAsc(Boolean.TRUE);
+        model.addAttribute("tptcLst", tptcLst);
         model.addAttribute("activeUsersLst", activeUsersLst);
+        model.addAttribute("folderList", getFolderList(testPlan));
         model.addAttribute("testPlanMetricLst", testPlanMetricLst);
         model.addAttribute("testCaseLst", testCaseLst);
         model.addAttribute("testPlan", testPlan);
         model.addAttribute("tecaseCnt", totalCount);
+        model.addAttribute("folderId",folderId);
         model.addAttribute("tptcLst", tptcLst);
         model.addAttribute("testPlanPassRate", Math.round((totalPassCount * 100.0) / totalCount));
         model.addAttribute("testPlanProgressRate", Math.round(((totalCount - totalNotRunCount) * 100.0) / totalCount));
         return "testplan_view";
+    }
+    private Map<String, String> getFolderList(EcTestplan testPlan) {
+        
+     String delimiter = "\\";
+        Map<String, String> map = new HashMap<>();
+        List<EcTestplanTestcaseMapping> testCaseMappings = testPlan.getEcTestplanTestcaseMappingList();
+        for (EcTestplanTestcaseMapping testCaseMapping : testCaseMappings) {
+            EcTestcase tc = testCaseMapping.getTestcaseId();
+            EcTestfolder folder = tc.getFolderId();
+            String fullpath = "";
+            List<EcTestfolder> pFolders = folder.getAllParentFolderList();
+            for (EcTestfolder pfolder : pFolders) {
+                String pfoldername = pfolder.getName();
+                fullpath += pfoldername + delimiter;
+            }
+            fullpath += folder.getName();
+            map.put(String.valueOf(folder.getId()), fullpath);
+
+        }
+        return map;
+
     }
 
     @RequestMapping(value = "/testplan_save", method = RequestMethod.POST)

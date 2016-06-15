@@ -7,6 +7,7 @@ import com.deem.excord.domain.EcTestplan;
 import com.deem.excord.domain.EcTestplanTestcaseMapping;
 import com.deem.excord.domain.EcTestresult;
 import com.deem.excord.domain.EcTeststep;
+import com.deem.excord.domain.EcUser;
 import com.deem.excord.repository.TestCaseRepository;
 import com.deem.excord.repository.TestFolderRepository;
 import com.deem.excord.repository.TestPlanRepository;
