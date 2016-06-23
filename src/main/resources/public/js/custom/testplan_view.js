@@ -15,6 +15,12 @@ $(document).ready(function () {
             }
         });
     });
+    
+    $(document).ready(function(){
+        $(".form-control").change(function(){
+         window.location.href = "/testplan_view?testplanId="+$("#testplanId").val()+"&folderId="+this.value; 
+          });
+    });
 
     $("#checkAll").click(function (event) {
         $('input:checkbox').not(this).prop('checked', this.checked);

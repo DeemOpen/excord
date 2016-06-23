@@ -151,17 +151,12 @@
                 <label>Folders</label>
             </div>
             <div class="col-md-9">
-                <select  id="folderName" class="form-control" name="folder" onchange="myFunction(this.value)" >
-                  <option value="">- select folder -</option>
-                    <#list folderList?keys as it>
-                    <option value="${it}" ${(it == (folderId!0)?c)?then('selected', '')} > ${folderList[it]} </option>
+                <select  id="folderName" class="form-control" name="folder"  >
+                    <option value="">- select folder -</option>
+                    <#list folderList?keys as folder>
+                    <option value="${folder}" ${(folder == (folderId!0)?c)?then('selected', '')} > ${folderList[folder]} </option>
                     </#list>
                 </select>
-                <script>
-                    function myFunction(value1) {
-                        window.location.href = "/testplan_view?testplanId=${testPlan.id?c}&folderId=" + value1;
-                    }
-                </script>
             </div>
         </div>
 </div>

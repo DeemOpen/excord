@@ -17,14 +17,10 @@ import com.deem.excord.util.HistoryUtil;
 import com.deem.excord.vo.TestPlanMetricVo;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.logging.Level;
-import java.util.HashSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -221,7 +217,6 @@ public class TestPlanController {
             testCaseLst = new ArrayList<>();
         }
         List<EcUser> activeUsersLst = uDao.findByEnabledOrderByUsernameAsc(Boolean.TRUE);
-        model.addAttribute("tptcLst", tptcLst);
         model.addAttribute("activeUsersLst", activeUsersLst);
         model.addAttribute("folderList", getFolderList(testPlan));
         model.addAttribute("testPlanMetricLst", testPlanMetricLst);
