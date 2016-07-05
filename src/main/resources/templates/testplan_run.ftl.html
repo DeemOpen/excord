@@ -17,7 +17,7 @@
                             <th width="15%">Test Plan</th>
                             <th>
                                 <a href="/testplan_view?testplanId=${testPlan.id?c}">${testPlan.name}</a>
-                                <input type="hidden" name="testplanId" value="${testPlan.id?c}"/>
+                                <input type="hidden" id="testplanId"  name="testplanId" value="${testPlan.id?c}"/>
                             </th>
                         </tr>
                         <tr>
@@ -38,6 +38,17 @@
                                 <select name="testEnvironment" class="form-control">
                                     <#list testEnvLst as env>
                                     <option>${env}</option>
+                                    </#list>
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td width="15%">Select By Folder</td>
+                            <td>
+                                <select  id="folderName" class="form-control" name="folderId"  >
+                                    <option value="">- All -</option>
+                                    <#list folderList?keys as folder>
+                                    <option value="${folder}" ${(folder == (folderId!0)?c)?then('selected', '')} > ${folderList[folder]} </option>
                                     </#list>
                                 </select>
                             </td>

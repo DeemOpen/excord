@@ -16,6 +16,17 @@ $(document).ready(function () {
         });
     });
 
+
+    $("#folderName").change(function () {
+        if (this.value === "") {
+            window.location.href = "/testplan_view?testplanId=" + $("#testplanId").val();
+        } else {
+            window.location.href = "/testplan_view?testplanId=" + $("#testplanId").val() + "&folderId=" + this.value;
+        }
+
+    });
+
+
     $("#checkAll").click(function (event) {
         $('input:checkbox').not(this).prop('checked', this.checked);
     });

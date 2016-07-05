@@ -22,6 +22,9 @@ public interface TestCaseRepository extends CrudRepository<EcTestcase, Long> {
     @Query(value = "SELECT count(*) FROM ec_testcase where enabled = 1", nativeQuery = true)
     public Integer getCountOfActiveTestcases();
 
-    public List<EcTestcase> findByNameContainingOrDescriptionContainingOrderByIdDesc(String nameKey,String descKey);
+    public List<EcTestcase> findByNameContainingOrDescriptionContainingOrderByIdDesc(String nameKey, String descKey);
+
+    @Query(value = "select a.* from  ec_testcase a  ,ec_testplan_testcase_mapping b where a.id=b.testcase_id and b.testplan_id=:testPlanId and a.folder_id=:folderId", nativeQuery = true)
+    public List<EcTestcase> findAllTestCasesByTestPlanIdAndTestFolderId(@Param("testPlanId") Long testPlanId, @Param("folderId") Long folderId);
 
 }

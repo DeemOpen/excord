@@ -3,10 +3,10 @@ $(document).ready(function () {
     $('#testplanrun-ele').DataTable({
         "bPaginate": false,
         "aoColumnDefs": [
-            {'bSortable': false, aTargets: [ '_all' ]}
+            {'bSortable': false, aTargets: ['_all']}
         ],
-        "paging":   false,
-        "info":     false
+        "paging": false,
+        "info": false
     });
 
     $("#checkAll").click(function (event) {
@@ -31,6 +31,15 @@ $(document).ready(function () {
                 }
             });
         }
+    });
+
+    $("#folderName").change(function () {
+        if (this.value === "") {
+            window.location.href = "/testplan_run?testplanId=" + $("#testplanId").val();
+        } else {
+            window.location.href = "/testplan_run?testplanId=" + $("#testplanId").val() + "&folderId=" + this.value;
+        }
+
     });
 
 }); 
