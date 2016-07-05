@@ -299,7 +299,7 @@ public class TestPlanController {
             tr.setTestplanTestcaseLinkId(tptcLinkId);
             trDao.save(tr);
         }
-        System.out.println(folderId);
+        
         if (folderId == null) {
             return "redirect:/testplan_run?testplanId=" + testplanId;
         } else {
