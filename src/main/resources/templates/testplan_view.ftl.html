@@ -10,7 +10,6 @@
                 <h3>Test Plan View</h3>
             </div>
         </div>
-
         <div class="row">
             <div class="col-md-4">
                 <table class="table table-striped table-bordered" width="100%" cellspacing="0">
@@ -126,10 +125,9 @@
                 </table>
             </div>
         </div>
-        <br/>
         <#if testPlan.enabled?c == 'true'>
         <div class="row">
-            <div class="col-md-1">
+            <div class="col-md-1 text-right">
                 <label>Active Users</label>
             </div>
             <div class="col-md-9">
@@ -143,24 +141,21 @@
                 <a href="#" class="btn btn-info btn-block" id="testcase_assign" ><i class="fa fa-user"></i>&nbsp;Assign Test Cases</a>
             </div>
             <br/>
-          <br/>
-          <br/>
+            <br/>
         </div>
-         <div class="row">
-            <div class="col-md-1 text-center">
-                <label>Folders</label>
+        <div class="row">
+            <div class="col-md-1 text-right">
+                <label>Filter By Folders</label>
             </div>
             <div class="col-md-9">
-                <select  id="folderName" class="form-control" name="folder"  >
-                    <option value="">- select folder -</option>
+                <select  id="folderName" class="form-control" name="folderId"  >
+                    <option value="">- All -</option>
                     <#list folderList?keys as folder>
                     <option value="${folder}" ${(folder == (folderId!0)?c)?then('selected', '')} > ${folderList[folder]} </option>
                     </#list>
                 </select>
             </div>
         </div>
-</div>
-<br/>
         </#if>
 
         <div class="row">

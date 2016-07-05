@@ -19,4 +19,7 @@ public interface TestPlanTestCaseRepository extends CrudRepository<EcTestplanTes
 
     public List<EcTestplanTestcaseMapping> findByTestcaseId(EcTestcase tc);
 
+    @Query(value = "SELECT a.* FROM excord.ec_testplan_testcase_mapping a, ec_testcase b where a.testcase_id = b.id and a.testplan_id = :testplanId and b.folder_id = :folderId", nativeQuery = true)
+    public List<EcTestplanTestcaseMapping> findByTestplanIdAndFolderId(@Param("testplanId") Long testplanId,@Param("folderId") Long folderId);
+
 }

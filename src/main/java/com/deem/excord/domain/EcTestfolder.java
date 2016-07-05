@@ -3,8 +3,6 @@ package com.deem.excord.domain;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.HashSet;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -104,12 +102,13 @@ public class EcTestfolder implements Serializable {
     public void setEcTestcaseList(List<EcTestcase> ecTestcaseList) {
         this.ecTestcaseList = ecTestcaseList;
     }
-      public List<EcTestfolder> getAllParentFolderList() {
+
+    public List<EcTestfolder> getAllParentFolderList() {
         List<EcTestfolder> parentFolderList = new ArrayList<>();
         if (parentId != null) {
             parentFolderList.add(parentId);
             parentFolderList.addAll(parentId.getAllParentFolderList());
-        } 
+        }
         return parentFolderList;
     }
 

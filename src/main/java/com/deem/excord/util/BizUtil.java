@@ -1,7 +1,10 @@
 package com.deem.excord.util;
 
 import com.deem.excord.domain.EcRequirement;
+import com.deem.excord.domain.EcTestcase;
+import com.deem.excord.domain.EcTestfolder;
 import com.deem.excord.domain.EcTestplan;
+import com.deem.excord.domain.EcTestplanTestcaseMapping;
 import com.deem.excord.vo.TestPlanMetricVo;
 import java.math.BigInteger;
 import java.util.ArrayList;
@@ -292,5 +295,27 @@ public enum BizUtil {
             value = value.substring(0, length);
         }
         return value;
+    }
+
+    public Map<String, String> getFolderList(EcTestplan testPlan) {
+
+        String delimiter = "/";
+        Map<String, String> map = new HashMap<>();
+        List<EcTestplanTestcaseMapping> testCaseMappings = testPlan.getEcTestplanTestcaseMappingList();
+        for (EcTestplanTestcaseMapping testCaseMapping : testCaseMappings) {
+            EcTestcase tc = testCaseMapping.getTestcaseId();
+            EcTestfolder folder = tc.getFolderId();
+            String fullpath = "/";
+            List<EcTestfolder> pFolders = folder.getAllParentFolderList();
+            for (EcTestfolder pfolder : pFolders) {
+                String pfoldername = pfolder.getName();
+                fullpath += pfoldername + delimiter;
+            }
+            fullpath += folder.getName();
+            map.put(String.valueOf(folder.getId()), fullpath);
+
+        }
+        return map;
+
     }
 }
