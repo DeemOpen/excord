@@ -1,17 +1,18 @@
 package com.deem.excord.util;
 
 import com.deem.excord.domain.EcRequirement;
-import com.deem.excord.domain.EcTestcase;
 import com.deem.excord.domain.EcTestfolder;
 import com.deem.excord.domain.EcTestplan;
 import com.deem.excord.domain.EcTestplanTestcaseMapping;
 import com.deem.excord.vo.TestPlanMetricVo;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -303,7 +304,7 @@ public enum BizUtil {
 
     public Map<String, String> getFolderHierarchyMap(EcTestplan testPlan) {
 
-        Map<String, String> map = new TreeMap<>();
+        Map<String, String> map = new HashMap<>();
         List<EcTestplanTestcaseMapping> testCaseMappings = testPlan.getEcTestplanTestcaseMappingList();
         for (EcTestplanTestcaseMapping testCaseMapping : testCaseMappings) {
             EcTestfolder folder = testCaseMapping.getTestcaseId().getFolderId();
@@ -319,7 +320,30 @@ public enum BizUtil {
             pathBuilder.append(folder.getName());
             map.put(folder.getId().toString(), pathBuilder.toString());
         }
-        return map;
+        return sortByComparator(map);
 
+    }
+
+    private Map<String, String> sortByComparator(Map<String, String> unsortMap) {
+
+        // Convert Map to List
+        List<Map.Entry<String, String>> list = new LinkedList<>(unsortMap.entrySet());
+
+        // Sort list with comparator, to compare the Map values
+        Collections.sort(list, new Comparator<Map.Entry<String, String>>() {
+            @Override
+            public int compare(Map.Entry<String, String> o1,
+                    Map.Entry<String, String> o2) {
+                return (o1.getValue()).compareTo(o2.getValue());
+            }
+        });
+
+        // Convert sorted map back to a Map
+        Map<String, String> sortedMap = new LinkedHashMap<>();
+        for (Iterator<Map.Entry<String, String>> it = list.iterator(); it.hasNext();) {
+            Map.Entry<String, String> entry = it.next();
+            sortedMap.put(entry.getKey(), entry.getValue());
+        }
+        return sortedMap;
     }
 }
