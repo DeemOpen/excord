@@ -181,7 +181,7 @@ public class TestPlanController {
 
         //All test env.
         List<String> testEnvLst = Arrays.asList(testEnvArr.split(","));
-        model.addAttribute("folderList", BizUtil.INSTANCE.getFolderList(testPlan));
+        model.addAttribute("childFolderMap", BizUtil.INSTANCE.getFolderHierarchyMap(testPlan));
         model.addAttribute("testPlan", testPlan);
         model.addAttribute("tptcLst", tptcLst);
         model.addAttribute("trLst", trLst);
@@ -220,7 +220,7 @@ public class TestPlanController {
         }
         List<EcUser> activeUsersLst = uDao.findByEnabledOrderByUsernameAsc(Boolean.TRUE);
         model.addAttribute("activeUsersLst", activeUsersLst);
-        model.addAttribute("folderList", BizUtil.INSTANCE.getFolderList(testPlan));
+        model.addAttribute("childFolderMap", BizUtil.INSTANCE.getFolderHierarchyMap(testPlan));
         model.addAttribute("testPlanMetricLst", testPlanMetricLst);
         model.addAttribute("testCaseLst", testCaseLst);
         model.addAttribute("testPlan", testPlan);

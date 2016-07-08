@@ -8,9 +8,13 @@ import com.deem.excord.domain.EcTestplanTestcaseMapping;
 import com.deem.excord.vo.TestPlanMetricVo;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -297,23 +301,23 @@ public enum BizUtil {
         return value;
     }
 
-    public Map<String, String> getFolderList(EcTestplan testPlan) {
+    public Map<String, String> getFolderHierarchyMap(EcTestplan testPlan) {
 
-        String delimiter = "/";
-        Map<String, String> map = new HashMap<>();
+        Map<String, String> map = new TreeMap<>();
         List<EcTestplanTestcaseMapping> testCaseMappings = testPlan.getEcTestplanTestcaseMappingList();
         for (EcTestplanTestcaseMapping testCaseMapping : testCaseMappings) {
-            EcTestcase tc = testCaseMapping.getTestcaseId();
-            EcTestfolder folder = tc.getFolderId();
-            String fullpath = "/";
-            List<EcTestfolder> pFolders = folder.getAllParentFolderList();
-            for (EcTestfolder pfolder : pFolders) {
-                String pfoldername = pfolder.getName();
-                fullpath += pfoldername + delimiter;
-            }
-            fullpath += folder.getName();
-            map.put(String.valueOf(folder.getId()), fullpath);
+            EcTestfolder folder = testCaseMapping.getTestcaseId().getFolderId();
 
+            StringBuilder pathBuilder = new StringBuilder();
+            pathBuilder.append(Constants.PATH_DELIMITER);
+            List<EcTestfolder> pFolders = folder.getAllParentFolderList();
+            Collections.reverse(pFolders);
+            for (EcTestfolder pfolder : pFolders) {
+                pathBuilder.append(pfolder.getName());
+                pathBuilder.append(Constants.PATH_DELIMITER);
+            }
+            pathBuilder.append(folder.getName());
+            map.put(folder.getId().toString(), pathBuilder.toString());
         }
         return map;
 

@@ -25,5 +25,7 @@ public interface Constants {
     String TYPE_MANUAL = "MANUAL";
     
     Long TRASH_NODE = 2L;
+    
+    String PATH_DELIMITER = "/";
 
 }

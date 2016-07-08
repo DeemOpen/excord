@@ -47,8 +47,8 @@
                             <td>
                                 <select  id="folderName" class="form-control" name="folderId"  >
                                     <option value="">- All -</option>
-                                    <#list folderList?keys as folder>
-                                    <option value="${folder}" ${(folder == (folderId!0)?c)?then('selected', '')} > ${folderList[folder]} </option>
+                                    <#list childFolderMap?keys as childFolderId>
+                                    <option value="${childFolderId}" ${(childFolderId == (folderId!0)?c)?then('selected', '')} > ${childFolderMap[childFolderId]} </option>
                                     </#list>
                                 </select>
                             </td>
