@@ -443,8 +443,8 @@ public class TestCaseController {
             for (String tc : clipboardTcLst) {
                 EcTestcase tcObj = tcDao.findOne(Long.parseLong(tc));
                 EcTestfolder newNode = tfDao.findOne(nodeId);
-                tcObj.setFolderId(newNode);
                 String oldFolder = tcObj.getFolderId().getName();
+                tcObj.setFolderId(newNode);
                 String newFolder = newNode.getName();
                 tcDao.save(tcObj);
                 historyUtil.addHistory("Moved testcase : [" + tcObj.getName() + "] from [" + oldFolder + " ] to [" + newFolder + " ]", tcObj.getSlug(), request, session);
