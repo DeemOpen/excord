@@ -16,9 +16,9 @@
 
 ### Login Info
 1. excord support LDAP integration.
-2. excord supports Database Integration. (user: admin, pwd: manager)
+2. excord supports Database Integration. (user: excord, pwd: excord)
 
-## Technology Stack
+### Technology Stack
 
 1. Spring Boot
 2. Freemarker template.
@@ -62,7 +62,8 @@ If you are using DB authentication insert this row after starting the server fir
 
 ```sql
 INSERT INTO `excord`.`ec_user` (`id`, `username`, `name`, `password`, `role`, `enabled`, `created_date`,`email`) 
-VALUES ('1', 'admin', 'admin', 'manager', 'USER', '1', NOW(),'test@blackhole.com');
+VALUES ('1', 'excord', 'excord', 'excord', 'USER', '1', NOW(),'test@blackhole.com');
+```
 
 ### Docker Setup
 
