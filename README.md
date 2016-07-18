@@ -63,7 +63,26 @@ If you are using DB authentication insert this row after starting the server fir
 ```sql
 INSERT INTO `excord`.`ec_user` (`id`, `username`, `name`, `password`, `role`, `enabled`, `created_date`,`email`) 
 VALUES ('1', 'admin', 'admin', 'manager', 'USER', '1', NOW(),'test@blackhole.com');
-```
+
+### Docker Setup
+
+To build docker image.
+
+```make build```
+
+To publish docker image.
+
+```make publish```
+
+Start the container - You will need docker-compose.
+
+``make up``
+
+Stop the container - You will need docker-compose.
+
+``make down``
+
+
 ### Log Monitoring
 tail -f excord.log
 grep 'GET' access_log.*.log | egrep -v "(.gif|.jpg|.png|.swf|.ico|.txt|.xml|.css|.js|.rss)"
