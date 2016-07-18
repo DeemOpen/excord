@@ -1,0 +1,17 @@
+db:
+  image: mysql
+  volumes:
+      - "/var/data/mysql:/var/lib/mysql"
+  ports: 
+    - 3306:3306
+  environment:
+    MYSQL_ROOT_PASSWORD: manager
+    MYSQL_DATABASE: excord
+    MYSQL_USER: excord
+    MYSQL_PASSWORD: excord
+web:
+  image: excord:1.0-SNAPSHOT
+  ports:
+    - "9090:9090"
+  links:
+    - db
