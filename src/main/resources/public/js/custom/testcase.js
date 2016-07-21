@@ -6,8 +6,8 @@ $(document).ready(function () {
         "aoColumnDefs": [
             {'bSortable': false, aTargets: ['_all']}
         ],
-        "paging":   false,
-        "info":     false
+        "paging": false,
+        "info": false
     });
 
 
@@ -58,26 +58,6 @@ $(document).ready(function () {
         event.preventDefault();
         if ($('input[name="testcaseChk"]:checked').length > 0) {
             $("#testcaseForm").attr("action", "/testcase_req_link");
-            $("#testcaseForm").submit();
-        } else {
-            bootbox.alert("Please check a testcase!");
-        }
-    });
-
-    $("#enableTestcase").click(function (event) {
-        event.preventDefault();
-        if ($('input[name="testcaseChk"]:checked').length > 0) {
-            $("#testcaseForm").attr("action", "/testcase_enable");
-            $("#testcaseForm").submit();
-        } else {
-            bootbox.alert("Please check a testcase!");
-        }
-    });
-
-    $("#disableTestcase").click(function (event) {
-        event.preventDefault();
-        if ($('input[name="testcaseChk"]:checked').length > 0) {
-            $("#testcaseForm").attr("action", "/testcase_disable");
             $("#testcaseForm").submit();
         } else {
             bootbox.alert("Please check a testcase!");

@@ -67,6 +67,9 @@ VALUES ('1', 'excord', 'excord', 'excord', 'USER', '1', NOW(),'test@blackhole.co
 
 ### Docker Setup
 
+Change the properties file
+spring.datasource.url=jdbc:mysql://db:3306/excord
+
 To build docker image.
 
 ```make build```

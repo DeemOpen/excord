@@ -42,8 +42,8 @@
                         <li><a href="#" id="addFolder"><i class="fa fa-plus-square"></i>&nbsp;Add Folder</a></li>
                         <li><a href="/testcase_add?nodeId=${currentNode.id?c}"><i class="fa fa-flask"></i>&nbsp;Add Testcase</a></li>
                         <li><a href="#" id="linkTestcaseTestplan"><i class="fa fa-cart-plus"></i>&nbsp;Add to Testplan</a></li>
-                        <li><a href="#" id="enableTestcase"><i class="fa fa-check"></i>&nbsp;Enable Testcases</a></li>
-                        <li><a href="#" id="disableTestcase"><i class="fa fa-ban"></i>&nbsp;Disable Testcases</a></li>
+                        <li><a href="/testcase_enable?nodeId=${currentNode.id?c}&enableFlag=true"><i class="fa fa-check"></i>&nbsp;Enable All TestCases (Including Nested)</a></li>
+                        <li><a href="/testcase_enable?nodeId=${currentNode.id?c}&enableFlag=false"><i class="fa fa-ban"></i>&nbsp;Disable All TestCases (Including Nested)</a></li>
                         <li><a href="#" id="deleteTestcase"><i class="fa fa-times"></i>&nbsp;Delete Testcases</a></li>
                         <li><a href="#" id="deleteFolder"><i class="fa fa-trash-o"></i>&nbsp;Delete Folder</a></li>
                         <li><a href="#" id="bulkEdit"><i class="fa fa-pencil-square-o"></i>&nbsp;Bulk Edit Testcases</a></li>
@@ -51,6 +51,11 @@
                         <li><a href="#" id="pasteTestcase"><i class="fa fa-clipboard"></i>&nbsp;Paste Testcases</a></li>
                         <#else>
                         <li><a href="#" id="cutTestcase"><i class="fa fa-scissors"></i>&nbsp;Cut Testcases</a></li>
+                        </#if>
+                        <#if clipboardTf??>
+                        <li><a href="/folder_paste?nodeId=${currentNode.id?c}"><i class="fa fa-clipboard"></i>&nbsp;Paste Folder</a></li>
+                        <#else>
+                        <li><a href="/folder_cut?nodeId=${currentNode.id?c}"><i class="fa fa-scissors"></i>&nbsp;Cut Folder</a></li>
                         </#if>
                         <li><a href="#" id="renameFolder"><i class="fa fa-pencil"></i>&nbsp;Rename Folder</a></li>
                         <li><a href="#" id="cloneTestcase"><i class="fa fa-clone"></i>&nbsp;Clone Testcases</a></li>

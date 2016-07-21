@@ -285,29 +285,26 @@ public class TestCaseController {
         return "redirect:/testcase?nodeId=" + nodeId;
     }
 
-    @RequestMapping(value = "/testcase_enable", method = RequestMethod.POST)
-    public String testcaseEnable(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "nodeId", required = true) Long nodeId, @RequestParam(value = "testcaseChk") List<Long> testcaseChkLst) {
-
-        for (Long testCaseId : testcaseChkLst) {
-            EcTestcase tcObj = tcDao.findOne(testCaseId);
-            tcObj.setEnabled(true);
-            tcDao.save(tcObj);
-            historyUtil.addHistory("Enabled testcase : [" + tcObj.getName() + "]", tcObj.getSlug(), request, session);
+    public void testcaseEnabledNested(EcTestfolder currentNode, Boolean enableFlag) {
+        List<EcTestfolder> ecTestfolderList = currentNode.getEcTestfolderList();
+        for (EcTestfolder tf : ecTestfolderList) {
+            testcaseEnabledNested(tf, enableFlag);
         }
-        session.setAttribute("flashMsg", "Successfully enabled testcase!");
-        return "redirect:/testcase?nodeId=" + nodeId;
+        List<EcTestcase> ecTestcaseList = currentNode.getEcTestcaseList();
+        for (EcTestcase tc : ecTestcaseList) {
+            tc.setEnabled(enableFlag);
+        }
+        tcDao.save(ecTestcaseList);
+
     }
 
-    @RequestMapping(value = "/testcase_disable", method = RequestMethod.POST)
-    public String testcaseDisable(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "nodeId", required = true) Long nodeId, @RequestParam(value = "testcaseChk") List<Long> testcaseChkLst) {
+    @RequestMapping(value = "/testcase_enable", method = RequestMethod.GET)
+    public String testcaseEnable(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "nodeId", required = true) Long nodeId, @RequestParam(value = "enableFlag", required = true) Boolean enableFlag) {
+        EcTestfolder currentNode = tfDao.findOne(nodeId);
 
-        for (Long testCaseId : testcaseChkLst) {
-            EcTestcase tcObj = tcDao.findOne(testCaseId);
-            tcObj.setEnabled(false);
-            tcDao.save(tcObj);
-            historyUtil.addHistory("Disabled testcase : [" + tcObj.getName() + "]", tcObj.getSlug(), request, session);
-        }
-        session.setAttribute("flashMsg", "Successfully disabled testcase!");
+        //Recursive call.
+        testcaseEnabledNested(currentNode, enableFlag);
+
         return "redirect:/testcase?nodeId=" + nodeId;
     }
 
@@ -382,6 +379,7 @@ public class TestCaseController {
             @RequestParam(value = "nodeId", required = true) Long nodeId,
             @RequestParam(value = "bulkTc", required = true) String bulkTc,
             @RequestParam(value = "tautomated", required = false) String tautomated,
+            @RequestParam(value = "tenabled", required = false) String tenabled,
             @RequestParam(value = "tpriority", required = false) String tpriority,
             @RequestParam(value = "ttype", required = false) String ttype,
             @RequestParam(value = "tlanguage", required = false) String tlanguage,
@@ -403,6 +401,9 @@ public class TestCaseController {
             }
             if (!StringUtils.isEmpty(tautomated)) {
                 tcObj.setAutomated(Boolean.valueOf(tautomated));
+            }
+            if (!StringUtils.isEmpty(tenabled)) {
+                tcObj.setEnabled(Boolean.valueOf(tenabled));
             }
             if (!StringUtils.isEmpty(tfeature)) {
                 tcObj.setFeature(tfeature);
@@ -431,6 +432,38 @@ public class TestCaseController {
         String clipboardTc = StringUtils.arrayToCommaDelimitedString(testcaseChkLst.toArray());
         session.setAttribute("clipboardTc", clipboardTc);
         session.setAttribute("flashMsg", "Testcases ready to move!");
+        return "redirect:/testcase?nodeId=" + nodeId;
+    }
+
+    @RequestMapping(value = "/folder_cut", method = RequestMethod.GET)
+    public String folderCut(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "nodeId", required = true) Long nodeId) {
+
+        EcTestfolder currenNode = tfDao.findOne(nodeId);
+        if (currenNode.getParentId() != null) {
+            session.setAttribute("clipboardTf", nodeId);
+            session.setAttribute("flashMsg", "Folder ready to move: " + currenNode.getName());
+        } else {
+            session.setAttribute("flashMsg", "Cant Move Root!");
+        }
+        return "redirect:/testcase?nodeId=" + nodeId;
+    }
+
+    @RequestMapping(value = "/folder_paste", method = RequestMethod.GET)
+    public String folderPaste(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "nodeId", required = true) Long nodeId) {
+        Long oringNodeId = (Long) session.getAttribute("clipboardTf");
+
+        EcTestfolder orignNode = tfDao.findOne(oringNodeId);
+        EcTestfolder currentNode = tfDao.findOne(nodeId);
+
+        if (!oringNodeId.equals(nodeId)) {
+            orignNode.setParentId(currentNode);
+            tfDao.save(orignNode);
+            session.setAttribute("flashMsg", "Folder moved successfully!");
+        } else {
+            session.setAttribute("flashMsg", "Cant Link to same Folder!");
+        }
+
+        session.setAttribute("clipboardTf", null);
         return "redirect:/testcase?nodeId=" + nodeId;
     }
 

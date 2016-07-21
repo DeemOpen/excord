@@ -1,6 +1,7 @@
 package com.deem.excord.util;
 
 import com.deem.excord.domain.EcRequirement;
+import com.deem.excord.domain.EcTestcase;
 import com.deem.excord.domain.EcTestfolder;
 import com.deem.excord.domain.EcTestplan;
 import com.deem.excord.domain.EcTestplanTestcaseMapping;
@@ -15,7 +16,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
