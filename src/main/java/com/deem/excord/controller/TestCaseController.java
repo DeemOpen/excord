@@ -301,10 +301,13 @@ public class TestCaseController {
     @RequestMapping(value = "/testcase_enable", method = RequestMethod.GET)
     public String testcaseEnable(Model model, HttpServletRequest request, HttpSession session, @RequestParam(value = "nodeId", required = true) Long nodeId, @RequestParam(value = "enableFlag", required = true) Boolean enableFlag) {
         EcTestfolder currentNode = tfDao.findOne(nodeId);
-
         //Recursive call.
         testcaseEnabledNested(currentNode, enableFlag);
-
+        if (enableFlag) {
+            historyUtil.addHistory("TestFolder Enabled : [" + currentNode.getName() + "]", currentNode.getSlug(), request, session);
+        } else {
+            historyUtil.addHistory("TestFolder Disabled : [" + currentNode.getName() + "]", currentNode.getSlug(), request, session);
+        }
         return "redirect:/testcase?nodeId=" + nodeId;
     }
 
@@ -459,6 +462,7 @@ public class TestCaseController {
             orignNode.setParentId(currentNode);
             tfDao.save(orignNode);
             session.setAttribute("flashMsg", "Folder moved successfully!");
+            historyUtil.addHistory("Folder moved successfully : [" + orignNode.getName() + "]", orignNode.getSlug(), request, session);
         } else {
             session.setAttribute("flashMsg", "Cant Link to same Folder!");
         }
